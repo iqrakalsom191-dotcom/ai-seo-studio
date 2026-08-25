@@ -10,7 +10,8 @@ import {
   Search,
   BookOpen,
   Settings,
-  LogOut
+  LogOut,
+  Wand2
 } from 'lucide-react'
 
 const navItems = [
@@ -18,6 +19,7 @@ const navItems = [
   { label: 'AI Generator', href: '/generator', icon: Sparkles },
   { label: 'Meta Tags', href: '/meta', icon: Tags },
   { label: 'Keywords', href: '/keywords', icon: Search },
+  { label: 'AI Improver', href: '/improver', icon: Wand2 },
   { label: 'Library', href: '/library', icon: BookOpen },
   { label: 'Settings', href: '/settings', icon: Settings },
 ]

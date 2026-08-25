@@ -29,8 +29,8 @@ export default function ImproverPage() {
         body: JSON.stringify({ content, type }),
       })
       const data = await res.json()
-      if (data.success) {
-        setResult(data.improved)
+      if (res.ok && data.result) {
+        setResult(data.result)
       } else {
         setError(data.error || 'Improvement failed')
       }
@@ -70,7 +70,7 @@ export default function ImproverPage() {
     <div className="max-w-3xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-2">
         <Wand2 style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold text-gray-900">Content Improver</h1>
+        <h1 className="text-2xl font-bold text-gray-900">AI Content Improver</h1>
       </div>
       <p className="text-gray-500 mb-8">Paste your content, pick an improvement type, and let AI polish it up.</p>
 
@@ -116,12 +116,17 @@ export default function ImproverPage() {
 
       {result && (
         <div className="mt-6 space-y-4">
-          <div className="rounded-2xl border border-gray-100 shadow-sm p-6" style={{ backgroundColor: '#1A1A2E' }}>
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
             <div className="flex justify-between items-center mb-3">
               <span className="text-sm font-semibold" style={{ color: '#00C6AE' }}>Improved Content</span>
               <span className="text-xs font-medium text-gray-400">{result.length} chars</span>
             </div>
-            <p className="text-gray-100 text-sm leading-relaxed whitespace-pre-wrap">{result}</p>
+            <textarea
+              readOnly
+              value={result}
+              rows={8}
+              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm text-gray-800 leading-relaxed resize-y focus:outline-none bg-gray-50"
+            />
           </div>
 
           <div className="flex gap-3">
