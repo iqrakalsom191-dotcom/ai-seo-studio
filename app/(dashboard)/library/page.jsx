@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
+import toast from 'react-hot-toast';
 import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save, Download, CheckSquare, Square } from 'lucide-react';
 
 const TYPE_LABELS = {
@@ -55,17 +56,25 @@ export default function LibraryPage() {
       .eq('user_id', user.id)
       .order('created_at', { ascending: false });
     if (!error) setItems(data || []);
+    else toast.error('Failed to load library');
     setLoading(false);
   }
 
   async function handleDelete(id) {
-    await supabase.from('saved_content').delete().eq('id', id);
-    setItems((prev) => prev.filter((i) => i.id !== id));
+    try {
+      const { error } = await supabase.from('saved_content').delete().eq('id', id);
+      if (error) throw error;
+      setItems((prev) => prev.filter((i) => i.id !== id));
+      toast.success('Deleted');
+    } catch (e) {
+      toast.error('Delete failed');
+    }
   }
 
   async function handleCopy(item) {
     await navigator.clipboard.writeText(item.content || '');
     setCopied(item.id);
+    toast.success('Copied to clipboard');
     setTimeout(() => setCopied(null), 2000);
   }
 
@@ -91,7 +100,10 @@ export default function LibraryPage() {
     if (!error) {
       setItems(prev => prev.map(i => i.id === modal.id ? { ...i, content: editContent } : i));
       setSaveSuccess(true);
+      toast.success('Saved!');
       setTimeout(() => setSaveSuccess(false), 2000);
+    } else {
+      toast.error('Save failed');
     }
     setSaving(false);
   }
@@ -144,18 +156,18 @@ export default function LibraryPage() {
       {modal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
           onClick={closeModal}>
-          <div style={{ background: '#fff', borderRadius: '20px', padding: '32px', maxWidth: '660px', width: '100%', maxHeight: '82vh', overflowY: 'auto', boxShadow: '0 24px 64px rgba(108,71,255,0.15)' }}
+          <div style={{ background: 'var(--card-bg)', borderRadius: '20px', padding: '32px', maxWidth: '660px', width: '100%', maxHeight: '82vh', overflowY: 'auto', boxShadow: '0 24px 64px rgba(108,71,255,0.15)' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', flexShrink: 0, background: typeBadge[modal.type]?.bg || '#f3f4f6', color: typeBadge[modal.type]?.color || '#6b7280' }}>
+                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', flexShrink: 0, background: typeBadge[modal.type]?.bg || 'var(--subtle-bg)', color: typeBadge[modal.type]?.color || '#6b7280' }}>
                   {TYPE_LABELS[modal.type]?.label || modal.type}
                 </span>
-                <h3 style={{ fontSize: '15px', fontWeight: '700', color: '#1A1A2E', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <h3 style={{ fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {modal.title}
                 </h3>
               </div>
-              <button onClick={closeModal} style={{ background: '#f3f4f6', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '12px' }}>
+              <button onClick={closeModal} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '12px' }}>
                 <X size={16} color="#6b7280" />
               </button>
             </div>
@@ -163,14 +175,14 @@ export default function LibraryPage() {
             <textarea
               value={editContent}
               onChange={e => setEditContent(e.target.value)}
-              style={{ width: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: '#1A1A2E', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+              style={{ width: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
               onFocus={e => e.target.style.borderColor = '#6C47FF'}
-              onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+              onBlur={e => e.target.style.borderColor = 'var(--border-color)'}
             />
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px' }}>
               <button onClick={closeModal}
-                style={{ padding: '10px 20px', borderRadius: '10px', background: '#f3f4f6', color: '#4A4A6A', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>
+                style={{ padding: '10px 20px', borderRadius: '10px', background: 'var(--subtle-bg)', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>
                 Close
               </button>
               <button onClick={handleSaveChanges} disabled={saving}
@@ -189,7 +201,7 @@ export default function LibraryPage() {
         </div>
         <button onClick={toggleSelectMode}
           className="flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
-          style={selectMode ? { backgroundColor: '#6C47FF', color: '#fff' } : { backgroundColor: '#F0EEFF', color: '#6C47FF' }}>
+          style={selectMode ? { backgroundColor: '#6C47FF', color: '#fff' } : { backgroundColor: 'var(--accent-soft-bg)', color: '#6C47FF' }}>
           {selectMode ? <X size={15} /> : <CheckSquare size={15} />}
           {selectMode ? 'Cancel' : 'Select'}
         </button>
@@ -210,14 +222,14 @@ export default function LibraryPage() {
           {filters.map((f) => (
             <button key={f} onClick={() => setActiveFilter(f)}
               className="px-4 py-2.5 rounded-xl text-sm font-medium capitalize transition-all"
-              style={activeFilter === f ? { backgroundColor: '#6C47FF', color: '#fff' } : { backgroundColor: '#F0EEFF', color: '#6C47FF' }}>
+              style={activeFilter === f ? { backgroundColor: '#6C47FF', color: '#fff' } : { backgroundColor: 'var(--accent-soft-bg)', color: '#6C47FF' }}>
               {f}
             </button>
           ))}
           {selectMode && (
             <button onClick={handleSelectAll}
               className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
-              style={{ backgroundColor: '#F0EEFF', color: '#6C47FF' }}>
+              style={{ backgroundColor: 'var(--accent-soft-bg)', color: '#6C47FF' }}>
               <CheckSquare size={15} />
               {selectedIds.size === filtered.length && filtered.length > 0 ? 'Deselect All' : 'Select All'}
             </button>
@@ -243,7 +255,7 @@ export default function LibraryPage() {
 
       {!loading && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: '#F0EEFF' }}>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: 'var(--accent-soft-bg)' }}>
             <BookOpen className="w-8 h-8" style={{ color: '#6C47FF' }} />
           </div>
           <h3 className="text-lg font-semibold text-gray-800 mb-1">Nothing saved yet</h3>

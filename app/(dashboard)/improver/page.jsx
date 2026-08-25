@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Wand2, Copy, Save, Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
+import toast from 'react-hot-toast'
 
 const IMPROVEMENT_TYPES = ['Improve Writing', 'SEO Optimize', 'Rewrite', 'Make Shorter', 'Make Longer']
 
@@ -33,9 +34,11 @@ export default function ImproverPage() {
         setResult(data.result)
       } else {
         setError(data.error || 'Improvement failed')
+        toast.error(data.error || 'Improvement failed')
       }
     } catch (e) {
       setError('Something went wrong')
+      toast.error('Something went wrong')
     } finally {
       setLoading(false)
     }
@@ -44,6 +47,7 @@ export default function ImproverPage() {
   const copy = async () => {
     await navigator.clipboard.writeText(result)
     setCopied(true)
+    toast.success('Copied to clipboard')
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -59,8 +63,10 @@ export default function ImproverPage() {
         type: 'blog',
       })
       setSaved(true)
+      toast.success('Saved to library')
     } catch (e) {
       console.error(e)
+      toast.error('Save failed')
     } finally {
       setSaving(false)
     }

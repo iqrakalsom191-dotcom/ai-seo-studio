@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { Link2, Copy, Check } from 'lucide-react'
 
 export default function SlugPage() {
@@ -26,9 +27,11 @@ export default function SlugPage() {
         setSlugs(data.slugs)
       } else {
         setError(data.error || 'Slug generation failed')
+        toast.error(data.error || 'Slug generation failed')
       }
     } catch (e) {
       setError('Something went wrong')
+      toast.error('Something went wrong')
     } finally {
       setLoading(false)
     }
@@ -37,6 +40,7 @@ export default function SlugPage() {
   const copy = async (slug, index) => {
     await navigator.clipboard.writeText(slug)
     setCopiedIndex(index)
+    toast.success('Copied to clipboard')
     setTimeout(() => setCopiedIndex(null), 2000)
   }
 

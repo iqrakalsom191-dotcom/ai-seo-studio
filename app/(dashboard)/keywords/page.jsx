@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { Search, Loader2, Tag, Lightbulb, Target, BarChart2, Save } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
+import toast from 'react-hot-toast';
 
 const intentColors = {
   Informational: 'bg-blue-100 text-blue-700',
@@ -45,6 +46,7 @@ export default function KeywordsPage() {
       setResult(data);
     } catch (err) {
       setError(err.message);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
@@ -64,8 +66,10 @@ export default function KeywordsPage() {
         keyword: keyword,
       });
       setSaved(true);
+      toast.success('Saved to library');
     } catch (e) {
       console.error(e);
+      toast.error('Save failed');
     } finally {
       setSaving(false);
     }
@@ -141,7 +145,7 @@ export default function KeywordsPage() {
             <div className="flex flex-wrap gap-2">
               {result.related.map((kw, i) => (
                 <span key={i} className="px-3 py-1.5 rounded-lg text-xs font-medium border"
-                  style={{ backgroundColor: '#F0EEFF', color: '#6C47FF', borderColor: '#e0d9ff' }}>
+                  style={{ backgroundColor: 'var(--accent-soft-bg)', color: '#6C47FF', borderColor: '#e0d9ff' }}>
                   {kw}
                 </span>
               ))}
@@ -170,7 +174,7 @@ export default function KeywordsPage() {
               {result.tips.map((tip, i) => (
                 <li key={i} className="flex gap-3 text-sm text-gray-600">
                   <span className="flex-shrink-0 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center mt-0.5"
-                    style={{ backgroundColor: '#F0EEFF', color: '#6C47FF' }}>
+                    style={{ backgroundColor: 'var(--accent-soft-bg)', color: '#6C47FF' }}>
                     {i + 1}
                   </span>
                   {tip}

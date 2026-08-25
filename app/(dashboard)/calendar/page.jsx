@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
+import toast from 'react-hot-toast'
 import { CalendarDays, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
 
 const TYPE_COLORS = {
@@ -84,16 +85,24 @@ export default function CalendarPage() {
       setPlannedDate('')
       setContentType('blog')
       setShowForm(false)
+      toast.success('Content plan added')
     } catch (e) {
       setError(e.message || 'Failed to save entry')
+      toast.error(e.message || 'Failed to save entry')
     } finally {
       setSaving(false)
     }
   }
 
   async function handleDelete(id) {
-    await supabase.from('content_calendar').delete().eq('id', id)
-    setEntries((prev) => prev.filter((e) => e.id !== id))
+    try {
+      const { error } = await supabase.from('content_calendar').delete().eq('id', id)
+      if (error) throw error
+      setEntries((prev) => prev.filter((e) => e.id !== id))
+      toast.success('Deleted')
+    } catch (e) {
+      toast.error('Delete failed')
+    }
   }
 
   function prevMonth() {

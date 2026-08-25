@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { HelpCircle, ChevronDown } from 'lucide-react'
 
 export default function FaqPage() {
@@ -27,9 +28,11 @@ export default function FaqPage() {
         setFaqs(data.faqs)
       } else {
         setError(data.error || 'FAQ generation failed')
+        toast.error(data.error || 'FAQ generation failed')
       }
     } catch (e) {
       setError('Something went wrong')
+      toast.error('Something went wrong')
     } finally {
       setLoading(false)
     }

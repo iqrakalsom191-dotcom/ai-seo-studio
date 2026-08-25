@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { User, Lock, Trash2, Save, CheckCircle, XCircle } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
+import toast from 'react-hot-toast';
 
 function Toast({ message, type }) {
   if (!message) return null;
@@ -24,11 +25,11 @@ export default function SettingsPage() {
   const [profileLoading, setProfileLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [toast, setToast] = useState({ message: '', type: '' });
+  const [inlineToast, setInlineToast] = useState({ message: '', type: '' });
 
   const showToast = (message, type) => {
-    setToast({ message, type });
-    setTimeout(() => setToast({ message: '', type: '' }), 3500);
+    setInlineToast({ message, type });
+    setTimeout(() => setInlineToast({ message: '', type: '' }), 3500);
   };
 
   useEffect(() => {
@@ -53,8 +54,10 @@ export default function SettingsPage() {
       });
       if (error) throw error;
       showToast('Profile updated successfully.', 'success');
+      toast.success('Profile updated successfully.');
     } catch (e) {
       showToast(e.message || 'Profile update failed.', 'error');
+      toast.error(e.message || 'Profile update failed.');
     } finally {
       setProfileLoading(false);
     }
@@ -73,8 +76,10 @@ export default function SettingsPage() {
       setNewPassword('');
       setConfirmPassword('');
       showToast('Password updated successfully.', 'success');
+      toast.success('Password updated successfully.');
     } catch (e) {
       showToast(e.message || 'Password update failed.', 'error');
+      toast.error(e.message || 'Password update failed.');
     } finally {
       setPasswordLoading(false);
     }
@@ -92,6 +97,7 @@ export default function SettingsPage() {
       window.location.href = '/login';
     } catch (e) {
       showToast('Account deletion failed. Contact support.', 'error');
+      toast.error('Account deletion failed. Contact support.');
     } finally {
       setDeleteLoading(false);
     }
@@ -99,7 +105,7 @@ export default function SettingsPage() {
 
   return (
     <div className="p-8 max-w-2xl mx-auto">
-      <Toast message={toast.message} type={toast.type} />
+      <Toast message={inlineToast.message} type={inlineToast.type} />
 
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Settings</h1>

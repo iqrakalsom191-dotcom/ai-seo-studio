@@ -1,11 +1,12 @@
 'use client'
 import { useState } from 'react'
-import { Share2, Copy, Check, Instagram, Twitter, Linkedin } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { Share2, Copy, Check, Camera, AtSign, Briefcase } from 'lucide-react'
 
 const PLATFORMS = [
-  { label: 'Instagram', icon: Instagram },
-  { label: 'Twitter/X', icon: Twitter },
-  { label: 'LinkedIn', icon: Linkedin },
+  { label: 'Instagram', icon: Camera },
+  { label: 'Twitter/X', icon: AtSign },
+  { label: 'LinkedIn', icon: Briefcase },
 ]
 
 export default function SocialPage() {
@@ -40,9 +41,11 @@ export default function SocialPage() {
         setResults(data.results)
       } else {
         setError(data.error || 'Caption generation failed')
+        toast.error(data.error || 'Caption generation failed')
       }
     } catch (e) {
       setError('Something went wrong')
+      toast.error('Something went wrong')
     } finally {
       setLoading(false)
     }
@@ -51,6 +54,7 @@ export default function SocialPage() {
   const copy = async (text, platform) => {
     await navigator.clipboard.writeText(text)
     setCopiedPlatform(platform)
+    toast.success('Copied to clipboard')
     setTimeout(() => setCopiedPlatform(null), 2000)
   }
 
@@ -86,7 +90,7 @@ export default function SocialPage() {
                   key={label}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer text-sm font-medium transition"
                   style={{
-                    borderColor: isChecked ? '#6C47FF' : '#e5e7eb',
+                    borderColor: isChecked ? '#6C47FF' : 'var(--border-color)',
                     backgroundColor: isChecked ? 'rgba(108,71,255,0.06)' : '#fff',
                     color: isChecked ? '#6C47FF' : '#374151',
                   }}

@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 import { BookOpenCheck, Type, AlignLeft, Lightbulb } from 'lucide-react'
 
 function badgeColor(score) {
@@ -31,9 +32,11 @@ export default function ReadabilityPage() {
         setResult(data)
       } else {
         setError(data.error || 'Analysis failed')
+        toast.error(data.error || 'Analysis failed')
       }
     } catch (e) {
       setError('Something went wrong')
+      toast.error('Something went wrong')
     } finally {
       setLoading(false)
     }

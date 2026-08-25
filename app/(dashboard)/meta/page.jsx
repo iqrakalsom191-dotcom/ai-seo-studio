@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Tag, Copy, Save } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
+import toast from 'react-hot-toast'
 
 export default function MetaPage() {
   const [topic, setTopic] = useState('')
@@ -30,15 +31,20 @@ export default function MetaPage() {
         setResult(data)
       } else {
         setError(data.error || 'Generation failed')
+        toast.error(data.error || 'Generation failed')
       }
     } catch (e) {
       setError('Something went wrong')
+      toast.error('Something went wrong')
     } finally {
       setLoading(false)
     }
   }
 
-  const copy = (text) => navigator.clipboard.writeText(text)
+  const copy = (text) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Copied to clipboard')
+  }
 
   const saveToLibrary = async () => {
     setSaving(true)
@@ -53,8 +59,10 @@ export default function MetaPage() {
         keyword: keyword,
       })
       setSaved(true)
+      toast.success('Saved to library')
     } catch (e) {
       console.error(e)
+      toast.error('Save failed')
     } finally {
       setSaving(false)
     }

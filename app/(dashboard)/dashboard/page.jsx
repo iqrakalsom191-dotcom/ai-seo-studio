@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import toast from 'react-hot-toast'
 import { FileText, Key, Calendar, Flame, Sparkles, Tags, Search, ArrowRight, Clock, Lightbulb, X } from 'lucide-react'
 
 const typeBadge = {
@@ -80,7 +81,7 @@ export default function DashboardPage() {
         .select('id, title, type, keyword, content, created_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false })
-      if (error || !data) return
+      if (error || !data) { if (error) toast.error('Failed to load dashboard data'); return }
       setAllData(data)
       processData(data)
     })
@@ -113,7 +114,7 @@ export default function DashboardPage() {
   ]
 
   const formatDate = (iso) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  const cardStyle = { background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', textDecoration: 'none', display: 'block' }
+  const cardStyle = { background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', textDecoration: 'none', display: 'block' }
 
   return (
     <div style={{ padding: '40px 48px', maxWidth: '1100px' }}>
@@ -130,23 +131,23 @@ export default function DashboardPage() {
       {modal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
           onClick={() => setModal(null)}>
-          <div style={{ background: '#fff', borderRadius: '20px', padding: '32px', maxWidth: '640px', width: '100%', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
+          <div style={{ background: 'var(--card-bg)', borderRadius: '20px', padding: '32px', maxWidth: '640px', width: '100%', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: typeBadge[modal.type]?.bg || '#f3f4f6', color: typeBadge[modal.type]?.color || '#6b7280' }}>
+                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: typeBadge[modal.type]?.bg || 'var(--subtle-bg)', color: typeBadge[modal.type]?.color || '#6b7280' }}>
                   {typeBadge[modal.type]?.label || modal.type}
                 </span>
-                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#1A1A2E', margin: 0 }}>{modal.title}</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)', margin: 0 }}>{modal.title}</h3>
               </div>
-              <button onClick={() => setModal(null)} style={{ background: '#f3f4f6', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button onClick={() => setModal(null)} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <X size={16} color="#6b7280" />
               </button>
             </div>
             <textarea
               readOnly
               value={modal.content || ''}
-              style={{ width: '100%', minHeight: '300px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: '#1A1A2E', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
+              style={{ width: '100%', minHeight: '300px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
             />
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
               <button onClick={() => setModal(null)}
@@ -161,21 +162,21 @@ export default function DashboardPage() {
       {/* Header */}
       <div style={{ marginBottom: '40px' }}>
         <p style={{ fontSize: '14px', color: '#00C6AE', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Welcome back</p>
-        <h1 style={{ fontSize: '36px', fontWeight: '800', color: '#1A1A2E', letterSpacing: '-0.8px', marginBottom: '8px' }}>
+        <h1 style={{ fontSize: '36px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.8px', marginBottom: '8px' }}>
           {user?.user_metadata?.full_name || 'There'} 👋
         </h1>
-        <p style={{ fontSize: '16px', color: '#4A4A6A' }}>Here's what's happening with your SEO content today.</p>
+        <p style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>Here's what's happening with your SEO content today.</p>
       </div>
 
       {/* Date Filter */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
         <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)}
-          style={{ border: '1px solid #e5e7eb', borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: '#1A1A2E', outline: 'none' }} />
+          style={{ border: '1px solid #e5e7eb', borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: 'var(--text-primary)', outline: 'none' }} />
         <span style={{ fontSize: '13px', color: '#9ca3af' }}>to</span>
         <input type="date" value={toDate} onChange={e => setToDate(e.target.value)}
-          style={{ border: '1px solid #e5e7eb', borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: '#1A1A2E', outline: 'none' }} />
+          style={{ border: '1px solid #e5e7eb', borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: 'var(--text-primary)', outline: 'none' }} />
         <button onClick={applyFilter} style={{ padding: '8px 18px', borderRadius: '10px', background: '#6C47FF', color: '#fff', fontSize: '13px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>Filter</button>
-        <button onClick={resetFilter} style={{ padding: '8px 18px', borderRadius: '10px', background: '#f3f4f6', color: '#4A4A6A', fontSize: '13px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>Reset</button>
+        <button onClick={resetFilter} style={{ padding: '8px 18px', borderRadius: '10px', background: 'var(--subtle-bg)', color: 'var(--text-secondary)', fontSize: '13px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>Reset</button>
       </div>
 
       {/* Stats Cards */}
@@ -188,8 +189,8 @@ export default function DashboardPage() {
                   <Icon size={20} style={{ color }} />
                 </div>
               </div>
-              <div style={{ fontSize: '28px', fontWeight: '800', color: '#1A1A2E', letterSpacing: '-0.5px', marginBottom: '4px' }}>{value}</div>
-              <div style={{ fontSize: '13px', color: '#4A4A6A', fontWeight: '500' }}>{label}</div>
+              <div style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.5px', marginBottom: '4px' }}>{value}</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: '500' }}>{label}</div>
             </>
           )
           return href
@@ -200,15 +201,15 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1A1A2E', marginBottom: '16px', letterSpacing: '-0.3px' }}>Quick Actions</h2>
+        <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Quick Actions</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
           {actions.map(({ label, desc, icon: Icon, href }) => (
-            <Link key={href} href={href} className="action-card" style={{ textDecoration: 'none', background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', display: 'block' }}>
+            <Link key={href} href={href} className="action-card" style={{ textDecoration: 'none', background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', display: 'block' }}>
               <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg, #6C47FF, #00C6AE)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', boxShadow: '0 4px 12px rgba(108,71,255,0.3)' }}>
                 <Icon size={20} style={{ color: '#fff' }} />
               </div>
-              <div style={{ fontSize: '15px', fontWeight: '700', color: '#1A1A2E', marginBottom: '6px' }}>{label}</div>
-              <div style={{ fontSize: '13px', color: '#4A4A6A', lineHeight: '1.5', marginBottom: '16px' }}>{desc}</div>
+              <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '6px' }}>{label}</div>
+              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '16px' }}>{desc}</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#6C47FF' }}>
                 Get started <ArrowRight size={14} />
               </div>
@@ -219,7 +220,7 @@ export default function DashboardPage() {
 
       {/* Content Breakdown */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1A1A2E', marginBottom: '16px', letterSpacing: '-0.3px' }}>Content Breakdown</h2>
+        <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Content Breakdown</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
           {[
             { label: 'Blog Posts', count: breakdown.blog,    bg: 'rgba(108,71,255,0.08)', color: '#6C47FF', bar: '#6C47FF' },
@@ -229,12 +230,12 @@ export default function DashboardPage() {
             const total = breakdown.blog + breakdown.meta + breakdown.keyword || 1
             const pct = Math.round((count / total) * 100)
             return (
-              <div key={label} style={{ background: '#fff', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
+              <div key={label} style={{ background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: '600', color: '#4A4A6A' }}>{label}</span>
+                  <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)' }}>{label}</span>
                   <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: bg, color }}>{count}</span>
                 </div>
-                <div style={{ height: '6px', borderRadius: '99px', background: '#f3f4f6' }}>
+                <div style={{ height: '6px', borderRadius: '99px', background: 'var(--subtle-bg)' }}>
                   <div style={{ height: '6px', borderRadius: '99px', background: bar, width: pct + '%', transition: 'width 0.6s ease' }} />
                 </div>
                 <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '6px' }}>{pct}% of total</div>
@@ -247,8 +248,8 @@ export default function DashboardPage() {
       {/* Top Keywords + Recent Activity */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '40px' }}>
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1A1A2E', marginBottom: '16px', letterSpacing: '-0.3px' }}>Top Keywords</h2>
-          <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', padding: '20px', minHeight: '100px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Top Keywords</h2>
+          <div style={{ background: 'var(--card-bg)', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', padding: '20px', minHeight: '100px' }}>
             {topKeywords.length === 0
               ? <p style={{ fontSize: '13px', color: '#9ca3af', textAlign: 'center', padding: '24px 0' }}>No keywords saved yet</p>
               : <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
@@ -263,27 +264,27 @@ export default function DashboardPage() {
         </div>
 
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: '#1A1A2E', marginBottom: '16px', letterSpacing: '-0.3px' }}>Recent Activity</h2>
-          <div style={{ background: '#fff', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Recent Activity</h2>
+          <div style={{ background: 'var(--card-bg)', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
             {recent.length === 0 ? (
               <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
                 <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(108,71,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                   <Clock size={24} style={{ color: '#6C47FF' }} />
                 </div>
-                <div style={{ fontSize: '15px', fontWeight: '600', color: '#1A1A2E', marginBottom: '6px' }}>No activity yet</div>
-                <div style={{ fontSize: '13px', color: '#4A4A6A' }}>Your generated content will appear here</div>
+                <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '6px' }}>No activity yet</div>
+                <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Your generated content will appear here</div>
               </div>
             ) : (
               <div>
                 {recent.map((item, i) => {
-                  const badge = typeBadge[item.type] || { label: item.type, bg: '#f3f4f6', color: '#6b7280' }
+                  const badge = typeBadge[item.type] || { label: item.type, bg: 'var(--subtle-bg)', color: '#6b7280' }
                   return (
                     <div key={item.id} className="activity-row"
                       onClick={() => setModal(item)}
                       style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: i < recent.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
                         <span style={{ padding: '3px 8px', borderRadius: '20px', fontSize: '10px', fontWeight: '700', background: badge.bg, color: badge.color, flexShrink: 0 }}>{badge.label}</span>
-                        <span style={{ fontSize: '13px', color: '#1A1A2E', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
+                        <span style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
                       </div>
                       <span style={{ fontSize: '11px', color: '#9ca3af', flexShrink: 0, marginLeft: '12px' }}>{formatDate(item.created_at)}</span>
                     </div>
@@ -302,7 +303,7 @@ export default function DashboardPage() {
         </div>
         <div>
           <div style={{ fontSize: '12px', fontWeight: '700', color: '#6C47FF', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>SEO Tip of the Day</div>
-          <div style={{ fontSize: '14px', color: '#1A1A2E', lineHeight: '1.6' }}>{tip}</div>
+          <div style={{ fontSize: '14px', color: 'var(--text-primary)', lineHeight: '1.6' }}>{tip}</div>
         </div>
       </div>
     </div>

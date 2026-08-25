@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Sparkles, Copy, BookmarkPlus, Loader2, CheckCheck } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
+import toast from 'react-hot-toast'
 
 function parseBold(line) {
   const parts = line.split(/\*\*/)
@@ -63,9 +64,11 @@ export default function GeneratorPage() {
         setOutput(data.content)
       } else {
         setError('No content received. Please try again.')
+        toast.error('No content received. Please try again.')
       }
     } catch (e) {
       setError('Generation failed. Please try again.')
+      toast.error('Generation failed. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -75,6 +78,7 @@ export default function GeneratorPage() {
     if (!output) return
     await navigator.clipboard.writeText(output)
     setCopied(true)
+    toast.success('Copied to clipboard')
     setTimeout(() => setCopied(false), 2000)
   }
 
@@ -93,8 +97,8 @@ export default function GeneratorPage() {
       word_count: output.split(/\s+/).length,
     })
     setSaving(false)
-    if (!dbErr) { setSavedOk(true); setTimeout(() => setSavedOk(false), 2500) }
-    else setError('Save failed. Please try again.')
+    if (!dbErr) { setSavedOk(true); toast.success('Saved to library'); setTimeout(() => setSavedOk(false), 2500) }
+    else { setError('Save failed. Please try again.'); toast.error('Save failed. Please try again.') }
   }
 
   const selectClass = 'w-full rounded-lg border border-[#6C47FF]/20 bg-white px-4 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:ring-2 focus:ring-[#6C47FF]/40 appearance-none cursor-pointer'
