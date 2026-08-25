@@ -72,7 +72,7 @@ export default function MetaPage() {
     <div className="max-w-3xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-2">
         <Tag className="text-violet-600" size={28} />
-        <h1 className="text-2xl font-bold text-gray-900">Meta Tag Generator</h1>
+        <h1 className="text-2xl font-bold " style={{ color: 'var(--foreground)' }}>Meta Tag Generator</h1>
       </div>
       <p className="text-gray-500 mb-8">Generate SEO-optimized title and meta description for any page.</p>
 

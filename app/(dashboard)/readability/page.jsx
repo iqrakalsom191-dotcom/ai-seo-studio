@@ -46,7 +46,7 @@ export default function ReadabilityPage() {
     <div className="max-w-3xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-2">
         <BookOpenCheck style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold text-gray-900">Readability Checker</h1>
+        <h1 className="text-2xl font-bold " style={{ color: 'var(--foreground)' }}>Readability Checker</h1>
       </div>
       <p className="text-gray-500 mb-8">Paste your content and get a Flesch Reading Ease score with AI-powered suggestions.</p>
 

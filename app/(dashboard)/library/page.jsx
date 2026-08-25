@@ -196,7 +196,7 @@ export default function LibraryPage() {
 
       <div className="mb-8 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Content Library</h1>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>Content Library</h1>
           <p className="text-gray-500">All your saved content in one place.</p>
         </div>
         <button onClick={toggleSelectMode}

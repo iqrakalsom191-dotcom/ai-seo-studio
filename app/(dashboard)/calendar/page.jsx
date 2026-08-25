@@ -132,7 +132,7 @@ export default function CalendarPage() {
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-2">
         <CalendarDays style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold text-gray-900">Content Calendar</h1>
+        <h1 className="text-2xl font-bold " style={{ color: 'var(--foreground)' }}>Content Calendar</h1>
       </div>
       <p className="text-gray-500 mb-6">Plan and track your content across blog, meta, and social.</p>
 

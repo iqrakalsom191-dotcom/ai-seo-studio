@@ -107,7 +107,7 @@ export default function GeneratorPage() {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
 
       <div>
-        <h1 className="text-2xl font-semibold text-[#1A1A2E] flex items-center gap-2">
+        <h1 className="text-2xl font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)' }}>
           <Sparkles size={22} className="text-[#6C47FF]" />
           AI Blog Generator
         </h1>

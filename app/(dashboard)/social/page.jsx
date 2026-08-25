@@ -62,7 +62,7 @@ export default function SocialPage() {
     <div className="max-w-3xl mx-auto p-6">
       <div className="flex items-center gap-3 mb-2">
         <Share2 style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold text-gray-900">Social Captions</h1>
+        <h1 className="text-2xl font-bold " style={{ color: 'var(--foreground)' }}>Social Captions</h1>
       </div>
       <p className="text-gray-500 mb-8">Paste your blog content, pick platforms, and generate ready-to-post captions.</p>
 

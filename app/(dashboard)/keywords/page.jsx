@@ -78,7 +78,7 @@ export default function KeywordsPage() {
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Keyword Analyzer</h1>
+        <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--foreground)' }}>Keyword Analyzer</h1>
         <p className="text-gray-500">Enter a keyword to get AI-powered SEO insights.</p>
       </div>
 
