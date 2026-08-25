@@ -11,7 +11,8 @@ import {
   BookOpen,
   Settings,
   LogOut,
-  Wand2
+  Wand2,
+  BookOpenCheck
 } from 'lucide-react'
 
 const navItems = [
@@ -20,6 +21,7 @@ const navItems = [
   { label: 'Meta Tags', href: '/meta', icon: Tags },
   { label: 'Keywords', href: '/keywords', icon: Search },
   { label: 'AI Improver', href: '/improver', icon: Wand2 },
+  { label: 'Readability', href: '/readability', icon: BookOpenCheck },
   { label: 'Library', href: '/library', icon: BookOpen },
   { label: 'Settings', href: '/settings', icon: Settings },
 ]
