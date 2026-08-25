@@ -12,7 +12,11 @@ import {
   Settings,
   LogOut,
   Wand2,
-  BookOpenCheck
+  BookOpenCheck,
+  Link2,
+  HelpCircle,
+  Share2,
+  CalendarDays
 } from 'lucide-react'
 
 const navItems = [
@@ -22,6 +26,10 @@ const navItems = [
   { label: 'Keywords', href: '/keywords', icon: Search },
   { label: 'AI Improver', href: '/improver', icon: Wand2 },
   { label: 'Readability', href: '/readability', icon: BookOpenCheck },
+  { label: 'Slug Generator', href: '/slug', icon: Link2 },
+  { label: 'FAQ Generator', href: '/faq', icon: HelpCircle },
+  { label: 'Social Captions', href: '/social', icon: Share2 },
+  { label: 'Content Calendar', href: '/calendar', icon: CalendarDays },
   { label: 'Library', href: '/library', icon: BookOpen },
   { label: 'Settings', href: '/settings', icon: Settings },
 ]
