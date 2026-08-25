@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
-import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save } from 'lucide-react';
+import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save, Download, CheckSquare, Square } from 'lucide-react';
 
 const TYPE_LABELS = {
   blog:    { label: 'Blog',    color: 'bg-purple-100 text-purple-700' },
@@ -33,6 +33,8 @@ export default function LibraryPage() {
   const [editContent, setEditContent] = useState('');
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(new Set());
   const supabase = createClient();
 
   useEffect(() => { fetchContent(); }, []);
@@ -94,6 +96,45 @@ export default function LibraryPage() {
     setSaving(false);
   }
 
+  function toggleSelectMode() {
+    setSelectMode((prev) => !prev);
+    setSelectedIds(new Set());
+  }
+
+  function toggleSelectItem(id) {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
+
+  function handleSelectAll() {
+    setSelectedIds((prev) =>
+      prev.size === filtered.length ? new Set() : new Set(filtered.map((i) => i.id))
+    );
+  }
+
+  function handleExportSelected() {
+    const selectedItems = items.filter((i) => selectedIds.has(i.id));
+    const text = selectedItems
+      .map((item) => {
+        const date = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        return `Title: ${item.title || item.keyword || 'Untitled'}\nType: ${TYPE_LABELS[item.type]?.label || item.type}\nDate: ${date}\n\n${item.content || ''}`;
+      })
+      .join('\n\n----------------------------------------\n\n');
+    const blob = new Blob([text], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `content-export-${new Date().toISOString().slice(0, 10)}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
   const filters = ['all', 'blog', 'meta', 'keyword'];
 
   return (
@@ -141,9 +182,17 @@ export default function LibraryPage() {
         </div>
       )}
 
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Content Library</h1>
-        <p className="text-gray-500">All your saved content in one place.</p>
+      <div className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Content Library</h1>
+          <p className="text-gray-500">All your saved content in one place.</p>
+        </div>
+        <button onClick={toggleSelectMode}
+          className="flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
+          style={selectMode ? { backgroundColor: '#6C47FF', color: '#fff' } : { backgroundColor: '#F0EEFF', color: '#6C47FF' }}>
+          {selectMode ? <X size={15} /> : <CheckSquare size={15} />}
+          {selectMode ? 'Cancel' : 'Select'}
+        </button>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -157,7 +206,7 @@ export default function LibraryPage() {
             className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#6C47FF] focus:border-transparent"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           {filters.map((f) => (
             <button key={f} onClick={() => setActiveFilter(f)}
               className="px-4 py-2.5 rounded-xl text-sm font-medium capitalize transition-all"
@@ -165,6 +214,22 @@ export default function LibraryPage() {
               {f}
             </button>
           ))}
+          {selectMode && (
+            <button onClick={handleSelectAll}
+              className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
+              style={{ backgroundColor: '#F0EEFF', color: '#6C47FF' }}>
+              <CheckSquare size={15} />
+              {selectedIds.size === filtered.length && filtered.length > 0 ? 'Deselect All' : 'Select All'}
+            </button>
+          )}
+          {selectMode && selectedIds.size > 0 && (
+            <button onClick={handleExportSelected}
+              className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
+              style={{ backgroundColor: '#6C47FF', color: '#fff' }}>
+              <Download size={15} />
+              Export Selected (.txt)
+            </button>
+          )}
         </div>
       </div>
 
@@ -196,35 +261,46 @@ export default function LibraryPage() {
 
             return (
               <div key={item.id}
-                onClick={() => openModal(item)}
-                className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-all cursor-pointer"
+                onClick={() => selectMode ? toggleSelectItem(item.id) : openModal(item)}
+                className="relative bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-all cursor-pointer"
                 style={{ transition: 'box-shadow 0.2s, border-color 0.2s' }}
                 onMouseEnter={e => e.currentTarget.style.borderColor = '#6C47FF'}
                 onMouseLeave={e => e.currentTarget.style.borderColor = 'rgb(243 244 246)'}>
+                {selectMode && (
+                  <div className="absolute top-4 right-4" onClick={e => { e.stopPropagation(); toggleSelectItem(item.id); }}>
+                    {selectedIds.has(item.id)
+                      ? <CheckSquare size={20} style={{ color: '#6C47FF' }} />
+                      : <Square size={20} className="text-gray-300" />}
+                  </div>
+                )}
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
                     <Icon className="w-4 h-4 flex-shrink-0" style={{ color: '#6C47FF' }} />
                     <h3 className="text-sm font-semibold text-gray-800 truncate">{item.title || item.keyword || 'Untitled'}</h3>
                   </div>
-                  <span className={`flex-shrink-0 px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge.color}`}>
-                    {badge.label}
-                  </span>
+                  {!selectMode && (
+                    <span className={`flex-shrink-0 px-2.5 py-0.5 rounded-full text-xs font-semibold ${badge.color}`}>
+                      {badge.label}
+                    </span>
+                  )}
                 </div>
 
                 <p className="text-xs text-gray-500 leading-relaxed flex-1">{preview}</p>
 
                 <div className="flex items-center justify-between pt-1 border-t border-gray-50">
                   <span className="text-xs text-gray-400">{date}</span>
-                  <div className="flex gap-2" onClick={e => e.stopPropagation()}>
-                    <button onClick={() => handleCopy(item)}
-                      className="p-1.5 rounded-lg transition-colors hover:bg-gray-50" title="Copy">
-                      {copied === item.id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-gray-400" />}
-                    </button>
-                    <button onClick={() => handleDelete(item.id)}
-                      className="p-1.5 rounded-lg transition-colors hover:bg-red-50" title="Delete">
-                      <Trash2 className="w-4 h-4 text-red-400" />
-                    </button>
-                  </div>
+                  {!selectMode && (
+                    <div className="flex gap-2" onClick={e => e.stopPropagation()}>
+                      <button onClick={() => handleCopy(item)}
+                        className="p-1.5 rounded-lg transition-colors hover:bg-gray-50" title="Copy">
+                        {copied === item.id ? <Check className="w-4 h-4 text-emerald-500" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                      </button>
+                      <button onClick={() => handleDelete(item.id)}
+                        className="p-1.5 rounded-lg transition-colors hover:bg-red-50" title="Delete">
+                        <Trash2 className="w-4 h-4 text-red-400" />
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
             );
