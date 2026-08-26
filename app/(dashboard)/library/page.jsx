@@ -339,9 +339,9 @@ export default function LibraryPage() {
       {modal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
           onClick={closeModal}>
-          <div style={{ background: 'var(--card-bg)', borderRadius: '20px', padding: '32px', maxWidth: '660px', width: '100%', maxHeight: '82vh', overflowY: 'auto', boxShadow: '0 24px 64px rgba(108,71,255,0.15)' }}
+          <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '660px', width: '100%', height: '90vh', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 24px 64px rgba(108,71,255,0.15)' }}
             onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+            <div style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 10, padding: '16px 24px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
                 <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', flexShrink: 0, background: typeBadge[modal.type]?.bg || 'var(--subtle-bg)', color: typeBadge[modal.type]?.color || '#6b7280' }}>
                   {TYPE_LABELS[modal.type]?.label || modal.type}
@@ -350,30 +350,34 @@ export default function LibraryPage() {
                   {modal.title}
                 </h3>
               </div>
-              <button onClick={() => setIsEditing(prev => !prev)}
-                style={{ background: isEditing ? '#6C47FF' : 'var(--subtle-bg)', color: isEditing ? '#fff' : 'var(--text-secondary)', border: 'none', borderRadius: '8px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', flexShrink: 0, marginLeft: '12px' }}>
-                {isEditing ? 'Preview' : 'Edit'}
-              </button>
-              <button onClick={closeModal} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '8px' }}>
-                <X size={16} color="#6b7280" />
-              </button>
+              <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                <button onClick={() => setIsEditing(prev => !prev)}
+                  style={{ background: isEditing ? '#6C47FF' : 'var(--subtle-bg)', color: isEditing ? '#fff' : 'var(--text-secondary)', border: 'none', borderRadius: '8px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', marginLeft: '12px' }}>
+                  {isEditing ? 'Preview' : 'Edit'}
+                </button>
+                <button onClick={closeModal} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '8px' }}>
+                  <X size={16} color="#6b7280" />
+                </button>
+              </div>
             </div>
 
-            {isEditing ? (
-              <textarea
-                value={editContent}
-                onChange={e => setEditContent(e.target.value)}
-                style={{ width: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-                onFocus={e => e.target.style.borderColor = '#6C47FF'}
-                onBlur={e => e.target.style.borderColor = 'var(--border-color)'}
-              />
-            ) : (
-              <div style={{ width: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '8px', boxSizing: 'border-box' }}>
-                <MarkdownPreview content={editContent} />
-              </div>
-            )}
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
+              {isEditing ? (
+                <textarea
+                  value={editContent}
+                  onChange={e => setEditContent(e.target.value)}
+                  style={{ width: '100%', height: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                  onFocus={e => e.target.style.borderColor = '#6C47FF'}
+                  onBlur={e => e.target.style.borderColor = 'var(--border-color)'}
+                />
+              ) : (
+                <div style={{ width: '100%', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '8px', boxSizing: 'border-box' }}>
+                  <MarkdownPreview content={editContent} />
+                </div>
+              )}
+            </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px' }}>
+            <div style={{ position: 'sticky', bottom: 0, background: '#fff', zIndex: 10, padding: '16px 24px', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'flex-end', gap: '10px', flexShrink: 0 }}>
               <button onClick={closeModal}
                 style={{ padding: '10px 20px', borderRadius: '10px', background: 'var(--subtle-bg)', color: 'var(--text-secondary)', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>
                 Close
