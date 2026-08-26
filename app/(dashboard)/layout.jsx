@@ -23,7 +23,8 @@ import {
   Sun,
   Moon,
   FileText,
-  Globe
+  Globe,
+  Gauge
 } from 'lucide-react'
 
 const navGroups = [
@@ -66,6 +67,7 @@ const navGroups = [
   {
     label: 'Account',
     items: [
+      { label: 'Usage', href: '/usage', icon: Gauge },
       { label: 'Settings', href: '/settings', icon: Settings },
     ],
   },

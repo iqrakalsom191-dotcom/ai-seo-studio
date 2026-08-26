@@ -1,10 +1,23 @@
 import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { checkAndIncrementUsage } from '@/lib/usage'
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
 export async function POST(request) {
   try {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const usage = await checkAndIncrementUsage(user.id)
+    if (!usage.allowed) {
+      return NextResponse.json({ error: 'Daily generation limit reached. Try again tomorrow.' }, { status: 429 })
+    }
+
     const { keyword } = await request.json()
 
     const completion = await groq.chat.completions.create({
