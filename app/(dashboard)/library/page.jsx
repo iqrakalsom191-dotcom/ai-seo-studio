@@ -200,8 +200,10 @@ export default function LibraryPage() {
       const title = item.title || item.keyword || 'Untitled';
       const doc = new jsPDF();
       const margin = 15;
-      const maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const maxWidth = pageWidth - 30;
       const pageHeight = doc.internal.pageSize.getHeight();
+      doc.setFont('helvetica');
       let y = 20;
 
       const ensureSpace = (needed) => {
@@ -213,9 +215,9 @@ export default function LibraryPage() {
 
       doc.setTextColor('#6C47FF');
       doc.setFontSize(18);
-      doc.setFont(undefined, 'bold');
+      doc.setFont('helvetica', 'bold');
       const titleLines = doc.splitTextToSize(title, maxWidth);
-      doc.text(titleLines, margin, y);
+      doc.text(titleLines, margin, y, { maxWidth: pageWidth - 30 });
       y += titleLines.length * 8 + 6;
 
       parseMarkdownLines(item.content).forEach((line) => {
@@ -239,10 +241,11 @@ export default function LibraryPage() {
 
         doc.setFontSize(fontSize);
         doc.setTextColor(color);
-        doc.setFont(undefined, fontStyle);
-        const wrapped = doc.splitTextToSize(text, maxWidth - (indent - margin));
+        doc.setFont('helvetica', fontStyle);
+        const wrapWidth = maxWidth - (indent - margin);
+        const wrapped = doc.splitTextToSize(text, wrapWidth);
         ensureSpace(wrapped.length * (fontSize * 0.5) + 4);
-        doc.text(wrapped, indent, y);
+        doc.text(wrapped, indent, y, { maxWidth: wrapWidth });
         y += wrapped.length * (fontSize * 0.5) + 4;
       });
 
