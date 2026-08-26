@@ -212,6 +212,18 @@ export default function LibraryPage() {
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
+      <style jsx>{`
+        .export-pdf-btn, .export-word-btn {
+          flex: 1; display: flex; align-items: center; justify-content: center;
+          gap: 6px; padding: 6px 12px; border-radius: 6px; font-size: 13px;
+          font-weight: 500; background: transparent; cursor: pointer;
+          transition: all 150ms ease;
+        }
+        .export-pdf-btn { border: 1px solid #e74c3c; color: #e74c3c; }
+        .export-pdf-btn:hover { background: #e74c3c; color: #fff; }
+        .export-word-btn { border: 1px solid #2980b9; color: #2980b9; }
+        .export-word-btn:hover { background: #2980b9; color: #fff; }
+      `}</style>
 
       {/* Modal */}
       {modal && (
@@ -378,13 +390,11 @@ export default function LibraryPage() {
 
                 {!selectMode && (
                   <div className="flex gap-2 pt-1" onClick={e => e.stopPropagation()}>
-                    <button onClick={() => handleExportPDF(item)}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors hover:bg-gray-50 border border-gray-100 text-gray-500">
+                    <button onClick={() => handleExportPDF(item)} className="export-pdf-btn">
                       <FileDown className="w-3.5 h-3.5" />
                       Export PDF
                     </button>
-                    <button onClick={() => handleExportWord(item)}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors hover:bg-gray-50 border border-gray-100 text-gray-500">
+                    <button onClick={() => handleExportWord(item)} className="export-word-btn">
                       <FileText className="w-3.5 h-3.5" />
                       Export Word
                     </button>
