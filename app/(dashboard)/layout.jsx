@@ -19,6 +19,7 @@ import {
   HelpCircle,
   Share2,
   CalendarDays,
+  Braces,
   Sun,
   Moon
 } from 'lucide-react'
@@ -47,6 +48,7 @@ const navGroups = [
       { label: 'Slug Generator', href: '/slug', icon: Link2 },
       { label: 'FAQ Generator', href: '/faq', icon: HelpCircle },
       { label: 'Social Captions', href: '/social', icon: Share2 },
+      { label: 'Schema Markup', href: '/schema', icon: Braces },
     ],
   },
   {
