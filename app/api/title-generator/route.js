@@ -10,7 +10,9 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Missing keyword' }, { status: 400 })
     }
 
-    const prompt = `Generate 10 catchy, SEO-optimized blog title options for the keyword "${keyword}". Each title should be attention-grabbing, click-worthy, and optimized for search engines. Return only the 10 titles, one per line, with no numbering, bullets, quotes, or preamble.`
+    const prompt = `Generate exactly 10 catchy, SEO-optimized blog title options for the keyword "${keyword}". Each title should be attention-grabbing, click-worthy, and optimized for search engines.
+
+Return ONLY the 10 titles, one per line. Do not include numbering, bullets, quotes, explanations, reasoning, or any extra text — just the 10 titles and nothing else.`
 
     const completion = await groq.chat.completions.create({
       model: 'groq/compound',
@@ -19,17 +21,12 @@ export async function POST(request) {
     })
 
     const raw = completion.choices[0]?.message?.content?.trim() || ''
-    const titles = raw
-      .split('\n')
-      .map((line) => line.replace(/^[-*•\d.)\s]+/, '').trim())
-      .filter((line) => line.length > 0)
-      .slice(0, 10)
 
-    if (titles.length === 0) {
+    if (!raw) {
       return NextResponse.json({ error: 'Could not generate titles' }, { status: 500 })
     }
 
-    return NextResponse.json({ titles })
+    return NextResponse.json({ titles: raw })
 
   } catch (error) {
     console.error('TITLE GENERATOR ERROR:', error)

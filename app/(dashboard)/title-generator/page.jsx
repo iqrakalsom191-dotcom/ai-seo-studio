@@ -24,7 +24,8 @@ export default function TitleGeneratorPage() {
       })
       const data = await res.json()
       if (res.ok && data.titles) {
-        setTitles(data.titles)
+        const parsed = data.titles.split('\n').map((t) => t.trim()).filter(Boolean)
+        setTitles(parsed)
       } else {
         setError(data.error || 'Title generation failed')
         toast.error(data.error || 'Title generation failed')
