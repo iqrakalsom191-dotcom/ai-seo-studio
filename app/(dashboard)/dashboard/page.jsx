@@ -37,6 +37,52 @@ const SEO_TIPS = [
   'Pillar pages and topic clusters help establish topical authority in your niche.',
 ]
 
+function parseMarkdownLines(content) {
+  return (content || '').split('\n').map((raw) => {
+    const line = raw.trim()
+    if (!line) return { type: 'blank', text: '' }
+    if (line.startsWith('###')) return { type: 'h3', text: line.replace(/^#{3}\s*/, '') }
+    if (line.startsWith('##')) return { type: 'h2', text: line.replace(/^#{2}\s*/, '') }
+    if (line.startsWith('---')) return { type: 'hr', text: '' }
+    if (line.startsWith('* ')) return { type: 'bullet', text: line.replace(/^\*\s*/, '') }
+    if (line.startsWith('**') && line.endsWith('**') && line.length > 3) {
+      return { type: 'bold', text: line.replace(/^\*\*|\*\*$/g, '') }
+    }
+    return { type: 'paragraph', text: line }
+  })
+}
+
+function MarkdownPreview({ content }) {
+  const lines = parseMarkdownLines(content)
+  return (
+    <div>
+      {lines.map((line, idx) => {
+        switch (line.type) {
+          case 'h3':
+            return <h3 key={idx} style={{ color: '#6C47FF', fontSize: '18px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h3>
+          case 'h2':
+            return <h2 key={idx} style={{ color: '#6C47FF', fontSize: '22px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h2>
+          case 'bold':
+            return <p key={idx} style={{ color: '#0F0F0F', fontWeight: 700, margin: '4px 0' }}>{line.text}</p>
+          case 'bullet':
+            return (
+              <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', margin: '4px 0', color: '#333', lineHeight: 1.7 }}>
+                <span style={{ color: '#00C6AE', marginTop: '2px' }}>●</span>
+                <span>{line.text}</span>
+              </div>
+            )
+          case 'hr':
+            return <hr key={idx} style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '12px 0' }} />
+          case 'blank':
+            return <div key={idx} style={{ height: '8px' }} />
+          default:
+            return <p key={idx} style={{ color: '#333', lineHeight: 1.7, margin: '4px 0' }}>{line.text}</p>
+        }
+      })}
+    </div>
+  )
+}
+
 export default function DashboardPage() {
   const router = useRouter()
   const [user, setUser] = useState(null)
@@ -131,25 +177,25 @@ export default function DashboardPage() {
       {modal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
           onClick={() => setModal(null)}>
-          <div style={{ background: 'var(--card-bg)', borderRadius: '20px', padding: '32px', maxWidth: '640px', width: '100%', maxHeight: '80vh', overflowY: 'auto', boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
+          <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '640px', width: '100%', height: '80vh', maxHeight: '80vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
             onClick={e => e.stopPropagation()}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: typeBadge[modal.type]?.bg || 'var(--subtle-bg)', color: typeBadge[modal.type]?.color || '#6b7280' }}>
+            <div style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 10, padding: '16px 24px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', flexShrink: 0, background: typeBadge[modal.type]?.bg || 'var(--subtle-bg)', color: typeBadge[modal.type]?.color || '#6b7280' }}>
                   {typeBadge[modal.type]?.label || modal.type}
                 </span>
-                <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)', margin: 0 }}>{modal.title}</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{modal.title}</h3>
               </div>
-              <button onClick={() => setModal(null)} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button onClick={() => setModal(null)} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '12px' }}>
                 <X size={16} color="#6b7280" />
               </button>
             </div>
-            <textarea
-              readOnly
-              value={modal.content || ''}
-              style={{ width: '100%', minHeight: '300px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
-            />
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 24px' }}>
+              <MarkdownPreview content={modal.content} />
+            </div>
+
+            <div style={{ position: 'sticky', bottom: 0, background: '#fff', zIndex: 10, padding: '16px 24px', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
               <button onClick={() => setModal(null)}
                 style={{ padding: '10px 24px', borderRadius: '10px', background: '#6C47FF', color: '#fff', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>
                 Close
