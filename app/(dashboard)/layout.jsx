@@ -180,7 +180,7 @@ export default function DashboardLayout({ children }) {
                     style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)', flexShrink: 0 }}
                   />
                 </button>
-                {hoveredGroup === groupLabel && (
+                {hoveredGroup === groupLabel && isOpen && (
                   <div style={{
                     position: 'absolute', left: '100%', top: '4px', marginLeft: '8px',
                     background: '#1a1a1a', border: '1px solid #333', color: 'white',
@@ -188,6 +188,48 @@ export default function DashboardLayout({ children }) {
                     whiteSpace: 'nowrap', zIndex: 200, pointerEvents: 'none'
                   }}>
                     {groupLabel}
+                  </div>
+                )}
+                {hoveredGroup === groupLabel && !isOpen && (
+                  <div
+                    onMouseEnter={() => setHoveredGroup(groupLabel)}
+                    onMouseLeave={() => setHoveredGroup(null)}
+                    style={{
+                      position: 'absolute', left: '260px', top: 0,
+                      background: '#1a1a1a', border: '1px solid #333',
+                      borderRadius: '8px', padding: '8px', minWidth: '180px',
+                      zIndex: 1000, display: 'flex', flexDirection: 'column', gap: '2px'
+                    }}
+                  >
+                    <div style={{
+                      fontSize: '10.5px', fontWeight: '700', letterSpacing: '0.08em',
+                      textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
+                      padding: '4px 8px 6px'
+                    }}>
+                      {groupLabel}
+                    </div>
+                    {items.map(({ label, href, icon: Icon }) => {
+                      const isActive = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="nav-link"
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '10px',
+                            padding: '8px 10px', borderRadius: '8px', textDecoration: 'none',
+                            fontSize: '13px', fontWeight: isActive ? '600' : '500',
+                            background: isActive
+                              ? 'linear-gradient(135deg, rgba(108,71,255,0.9), rgba(108,71,255,0.6))'
+                              : 'transparent',
+                            color: isActive ? '#fff' : 'rgba(255,255,255,0.65)',
+                          }}
+                        >
+                          <Icon size={15} strokeWidth={isActive ? 2.5 : 1.8} style={{ color: isActive ? '#fff' : '#00C6AE', flexShrink: 0 }} />
+                          {label}
+                        </Link>
+                      )
+                    })}
                   </div>
                 )}
                 <div
