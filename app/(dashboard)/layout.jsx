@@ -15,6 +15,7 @@ import {
   Wand2,
   BookOpenCheck,
   Link2,
+  Type,
   HelpCircle,
   Share2,
   CalendarDays,
@@ -37,6 +38,7 @@ const navGroups = [
       { label: 'Keyword Analyzer', href: '/keywords', icon: Search },
       { label: 'Content Improver', href: '/improver', icon: Wand2 },
       { label: 'Readability Score', href: '/readability', icon: BookOpenCheck },
+      { label: 'Title Generator', href: '/title-generator', icon: Type },
     ],
   },
   {
