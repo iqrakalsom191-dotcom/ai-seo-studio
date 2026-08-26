@@ -21,7 +21,8 @@ import {
   CalendarDays,
   Braces,
   Sun,
-  Moon
+  Moon,
+  FileText
 } from 'lucide-react'
 
 const navGroups = [
@@ -40,6 +41,7 @@ const navGroups = [
       { label: 'Content Improver', href: '/improver', icon: Wand2 },
       { label: 'Readability Score', href: '/readability', icon: BookOpenCheck },
       { label: 'Title Generator', href: '/title-generator', icon: Type },
+      { label: 'Word Count & SEO', href: '/word-count', icon: FileText },
     ],
   },
   {
