@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import toast from 'react-hot-toast';
-import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save, Download, CheckSquare, Square } from 'lucide-react';
+import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save, Download, CheckSquare, Square, FileDown } from 'lucide-react';
+import jsPDF from 'jspdf';
+import JSZip from 'jszip';
 
 const TYPE_LABELS = {
   blog:    { label: 'Blog',    color: 'bg-purple-100 text-purple-700' },
@@ -128,23 +130,82 @@ export default function LibraryPage() {
     );
   }
 
-  function handleExportSelected() {
-    const selectedItems = items.filter((i) => selectedIds.has(i.id));
-    const text = selectedItems
-      .map((item) => {
-        const date = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        return `Title: ${item.title || item.keyword || 'Untitled'}\nType: ${TYPE_LABELS[item.type]?.label || item.type}\nDate: ${date}\n\n${item.content || ''}`;
-      })
-      .join('\n\n----------------------------------------\n\n');
-    const blob = new Blob([text], { type: 'text/plain' });
+  function downloadBlob(blob, filename) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `content-export-${new Date().toISOString().slice(0, 10)}.txt`;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  function safeFilename(name) {
+    return (name || 'Untitled').replace(/[\\/:*?"<>|]/g, '-').trim() || 'Untitled';
+  }
+
+  function handleExportPDF(item) {
+    try {
+      const title = item.title || item.keyword || 'Untitled';
+      const doc = new jsPDF();
+      const margin = 15;
+      const maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
+      doc.setFontSize(16);
+      const titleLines = doc.splitTextToSize(title, maxWidth);
+      doc.text(titleLines, margin, 20);
+      doc.setFontSize(11);
+      const bodyLines = doc.splitTextToSize(item.content || '', maxWidth);
+      doc.text(bodyLines, margin, 20 + titleLines.length * 8 + 6);
+      doc.save(`${safeFilename(title)}.pdf`);
+      toast.success('Downloaded!');
+    } catch (e) {
+      toast.error('Export failed');
+    }
+  }
+
+  function handleExportWord(item) {
+    try {
+      const title = item.title || item.keyword || 'Untitled';
+      const html = `
+        <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+        <head><meta charset="utf-8"><title>${title}</title></head>
+        <body>
+          <h1>${title}</h1>
+          <p>${(item.content || '').replace(/\n/g, '<br/>')}</p>
+        </body>
+        </html>`;
+      const blob = new Blob(['﻿', html], { type: 'application/msword' });
+      downloadBlob(blob, `${safeFilename(title)}.doc`);
+      toast.success('Downloaded!');
+    } catch (e) {
+      toast.error('Export failed');
+    }
+  }
+
+  async function handleExportSelected() {
+    try {
+      const selectedItems = items.filter((i) => selectedIds.has(i.id));
+      const zip = new JSZip();
+      const usedNames = new Set();
+      selectedItems.forEach((item) => {
+        const date = new Date(item.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const text = `Title: ${item.title || item.keyword || 'Untitled'}\nType: ${TYPE_LABELS[item.type]?.label || item.type}\nDate: ${date}\n\n${item.content || ''}`;
+        let name = `${safeFilename(item.title || item.keyword || 'Untitled')}.txt`;
+        let i = 1;
+        while (usedNames.has(name)) {
+          name = `${safeFilename(item.title || item.keyword || 'Untitled')}-${i}.txt`;
+          i++;
+        }
+        usedNames.add(name);
+        zip.file(name, text);
+      });
+      const blob = await zip.generateAsync({ type: 'blob' });
+      downloadBlob(blob, `content-export-${new Date().toISOString().slice(0, 10)}.zip`);
+      toast.success('Downloaded!');
+    } catch (e) {
+      toast.error('Export failed');
+    }
   }
 
   const filters = ['all', 'blog', 'meta', 'keyword'];
@@ -239,7 +300,7 @@ export default function LibraryPage() {
               className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
               style={{ backgroundColor: '#6C47FF', color: '#fff' }}>
               <Download size={15} />
-              Export Selected (.txt)
+              Download Selected (.zip)
             </button>
           )}
         </div>
@@ -314,6 +375,21 @@ export default function LibraryPage() {
                     </div>
                   )}
                 </div>
+
+                {!selectMode && (
+                  <div className="flex gap-2 pt-1" onClick={e => e.stopPropagation()}>
+                    <button onClick={() => handleExportPDF(item)}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors hover:bg-gray-50 border border-gray-100 text-gray-500">
+                      <FileDown className="w-3.5 h-3.5" />
+                      Export PDF
+                    </button>
+                    <button onClick={() => handleExportWord(item)}
+                      className="flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-lg text-xs font-medium transition-colors hover:bg-gray-50 border border-gray-100 text-gray-500">
+                      <FileText className="w-3.5 h-3.5" />
+                      Export Word
+                    </button>
+                  </div>
+                )}
               </div>
             );
           })}
