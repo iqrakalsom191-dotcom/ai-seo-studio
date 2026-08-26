@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
-import { FileText, Key, Calendar, Flame, Sparkles, Tags, Search, ArrowRight, Clock, Lightbulb, X } from 'lucide-react'
+import { FileText, Key, Calendar, Flame, Sparkles, Tags, Search, ArrowRight, ArrowUpRight, Clock, Lightbulb, X, Link2, HelpCircle, Braces, ChevronRight } from 'lucide-react'
 
 const typeBadge = {
   blog:    { label: 'Blog',    bg: 'rgba(108,71,255,0.12)', color: '#6C47FF' },
@@ -147,30 +147,44 @@ export default function DashboardPage() {
   }
 
   const statCards = [
-    { label: 'Total Content',  value: stats.total,            icon: FileText, color: '#6C47FF', bg: 'rgba(108,71,255,0.12)', href: '/library' },
-    { label: 'Keywords Saved', value: stats.keywords,         icon: Key,      color: '#00C6AE', bg: 'rgba(0,198,174,0.12)',  href: '/library?type=keyword' },
-    { label: 'This Week',      value: stats.thisWeek,         icon: Calendar, color: '#a78bfa', bg: 'rgba(167,139,250,0.12)',href: '/library' },
-    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', href: null },
+    { label: 'Total Content',  value: stats.total,            icon: FileText, color: '#6C47FF', bg: 'rgba(108,71,255,0.12)', trend: '+12%', href: '/library' },
+    { label: 'Keywords Saved', value: stats.keywords,         icon: Key,      color: '#00C6AE', bg: 'rgba(0,198,174,0.12)',  trend: '+8%',  href: '/library?type=keyword' },
+    { label: 'This Week',      value: stats.thisWeek,         icon: Calendar, color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', trend: '+24%', href: '/library' },
+    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', trend: null,   href: null },
   ]
 
   const actions = [
-    { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator' },
-    { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta'      },
-    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords'  },
+    { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator', gradient: 'linear-gradient(135deg, #6C47FF, #9b7bff)' },
+    { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta',      gradient: 'linear-gradient(135deg, #00C6AE, #34d9c4)' },
+    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords',  gradient: 'linear-gradient(135deg, #6C47FF, #00C6AE)' },
+  ]
+
+  const tools = [
+    { label: 'Blog Generator',  icon: Sparkles,   href: '/generator' },
+    { label: 'Meta Tags',       icon: Tags,       href: '/meta' },
+    { label: 'Keywords',        icon: Search,     href: '/keywords' },
+    { label: 'Slug Generator',  icon: Link2,       href: '/slug' },
+    { label: 'FAQ Generator',   icon: HelpCircle, href: '/faq' },
+    { label: 'Schema Markup',   icon: Braces,     href: '/schema' },
   ]
 
   const formatDate = (iso) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-  const cardStyle = { background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', textDecoration: 'none', display: 'block' }
 
   return (
     <div style={{ padding: '40px 48px', maxWidth: '1100px' }}>
       <style>{`
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(108,71,255,0.10) !important; }
         .stat-card { transition: all 0.2s ease; }
-        .action-card:hover { transform: translateY(-2px); border-color: #6C47FF !important; box-shadow: 0 8px 24px rgba(108,71,255,0.12) !important; }
+        .action-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(108,71,255,0.22) !important; }
         .action-card { transition: all 0.2s ease; }
-        .activity-row:hover { background: rgba(108,71,255,0.04) !important; cursor: pointer; }
+        .tool-card:hover { transform: translateY(-2px); border-color: #6C47FF !important; box-shadow: 0 8px 20px rgba(108,71,255,0.12) !important; }
+        .tool-card { transition: all 0.2s ease; }
+        .activity-row:hover { background: rgba(108,71,255,0.05) !important; cursor: pointer; }
+        .activity-row:hover .activity-arrow { opacity: 1 !important; transform: translateX(2px); }
         .activity-row { transition: background 0.15s ease; }
+        .activity-arrow { transition: all 0.15s ease; }
+        .cta-btn:hover { background: #5b3ae6 !important; transform: translateY(-1px); }
+        .cta-btn { transition: all 0.2s ease; }
       `}</style>
 
       {/* Content Modal */}
@@ -205,13 +219,20 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Header */}
-      <div style={{ marginBottom: '40px' }}>
-        <p style={{ fontSize: '14px', color: '#00C6AE', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Welcome back</p>
-        <h1 style={{ fontSize: '36px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.8px', marginBottom: '8px' }}>
-          {user?.user_metadata?.full_name || 'There'} 👋
-        </h1>
-        <p style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>Here's what's happening with your SEO content today.</p>
+      {/* Hero */}
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px', marginBottom: '40px', flexWrap: 'wrap' }}>
+        <div>
+          <p style={{ fontSize: '14px', color: '#00C6AE', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Welcome back</p>
+          <h1 style={{ fontSize: '36px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.8px', marginBottom: '8px' }}>
+            {user?.user_metadata?.full_name || 'There'} 👋
+          </h1>
+          <p style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>Here's what's happening with your SEO content today.</p>
+        </div>
+        <Link href="/generator" className="cta-btn"
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 24px', borderRadius: '12px', background: '#6C47FF', color: '#fff', fontSize: '15px', fontWeight: '700', textDecoration: 'none', boxShadow: '0 8px 20px rgba(108,71,255,0.3)', flexShrink: 0 }}>
+          <Sparkles size={18} />
+          Generate Content
+        </Link>
       </div>
 
       {/* Date Filter */}
@@ -227,21 +248,28 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '40px' }}>
-        {statCards.map(({ label, value, icon: Icon, color, bg, href }) => {
+        {statCards.map(({ label, value, icon: Icon, color, bg, trend, href }) => {
           const inner = (
             <>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
                 <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Icon size={20} style={{ color }} />
                 </div>
+                {trend && (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '11px', fontWeight: '700', color: '#10b981' }}>
+                    <ArrowUpRight size={12} />
+                    {trend}
+                  </span>
+                )}
               </div>
               <div style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.5px', marginBottom: '4px' }}>{value}</div>
               <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: '500' }}>{label}</div>
             </>
           )
+          const style = { background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', borderLeft: `4px solid ${color}`, boxShadow: '0 4px 16px rgba(0,0,0,0.04)', textDecoration: 'none', display: 'block' }
           return href
-            ? <Link key={label} href={href} className="stat-card" style={cardStyle}>{inner}</Link>
-            : <div key={label} className="stat-card" style={cardStyle}>{inner}</div>
+            ? <Link key={label} href={href} className="stat-card" style={style}>{inner}</Link>
+            : <div key={label} className="stat-card" style={style}>{inner}</div>
         })}
       </div>
 
@@ -249,16 +277,32 @@ export default function DashboardPage() {
       <div style={{ marginBottom: '40px' }}>
         <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Quick Actions</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {actions.map(({ label, desc, icon: Icon, href }) => (
-            <Link key={href} href={href} className="action-card" style={{ textDecoration: 'none', background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', display: 'block' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'linear-gradient(135deg, #6C47FF, #00C6AE)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', boxShadow: '0 4px 12px rgba(108,71,255,0.3)' }}>
-                <Icon size={20} style={{ color: '#fff' }} />
+          {actions.map(({ label, desc, icon: Icon, href, gradient }) => (
+            <Link key={href} href={href} className="action-card" style={{ textDecoration: 'none', background: gradient, borderRadius: '18px', padding: '28px', display: 'block', boxShadow: '0 8px 20px rgba(108,71,255,0.18)', minHeight: '160px' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Icon size={26} style={{ color: '#fff' }} />
               </div>
-              <div style={{ fontSize: '15px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '6px' }}>{label}</div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '16px' }}>{desc}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '600', color: '#6C47FF' }}>
+              <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '6px' }}>{label}</div>
+              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', lineHeight: '1.5', marginBottom: '18px' }}>{desc}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color: '#fff' }}>
                 Get started <ArrowRight size={14} />
               </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Tools */}
+      <div style={{ marginBottom: '40px' }}>
+        <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Tools</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '14px' }}>
+          {tools.map(({ label, icon: Icon, href }) => (
+            <Link key={href} href={href} className="tool-card"
+              style={{ textDecoration: 'none', background: 'var(--card-bg)', borderRadius: '14px', padding: '18px 12px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 2px 10px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '10px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(108,71,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon size={18} style={{ color: '#6C47FF' }} />
+              </div>
+              <span style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary)' }}>{label}</span>
             </Link>
           ))}
         </div>
@@ -281,8 +325,8 @@ export default function DashboardPage() {
                   <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)' }}>{label}</span>
                   <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: bg, color }}>{count}</span>
                 </div>
-                <div style={{ height: '6px', borderRadius: '99px', background: 'var(--subtle-bg)' }}>
-                  <div style={{ height: '6px', borderRadius: '99px', background: bar, width: pct + '%', transition: 'width 0.6s ease' }} />
+                <div style={{ height: '8px', borderRadius: '99px', background: 'var(--subtle-bg)', overflow: 'hidden' }}>
+                  <div style={{ height: '8px', borderRadius: '99px', background: bar, width: pct + '%', transition: 'width 0.6s ease' }} />
                 </div>
                 <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '6px' }}>{pct}% of total</div>
               </div>
@@ -327,12 +371,13 @@ export default function DashboardPage() {
                   return (
                     <div key={item.id} className="activity-row"
                       onClick={() => setModal(item)}
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: i < recent.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none' }}>
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: i < recent.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none', gap: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
                         <span style={{ padding: '3px 8px', borderRadius: '20px', fontSize: '10px', fontWeight: '700', background: badge.bg, color: badge.color, flexShrink: 0 }}>{badge.label}</span>
                         <span style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
                       </div>
-                      <span style={{ fontSize: '11px', color: '#9ca3af', flexShrink: 0, marginLeft: '12px' }}>{formatDate(item.created_at)}</span>
+                      <span style={{ fontSize: '11px', color: '#9ca3af', flexShrink: 0 }}>{formatDate(item.created_at)}</span>
+                      <ChevronRight size={15} className="activity-arrow" style={{ color: '#6C47FF', flexShrink: 0, opacity: 0.5 }} />
                     </div>
                   )
                 })}
@@ -343,13 +388,13 @@ export default function DashboardPage() {
       </div>
 
       {/* SEO Tip */}
-      <div style={{ background: 'linear-gradient(135deg, rgba(108,71,255,0.06), rgba(0,198,174,0.06))', borderRadius: '16px', padding: '24px', border: '1px solid rgba(108,71,255,0.12)', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'linear-gradient(135deg, #6C47FF, #00C6AE)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <div style={{ background: 'linear-gradient(135deg, #6C47FF, #00C6AE)', borderRadius: '16px', padding: '24px', boxShadow: '0 8px 24px rgba(108,71,255,0.25)', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Lightbulb size={18} style={{ color: '#fff' }} />
         </div>
         <div>
-          <div style={{ fontSize: '12px', fontWeight: '700', color: '#6C47FF', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>SEO Tip of the Day</div>
-          <div style={{ fontSize: '14px', color: 'var(--text-primary)', lineHeight: '1.6' }}>{tip}</div>
+          <div style={{ fontSize: '12px', fontWeight: '700', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', opacity: 0.9 }}>SEO Tip of the Day</div>
+          <div style={{ fontSize: '14px', color: '#fff', lineHeight: '1.6' }}>{tip}</div>
         </div>
       </div>
     </div>
