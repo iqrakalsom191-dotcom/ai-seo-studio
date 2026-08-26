@@ -83,6 +83,7 @@ export default function DashboardLayout({ children }) {
   const [expanded, setExpanded] = useState(() =>
     Object.fromEntries(navGroups.map(({ label }) => [label, label === 'Overview']))
   )
+  const [hoveredGroup, setHoveredGroup] = useState(null)
 
   const toggleGroup = (label) =>
     setExpanded((prev) => ({ ...prev, [label]: !prev[label] }))
@@ -122,9 +123,9 @@ export default function DashboardLayout({ children }) {
 
       {/* Sidebar */}
       <div style={{
-        width: '260px', minHeight: '100vh', background: '#0F0F0F',
+        width: '260px', height: '100vh', background: '#0F0F0F',
         display: 'flex', flexDirection: 'column', position: 'fixed',
-        top: 0, left: 0, zIndex: 100,
+        top: 0, left: 0, zIndex: 100, overflowY: 'auto',
         borderRight: '1px solid rgba(108,71,255,0.25)',
         boxShadow: '4px 0 24px rgba(108,71,255,0.08)'
       }}>
@@ -148,20 +149,21 @@ export default function DashboardLayout({ children }) {
         </div>
 
         {/* Nav Links */}
-        <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
+        <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {navGroups.map(({ label: groupLabel, items }) => {
             const isOpen = !!expanded[groupLabel]
             return (
-              <div key={groupLabel} style={{ marginBottom: '4px' }}>
+              <div key={groupLabel} style={{ position: 'relative' }}>
                 <button
                   className="nav-group-toggle"
                   onClick={() => toggleGroup(groupLabel)}
-                  title={groupLabel}
+                  onMouseEnter={() => setHoveredGroup(groupLabel)}
+                  onMouseLeave={() => setHoveredGroup(null)}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     background: 'transparent', border: 'none', cursor: 'pointer',
-                    fontSize: '10.5px', fontWeight: '700', letterSpacing: '0.08em',
-                    textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
+                    fontSize: '14px', fontWeight: '600', letterSpacing: '0.08em',
+                    textTransform: 'uppercase', color: '#aaaaaa',
                     padding: '8px 14px', borderRadius: '8px',
                   }}
                 >
@@ -172,6 +174,16 @@ export default function DashboardLayout({ children }) {
                     style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)', flexShrink: 0 }}
                   />
                 </button>
+                {hoveredGroup === groupLabel && (
+                  <div style={{
+                    position: 'absolute', left: '100%', top: '4px', marginLeft: '8px',
+                    background: '#1a1a1a', border: '1px solid #333', color: 'white',
+                    padding: '4px 10px', borderRadius: '6px', fontSize: '12px',
+                    whiteSpace: 'nowrap', zIndex: 200, pointerEvents: 'none'
+                  }}>
+                    {groupLabel}
+                  </div>
+                )}
                 <div
                   className="nav-group-body"
                   style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
