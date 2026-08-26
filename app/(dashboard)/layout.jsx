@@ -42,6 +42,7 @@ const navGroups = [
       { label: 'Readability Score', href: '/readability', icon: BookOpenCheck },
       { label: 'Title Generator', href: '/title-generator', icon: Type },
       { label: 'Word Count & SEO', href: '/word-count', icon: FileText },
+      { label: 'Internal Links', href: '/internal-links', icon: Link2 },
     ],
   },
   {
