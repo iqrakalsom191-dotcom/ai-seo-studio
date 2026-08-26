@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
@@ -84,9 +84,41 @@ export default function DashboardLayout({ children }) {
     Object.fromEntries(navGroups.map(({ label }) => [label, label === 'Overview']))
   )
   const [hoveredGroup, setHoveredGroup] = useState(null)
+  const [flyout, setFlyout] = useState(null)
+  const flyoutTimeoutRef = useRef(null)
 
   const toggleGroup = (label) =>
     setExpanded((prev) => ({ ...prev, [label]: !prev[label] }))
+
+  const openFlyout = (groupKey, e) => {
+    if (flyoutTimeoutRef.current) {
+      clearTimeout(flyoutTimeoutRef.current)
+      flyoutTimeoutRef.current = null
+    }
+    const top = e.currentTarget.getBoundingClientRect().top
+    setFlyout({ groupKey, top })
+  }
+
+  const scheduleCloseFlyout = () => {
+    flyoutTimeoutRef.current = setTimeout(() => {
+      setFlyout(null)
+    }, 200)
+  }
+
+  const cancelCloseFlyout = () => {
+    if (flyoutTimeoutRef.current) {
+      clearTimeout(flyoutTimeoutRef.current)
+      flyoutTimeoutRef.current = null
+    }
+  }
+
+  const closeFlyoutImmediately = () => {
+    if (flyoutTimeoutRef.current) {
+      clearTimeout(flyoutTimeoutRef.current)
+      flyoutTimeoutRef.current = null
+    }
+    setFlyout(null)
+  }
 
   useEffect(() => {
     setMounted(true)
@@ -120,6 +152,8 @@ export default function DashboardLayout({ children }) {
         .nav-group-chevron { transition: transform 0.25s ease !important; }
         .nav-group-body { transition: grid-template-rows 0.25s ease !important; display: grid; overflow: hidden; }
         .nav-group-body[data-open="false"] { height: 0; overflow: hidden; visibility: hidden; }
+        .flyout-link:hover { background: rgba(108,71,255,0.2) !important; color: #fff !important; }
+        .flyout-link { transition: all 150ms ease !important; }
       `}</style>
 
       {/* Sidebar */}
@@ -161,8 +195,14 @@ export default function DashboardLayout({ children }) {
                 <button
                   className="nav-group-toggle"
                   onClick={() => toggleGroup(groupLabel)}
-                  onMouseEnter={() => setHoveredGroup(groupLabel)}
-                  onMouseLeave={() => setHoveredGroup(null)}
+                  onMouseEnter={(e) => {
+                    setHoveredGroup(groupLabel)
+                    if (!isOpen) openFlyout(groupLabel, e)
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredGroup(null)
+                    scheduleCloseFlyout()
+                  }}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     background: hasActiveChild ? 'rgba(108,71,255,0.1)' : 'transparent',
@@ -190,20 +230,20 @@ export default function DashboardLayout({ children }) {
                     {groupLabel}
                   </div>
                 )}
-                {hoveredGroup === groupLabel && !isOpen && (
+                {flyout && flyout.groupKey === groupLabel && !isOpen && (
                   <div
-                    onMouseEnter={() => setHoveredGroup(groupLabel)}
-                    onMouseLeave={() => setHoveredGroup(null)}
+                    onMouseEnter={cancelCloseFlyout}
+                    onMouseLeave={closeFlyoutImmediately}
                     style={{
-                      position: 'absolute', left: '260px', top: 0,
-                      background: '#1a1a1a', border: '1px solid #333',
+                      position: 'fixed', left: '260px', top: flyout.top,
+                      background: '#1a1a1a', border: '1px solid #444',
                       borderRadius: '8px', padding: '8px', minWidth: '180px',
-                      zIndex: 1000, display: 'flex', flexDirection: 'column', gap: '2px'
+                      zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '2px'
                     }}
                   >
                     <div style={{
-                      fontSize: '10.5px', fontWeight: '700', letterSpacing: '0.08em',
-                      textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)',
+                      fontSize: '11px', fontWeight: '700', letterSpacing: '0.08em',
+                      textTransform: 'uppercase', color: '#aaaaaa',
                       padding: '4px 8px 6px'
                     }}>
                       {groupLabel}
@@ -214,11 +254,12 @@ export default function DashboardLayout({ children }) {
                         <Link
                           key={href}
                           href={href}
-                          className="nav-link"
+                          className="flyout-link"
                           style={{
                             display: 'flex', alignItems: 'center', gap: '10px',
                             padding: '8px 10px', borderRadius: '8px', textDecoration: 'none',
                             fontSize: '13px', fontWeight: isActive ? '600' : '500',
+                            width: '100%',
                             background: isActive
                               ? 'linear-gradient(135deg, rgba(108,71,255,0.9), rgba(108,71,255,0.6))'
                               : 'transparent',
