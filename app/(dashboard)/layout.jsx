@@ -119,6 +119,7 @@ export default function DashboardLayout({ children }) {
         .nav-group-toggle { transition: all 150ms ease !important; }
         .nav-group-chevron { transition: transform 0.25s ease !important; }
         .nav-group-body { transition: grid-template-rows 0.25s ease !important; display: grid; overflow: hidden; }
+        .nav-group-body[data-open="false"] { height: 0; overflow: hidden; visibility: hidden; }
       `}</style>
 
       {/* Sidebar */}
@@ -152,6 +153,9 @@ export default function DashboardLayout({ children }) {
         <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {navGroups.map(({ label: groupLabel, items }) => {
             const isOpen = !!expanded[groupLabel]
+            const hasActiveChild = items.some(({ href }) =>
+              pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
+            )
             return (
               <div key={groupLabel} style={{ position: 'relative' }}>
                 <button
@@ -161,7 +165,9 @@ export default function DashboardLayout({ children }) {
                   onMouseLeave={() => setHoveredGroup(null)}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    background: 'transparent', border: 'none', cursor: 'pointer',
+                    background: hasActiveChild ? 'rgba(108,71,255,0.1)' : 'transparent',
+                    border: 'none', cursor: 'pointer',
+                    borderLeft: hasActiveChild ? '3px solid #6C47FF' : '3px solid transparent',
                     fontSize: '14px', fontWeight: '600', letterSpacing: '0.08em',
                     textTransform: 'uppercase', color: '#aaaaaa',
                     padding: '8px 14px', borderRadius: '8px',
@@ -186,6 +192,7 @@ export default function DashboardLayout({ children }) {
                 )}
                 <div
                   className="nav-group-body"
+                  data-open={isOpen}
                   style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
                 >
                   <div style={{ minHeight: 0, display: 'flex', flexDirection: 'column', gap: '2px', padding: '2px 0 6px' }}>
