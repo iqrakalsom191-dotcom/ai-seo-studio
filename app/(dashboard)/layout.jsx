@@ -24,7 +24,8 @@ import {
   Moon,
   FileText,
   Globe,
-  Gauge
+  Gauge,
+  ChevronDown
 } from 'lucide-react'
 
 const navGroups = [
@@ -79,6 +80,12 @@ export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null)
   const { resolvedTheme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [expanded, setExpanded] = useState(() =>
+    Object.fromEntries(navGroups.map(({ label }) => [label, label === 'Overview']))
+  )
+
+  const toggleGroup = (label) =>
+    setExpanded((prev) => ({ ...prev, [label]: !prev[label] }))
 
   useEffect(() => {
     setMounted(true)
@@ -107,6 +114,10 @@ export default function DashboardLayout({ children }) {
         .logout-btn:hover { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
         .nav-link { transition: all 0.18s ease !important; }
         .logout-btn { transition: all 0.18s ease !important; }
+        .nav-group-toggle:hover { background: rgba(255,255,255,0.05) !important; color: rgba(255,255,255,0.6) !important; }
+        .nav-group-toggle { transition: all 0.18s ease !important; }
+        .nav-group-chevron { transition: transform 0.25s ease !important; }
+        .nav-group-body { transition: grid-template-rows 0.25s ease !important; display: grid; overflow: hidden; }
       `}</style>
 
       {/* Sidebar */}
@@ -138,54 +149,75 @@ export default function DashboardLayout({ children }) {
 
         {/* Nav Links */}
         <nav style={{ flex: 1, padding: '16px 12px', display: 'flex', flexDirection: 'column', gap: '4px', overflowY: 'auto' }}>
-          {navGroups.map(({ label: groupLabel, items }) => (
-            <div key={groupLabel} style={{ marginBottom: '8px' }}>
-              <div style={{
-                fontSize: '10.5px', fontWeight: '700', letterSpacing: '0.08em',
-                textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
-                padding: '8px 14px 6px'
-              }}>
-                {groupLabel}
+          {navGroups.map(({ label: groupLabel, items }) => {
+            const isOpen = !!expanded[groupLabel]
+            return (
+              <div key={groupLabel} style={{ marginBottom: '4px' }}>
+                <button
+                  className="nav-group-toggle"
+                  onClick={() => toggleGroup(groupLabel)}
+                  title={groupLabel}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                    background: 'transparent', border: 'none', cursor: 'pointer',
+                    fontSize: '10.5px', fontWeight: '700', letterSpacing: '0.08em',
+                    textTransform: 'uppercase', color: 'rgba(255,255,255,0.3)',
+                    padding: '8px 14px', borderRadius: '8px',
+                  }}
+                >
+                  {groupLabel}
+                  <ChevronDown
+                    size={14}
+                    className="nav-group-chevron"
+                    style={{ transform: isOpen ? 'rotate(0deg)' : 'rotate(-90deg)', flexShrink: 0 }}
+                  />
+                </button>
+                <div
+                  className="nav-group-body"
+                  style={{ gridTemplateRows: isOpen ? '1fr' : '0fr' }}
+                >
+                  <div style={{ minHeight: 0, display: 'flex', flexDirection: 'column', gap: '2px', padding: '2px 0 6px' }}>
+                    {items.map(({ label, href, icon: Icon }) => {
+                      const isActive = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
+                      return (
+                        <Link
+                          key={href}
+                          href={href}
+                          className="nav-link"
+                          title={label}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: '12px',
+                            padding: '10px 14px', borderRadius: '10px', textDecoration: 'none',
+                            fontSize: '14px', fontWeight: isActive ? '600' : '500',
+                            position: 'relative', overflow: 'hidden',
+                            background: isActive
+                              ? 'linear-gradient(135deg, rgba(108,71,255,0.9), rgba(108,71,255,0.6))'
+                              : 'transparent',
+                            color: isActive ? '#fff' : 'rgba(255,255,255,0.45)',
+                            boxShadow: isActive ? '0 4px 16px rgba(108,71,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15)' : 'none',
+                            border: isActive ? '1px solid rgba(108,71,255,0.5)' : '1px solid transparent',
+                          }}
+                        >
+                          <Icon
+                            size={17}
+                            strokeWidth={isActive ? 2.5 : 1.8}
+                            style={{ color: isActive ? '#fff' : '#00C6AE', flexShrink: 0 }}
+                          />
+                          {label}
+                          {isActive && (
+                            <div style={{
+                              position: 'absolute', right: '12px', width: '6px', height: '6px',
+                              borderRadius: '50%', background: '#fff', opacity: 0.7
+                            }} />
+                          )}
+                        </Link>
+                      )
+                    })}
+                  </div>
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                {items.map(({ label, href, icon: Icon }) => {
-                  const isActive = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
-                  return (
-                    <Link
-                      key={href}
-                      href={href}
-                      className="nav-link"
-                      style={{
-                        display: 'flex', alignItems: 'center', gap: '12px',
-                        padding: '10px 14px', borderRadius: '10px', textDecoration: 'none',
-                        fontSize: '14px', fontWeight: isActive ? '600' : '500',
-                        position: 'relative', overflow: 'hidden',
-                        background: isActive
-                          ? 'linear-gradient(135deg, rgba(108,71,255,0.9), rgba(108,71,255,0.6))'
-                          : 'transparent',
-                        color: isActive ? '#fff' : 'rgba(255,255,255,0.45)',
-                        boxShadow: isActive ? '0 4px 16px rgba(108,71,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15)' : 'none',
-                        border: isActive ? '1px solid rgba(108,71,255,0.5)' : '1px solid transparent',
-                      }}
-                    >
-                      <Icon
-                        size={17}
-                        strokeWidth={isActive ? 2.5 : 1.8}
-                        style={{ color: isActive ? '#fff' : '#00C6AE', flexShrink: 0 }}
-                      />
-                      {label}
-                      {isActive && (
-                        <div style={{
-                          position: 'absolute', right: '12px', width: '6px', height: '6px',
-                          borderRadius: '50%', background: '#fff', opacity: 0.7
-                        }} />
-                      )}
-                    </Link>
-                  )
-                })}
-              </div>
-            </div>
-          ))}
+            )
+          })}
         </nav>
 
         {/* User + Logout */}
