@@ -25,6 +25,52 @@ const typeBadge = {
   keyword: { bg: 'rgba(245,158,11,0.12)', color: '#b45309' },
 };
 
+function parseMarkdownLines(content) {
+  return (content || '').split('\n').map((raw) => {
+    const line = raw.trim();
+    if (!line) return { type: 'blank', text: '' };
+    if (line.startsWith('###')) return { type: 'h3', text: line.replace(/^#{3}\s*/, '') };
+    if (line.startsWith('##')) return { type: 'h2', text: line.replace(/^#{2}\s*/, '') };
+    if (line.startsWith('---')) return { type: 'hr', text: '' };
+    if (line.startsWith('* ')) return { type: 'bullet', text: line.replace(/^\*\s*/, '') };
+    if (line.startsWith('**') && line.endsWith('**') && line.length > 3) {
+      return { type: 'bold', text: line.replace(/^\*\*|\*\*$/g, '') };
+    }
+    return { type: 'paragraph', text: line };
+  });
+}
+
+function MarkdownPreview({ content }) {
+  const lines = parseMarkdownLines(content);
+  return (
+    <div>
+      {lines.map((line, idx) => {
+        switch (line.type) {
+          case 'h3':
+            return <h3 key={idx} style={{ color: '#6C47FF', fontSize: '18px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h3>;
+          case 'h2':
+            return <h2 key={idx} style={{ color: '#6C47FF', fontSize: '22px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h2>;
+          case 'bold':
+            return <p key={idx} style={{ color: '#0F0F0F', fontWeight: 700, margin: '4px 0' }}>{line.text}</p>;
+          case 'bullet':
+            return (
+              <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', margin: '4px 0', color: '#333', lineHeight: 1.7 }}>
+                <span style={{ color: '#00C6AE', marginTop: '2px' }}>●</span>
+                <span>{line.text}</span>
+              </div>
+            );
+          case 'hr':
+            return <hr key={idx} style={{ border: 'none', borderTop: '1px solid #e0e0e0', margin: '12px 0' }} />;
+          case 'blank':
+            return <div key={idx} style={{ height: '8px' }} />;
+          default:
+            return <p key={idx} style={{ color: '#333', lineHeight: 1.7, margin: '4px 0' }}>{line.text}</p>;
+        }
+      })}
+    </div>
+  );
+}
+
 export default function LibraryPage() {
   const [items, setItems] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -34,6 +80,7 @@ export default function LibraryPage() {
   const [copied, setCopied] = useState(null);
   const [modal, setModal] = useState(null);
   const [editContent, setEditContent] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
@@ -84,12 +131,14 @@ export default function LibraryPage() {
     setModal(item);
     setEditContent(item.content || '');
     setSaveSuccess(false);
+    setIsEditing(false);
   }
 
   function closeModal() {
     setModal(null);
     setEditContent('');
     setSaveSuccess(false);
+    setIsEditing(false);
   }
 
   async function handleSaveChanges() {
@@ -102,6 +151,7 @@ export default function LibraryPage() {
     if (!error) {
       setItems(prev => prev.map(i => i.id === modal.id ? { ...i, content: editContent } : i));
       setSaveSuccess(true);
+      setIsEditing(false);
       toast.success('Saved!');
       setTimeout(() => setSaveSuccess(false), 2000);
     } else {
@@ -151,17 +201,77 @@ export default function LibraryPage() {
       const doc = new jsPDF();
       const margin = 15;
       const maxWidth = doc.internal.pageSize.getWidth() - margin * 2;
-      doc.setFontSize(16);
+      const pageHeight = doc.internal.pageSize.getHeight();
+      let y = 20;
+
+      const ensureSpace = (needed) => {
+        if (y + needed > pageHeight - margin) {
+          doc.addPage();
+          y = margin;
+        }
+      };
+
+      doc.setTextColor('#6C47FF');
+      doc.setFontSize(18);
+      doc.setFont(undefined, 'bold');
       const titleLines = doc.splitTextToSize(title, maxWidth);
-      doc.text(titleLines, margin, 20);
-      doc.setFontSize(11);
-      const bodyLines = doc.splitTextToSize(item.content || '', maxWidth);
-      doc.text(bodyLines, margin, 20 + titleLines.length * 8 + 6);
+      doc.text(titleLines, margin, y);
+      y += titleLines.length * 8 + 6;
+
+      parseMarkdownLines(item.content).forEach((line) => {
+        if (line.type === 'blank') { y += 4; return; }
+        if (line.type === 'hr') {
+          ensureSpace(6);
+          doc.setDrawColor('#e0e0e0');
+          doc.line(margin, y, margin + maxWidth, y);
+          y += 8;
+          return;
+        }
+        let text = line.text;
+        let fontSize = 11;
+        let color = '#333333';
+        let fontStyle = 'normal';
+        let indent = margin;
+        if (line.type === 'h3') { fontSize = 14; color = '#6C47FF'; fontStyle = 'bold'; }
+        else if (line.type === 'h2') { fontSize = 16; color = '#6C47FF'; fontStyle = 'bold'; }
+        else if (line.type === 'bold') { fontSize = 11; color = '#0F0F0F'; fontStyle = 'bold'; }
+        else if (line.type === 'bullet') { text = `•  ${text}`; indent = margin + 4; }
+
+        doc.setFontSize(fontSize);
+        doc.setTextColor(color);
+        doc.setFont(undefined, fontStyle);
+        const wrapped = doc.splitTextToSize(text, maxWidth - (indent - margin));
+        ensureSpace(wrapped.length * (fontSize * 0.5) + 4);
+        doc.text(wrapped, indent, y);
+        y += wrapped.length * (fontSize * 0.5) + 4;
+      });
+
       doc.save(`${safeFilename(title)}.pdf`);
       toast.success('Downloaded!');
     } catch (e) {
       toast.error('Export failed');
     }
+  }
+
+  function markdownLinesToHtml(content) {
+    return parseMarkdownLines(content).map((line) => {
+      switch (line.type) {
+        case 'h3':
+          return `<h3 style="color:#6C47FF;font-size:18px;font-weight:700;margin:16px 0 8px;">${line.text}</h3>`;
+        case 'h2':
+          return `<h2 style="color:#6C47FF;font-size:22px;font-weight:700;margin:16px 0 8px;">${line.text}</h2>`;
+        case 'bold':
+          return `<p style="color:#0F0F0F;font-weight:700;margin:4px 0;">${line.text}</p>`;
+        case 'bullet':
+          return `<p style="margin:4px 0;color:#333;line-height:1.7;"><span style="color:#00C6AE;">&#9679;</span>&nbsp; ${line.text}</p>`;
+        case 'hr':
+          return `<hr style="border:none;border-top:1px solid #e0e0e0;margin:12px 0;" />`;
+        case 'blank':
+          return `<div style="height:8px;"></div>`;
+        default:
+          return `<p style="color:#333;line-height:1.7;margin:4px 0;">${line.text}</p>`;
+      }
+    }).join('\n');
   }
 
   function handleExportWord(item) {
@@ -171,8 +281,8 @@ export default function LibraryPage() {
         <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
         <head><meta charset="utf-8"><title>${title}</title></head>
         <body>
-          <h1>${title}</h1>
-          <p>${(item.content || '').replace(/\n/g, '<br/>')}</p>
+          <h1 style="color:#6C47FF;">${title}</h1>
+          ${markdownLinesToHtml(item.content)}
         </body>
         </html>`;
       const blob = new Blob(['﻿', html], { type: 'application/msword' });
@@ -240,18 +350,28 @@ export default function LibraryPage() {
                   {modal.title}
                 </h3>
               </div>
-              <button onClick={closeModal} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '12px' }}>
+              <button onClick={() => setIsEditing(prev => !prev)}
+                style={{ background: isEditing ? '#6C47FF' : 'var(--subtle-bg)', color: isEditing ? '#fff' : 'var(--text-secondary)', border: 'none', borderRadius: '8px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', flexShrink: 0, marginLeft: '12px' }}>
+                {isEditing ? 'Preview' : 'Edit'}
+              </button>
+              <button onClick={closeModal} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '8px' }}>
                 <X size={16} color="#6b7280" />
               </button>
             </div>
 
-            <textarea
-              value={editContent}
-              onChange={e => setEditContent(e.target.value)}
-              style={{ width: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-              onFocus={e => e.target.style.borderColor = '#6C47FF'}
-              onBlur={e => e.target.style.borderColor = 'var(--border-color)'}
-            />
+            {isEditing ? (
+              <textarea
+                value={editContent}
+                onChange={e => setEditContent(e.target.value)}
+                style={{ width: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: 'var(--text-primary)', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                onFocus={e => e.target.style.borderColor = '#6C47FF'}
+                onBlur={e => e.target.style.borderColor = 'var(--border-color)'}
+              />
+            ) : (
+              <div style={{ width: '100%', minHeight: '320px', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '8px', boxSizing: 'border-box' }}>
+                <MarkdownPreview content={editContent} />
+              </div>
+            )}
 
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '16px' }}>
               <button onClick={closeModal}
