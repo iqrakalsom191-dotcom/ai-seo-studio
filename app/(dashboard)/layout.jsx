@@ -110,13 +110,13 @@ export default function DashboardLayout({ children }) {
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        .nav-link:hover { background: rgba(108,71,255,0.12) !important; color: #fff !important; backdrop-filter: blur(10px); }
+        .nav-link:hover { background: rgba(108,71,255,0.15) !important; color: #fff !important; backdrop-filter: blur(10px); }
         .nav-link:hover svg { color: #00C6AE !important; }
         .logout-btn:hover { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
-        .nav-link { transition: all 0.18s ease !important; }
+        .nav-link { transition: all 150ms ease !important; }
         .logout-btn { transition: all 0.18s ease !important; }
-        .nav-group-toggle:hover { background: rgba(255,255,255,0.05) !important; color: rgba(255,255,255,0.6) !important; }
-        .nav-group-toggle { transition: all 0.18s ease !important; }
+        .nav-group-toggle:hover { background: rgba(108,71,255,0.15) !important; color: #fff !important; }
+        .nav-group-toggle { transition: all 150ms ease !important; }
         .nav-group-chevron { transition: transform 0.25s ease !important; }
         .nav-group-body { transition: grid-template-rows 0.25s ease !important; display: grid; overflow: hidden; }
       `}</style>
