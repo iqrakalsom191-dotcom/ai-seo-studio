@@ -195,64 +195,98 @@ export default function LibraryPage() {
     return (name || 'Untitled').replace(/[\\/:*?"<>|]/g, '-').trim() || 'Untitled';
   }
 
+  function exportPDFWithText(item, doc) {
+    const title = item.title || item.keyword || 'Untitled';
+    const margin = 20;
+    const maxWidth = doc.internal.pageSize.getWidth() - margin * 2; // 170mm on A4
+    const pageHeight = doc.internal.pageSize.getHeight();
+    doc.setFont('helvetica');
+    let y = 20;
+
+    const ensureSpace = (needed) => {
+      if (y + needed > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+    };
+
+    doc.setTextColor('#6C47FF');
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    const titleLines = doc.splitTextToSize(title, maxWidth);
+    doc.text(titleLines, margin, y);
+    y += titleLines.length * 8 + 6;
+
+    parseMarkdownLines(item.content).forEach((line) => {
+      if (line.type === 'blank') { y += 4; return; }
+      if (line.type === 'hr') {
+        ensureSpace(6);
+        doc.setDrawColor('#e0e0e0');
+        doc.line(margin, y, margin + maxWidth, y);
+        y += 8;
+        return;
+      }
+      let text = line.text;
+      let fontSize = 11;
+      let color = '#333333';
+      let fontStyle = 'normal';
+      let indent = margin;
+      if (line.type === 'h3') { fontSize = 14; color = '#6C47FF'; fontStyle = 'bold'; }
+      else if (line.type === 'h2') { fontSize = 16; color = '#6C47FF'; fontStyle = 'bold'; }
+      else if (line.type === 'bold') { fontSize = 11; color = '#0F0F0F'; fontStyle = 'bold'; }
+      else if (line.type === 'bullet') { text = `•  ${text}`; indent = margin + 4; }
+
+      doc.setFontSize(fontSize);
+      doc.setTextColor(color);
+      doc.setFont('helvetica', fontStyle);
+      const wrapWidth = maxWidth - (indent - margin);
+      const wrapped = doc.splitTextToSize(text, wrapWidth);
+      ensureSpace(wrapped.length * (fontSize * 0.5) + 4);
+      doc.text(wrapped, indent, y);
+      y += wrapped.length * (fontSize * 0.5) + 4;
+    });
+
+    doc.save(`${safeFilename(title)}.pdf`);
+    toast.success('Downloaded!');
+  }
+
   function handleExportPDF(item) {
+    const title = item.title || item.keyword || 'Untitled';
     try {
-      const title = item.title || item.keyword || 'Untitled';
       const doc = new jsPDF();
-      const margin = 15;
-      const pageWidth = doc.internal.pageSize.getWidth();
-      const maxWidth = pageWidth - 30;
-      const pageHeight = doc.internal.pageSize.getHeight();
-      doc.setFont('helvetica');
-      let y = 20;
 
-      const ensureSpace = (needed) => {
-        if (y + needed > pageHeight - margin) {
-          doc.addPage();
-          y = margin;
-        }
-      };
+      if (typeof doc.html !== 'function') {
+        exportPDFWithText(item, doc);
+        return;
+      }
 
-      doc.setTextColor('#6C47FF');
-      doc.setFontSize(18);
-      doc.setFont('helvetica', 'bold');
-      const titleLines = doc.splitTextToSize(title, maxWidth);
-      doc.text(titleLines, margin, y, { maxWidth: pageWidth - 30 });
-      y += titleLines.length * 8 + 6;
+      const container = document.createElement('div');
+      container.style.width = '650px';
+      container.style.padding = '0';
+      container.style.fontFamily = 'Helvetica, Arial, sans-serif';
+      container.innerHTML = `
+        <h1 style="color:#6C47FF;font-size:24px;font-weight:700;margin:0 0 16px;">${title}</h1>
+        ${markdownLinesToHtml(item.content)}
+      `;
+      document.body.appendChild(container);
 
-      parseMarkdownLines(item.content).forEach((line) => {
-        if (line.type === 'blank') { y += 4; return; }
-        if (line.type === 'hr') {
-          ensureSpace(6);
-          doc.setDrawColor('#e0e0e0');
-          doc.line(margin, y, margin + maxWidth, y);
-          y += 8;
-          return;
-        }
-        let text = line.text;
-        let fontSize = 11;
-        let color = '#333333';
-        let fontStyle = 'normal';
-        let indent = margin;
-        if (line.type === 'h3') { fontSize = 14; color = '#6C47FF'; fontStyle = 'bold'; }
-        else if (line.type === 'h2') { fontSize = 16; color = '#6C47FF'; fontStyle = 'bold'; }
-        else if (line.type === 'bold') { fontSize = 11; color = '#0F0F0F'; fontStyle = 'bold'; }
-        else if (line.type === 'bullet') { text = `•  ${text}`; indent = margin + 4; }
-
-        doc.setFontSize(fontSize);
-        doc.setTextColor(color);
-        doc.setFont('helvetica', fontStyle);
-        const wrapWidth = maxWidth - (indent - margin);
-        const wrapped = doc.splitTextToSize(text, wrapWidth);
-        ensureSpace(wrapped.length * (fontSize * 0.5) + 4);
-        doc.text(wrapped, indent, y, { maxWidth: wrapWidth });
-        y += wrapped.length * (fontSize * 0.5) + 4;
+      doc.html(container, {
+        x: 10,
+        y: 10,
+        width: 180,
+        windowWidth: 650,
+        callback: (pdf) => {
+          document.body.removeChild(container);
+          pdf.save(`${safeFilename(title)}.pdf`);
+          toast.success('Downloaded!');
+        },
       });
-
-      doc.save(`${safeFilename(title)}.pdf`);
-      toast.success('Downloaded!');
     } catch (e) {
-      toast.error('Export failed');
+      try {
+        exportPDFWithText(item, new jsPDF());
+      } catch (e2) {
+        toast.error('Export failed');
+      }
     }
   }
 
