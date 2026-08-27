@@ -31,11 +31,15 @@ export async function POST(request) {
 
     const completion = await groq.chat.completions.create({
       model: 'qwen/qwen3.6-27b',
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+        { role: 'user', content: prompt },
+      ],
       max_tokens: 2000,
     })
 
-    const result = completion.choices[0]?.message?.content?.trim() || ''
+    let result = completion.choices[0]?.message?.content?.trim() || ''
+    result = result.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
 
     if (!result) {
       return NextResponse.json({ error: 'Could not generate improved content' }, { status: 500 })

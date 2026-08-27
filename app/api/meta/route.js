@@ -23,15 +23,19 @@ export async function POST(request) {
 
     const completion = await groq.chat.completions.create({
       model: 'qwen/qwen3.6-27b',
-      messages: [{ 
-        role: 'user', 
-        content: `Write an SEO title and meta description for topic: ${topic}, keyword: ${keyword}. Format: TITLE: ... DESCRIPTION: ...`
-      }],
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+        {
+          role: 'user',
+          content: `Write an SEO title and meta description for topic: ${topic}, keyword: ${keyword}. Format: TITLE: ... DESCRIPTION: ...`
+        },
+      ],
       max_tokens: 1000,
-      
+
     })
 
-    const content = completion.choices[0]?.message?.content || ''
+    let content = completion.choices[0]?.message?.content || ''
+    content = content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
 
     const titleMatch = content.match(/TITLE:\s*(.+)/i)
     const descMatch = content.match(/DESCRIPTION:\s*(.+)/i)

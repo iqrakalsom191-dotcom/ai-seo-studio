@@ -62,11 +62,15 @@ Return the suggestions as plain text using short bullet points (start each with 
 
     const completion = await groq.chat.completions.create({
       model: 'qwen/qwen3.6-27b',
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+        { role: 'user', content: prompt },
+      ],
       max_tokens: 1000,
     })
 
-    const analysis = completion.choices[0]?.message?.content?.trim() || ''
+    let analysis = completion.choices[0]?.message?.content?.trim() || ''
+    analysis = analysis.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
 
     return NextResponse.json({ title, description, analysis })
 

@@ -22,9 +22,11 @@ export async function POST(request) {
 
     const completion = await groq.chat.completions.create({
       model: 'qwen/qwen3.6-27b',
-      messages: [{
-        role: 'user',
-        content: `Analyze this SEO keyword: "${keyword}"
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+        {
+          role: 'user',
+          content: `Analyze this SEO keyword: "${keyword}"
 
 Reply in exactly this format:
 INTENT: informational
@@ -32,11 +34,13 @@ DIFFICULTY: medium
 RELATED: keyword1, keyword2, keyword3, keyword4, keyword5, keyword6, keyword7, keyword8, keyword9, keyword10
 LSI: lsi1, lsi2, lsi3, lsi4, lsi5
 TIPS: tip one here | tip two here | tip three here`
-      }],
+        },
+      ],
       max_tokens: 500,
     })
 
-    const content = completion.choices[0]?.message?.content || ''
+    let content = completion.choices[0]?.message?.content || ''
+    content = content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
     console.log('KEYWORD RESPONSE:', content)
 
     const intentMatch = content.match(/INTENT:\s*(.+)/i)

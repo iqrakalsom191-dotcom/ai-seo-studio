@@ -32,11 +32,15 @@ Only include URLs from the list above that are genuinely relevant. Do not invent
 
     const completion = await groq.chat.completions.create({
       model: 'qwen/qwen3.6-27b',
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+        { role: 'user', content: prompt },
+      ],
       max_tokens: 1500,
     })
 
-    const raw = completion.choices[0]?.message?.content?.trim() || ''
+    let raw = completion.choices[0]?.message?.content?.trim() || ''
+    raw = raw.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
     const jsonMatch = raw.match(/\[[\s\S]*\]/)
 
     if (!jsonMatch) {

@@ -21,11 +21,15 @@ Return the recommendations as plain text, using short bullet points (start each 
 
     const completion = await groq.chat.completions.create({
       model: 'qwen/qwen3.6-27b',
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+        { role: 'user', content: prompt },
+      ],
       max_tokens: 1000,
     })
 
-    const recommendations = completion.choices[0]?.message?.content?.trim() || ''
+    let recommendations = completion.choices[0]?.message?.content?.trim() || ''
+    recommendations = recommendations.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
 
     if (!recommendations) {
       return NextResponse.json({ error: 'Could not generate recommendations' }, { status: 500 })
