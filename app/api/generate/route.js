@@ -39,7 +39,7 @@ Format it in plain text with clear sections.`
     return NextResponse.json({ content, success: true })
 
   } catch (error) {
-    console.error('GROQ ERROR:', error)
-    return NextResponse.json({ error: 'Generation failed' }, { status: 500 })
+    console.error('GROQ ERROR:', error.stack || error)
+    return NextResponse.json({ error: 'Generation failed', stack: error.stack }, { status: 500 })
   }
 }
