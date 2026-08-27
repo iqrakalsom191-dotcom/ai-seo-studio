@@ -61,7 +61,7 @@ Meta Description: "${description || '(none found)'}"
 Return the suggestions as plain text using short bullet points (start each with "- "). Do not include markdown headings or code fences.`
 
     const completion = await groq.chat.completions.create({
-      model: 'groq/compound',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 1000,
     })

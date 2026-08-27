@@ -13,7 +13,7 @@ export async function POST(request) {
     const prompt = `Generate 5 SEO-friendly URL slugs for the keyword "${keyword}". Each slug should be short, lowercase, use hyphens instead of spaces, contain no special characters, and be optimized for search engines. Return only the 5 slugs, one per line, with no numbering, bullets, quotes, or preamble.`
 
     const completion = await groq.chat.completions.create({
-      model: 'groq/compound',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 300,
     })

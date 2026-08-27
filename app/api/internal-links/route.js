@@ -31,7 +31,7 @@ Return ONLY a JSON array (no markdown, no code fences, no extra text) where each
 Only include URLs from the list above that are genuinely relevant. Do not invent new URLs.`
 
     const completion = await groq.chat.completions.create({
-      model: 'groq/compound',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 1500,
     })

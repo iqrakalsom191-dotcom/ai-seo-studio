@@ -16,7 +16,7 @@ Return the result strictly as a JSON array with no preamble, no markdown formatt
 [{"question": "...", "answer": "..."}, ...]`
 
     const completion = await groq.chat.completions.create({
-      model: 'groq/compound',
+      model: 'llama-3.3-70b-versatile',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 2000,
     })

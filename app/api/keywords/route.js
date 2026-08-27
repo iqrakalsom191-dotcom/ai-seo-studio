@@ -21,7 +21,7 @@ export async function POST(request) {
     const { keyword } = await request.json()
 
     const completion = await groq.chat.completions.create({
-      model: 'groq/compound',
+      model: 'llama-3.3-70b-versatile',
       messages: [{
         role: 'user',
         content: `Analyze this SEO keyword: "${keyword}"
