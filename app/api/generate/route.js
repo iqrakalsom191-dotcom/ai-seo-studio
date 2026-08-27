@@ -30,7 +30,7 @@ Include a compelling title, introduction, main body with subheadings, and a conc
 Format it in plain text with clear sections.`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'qwen/qwen3.6-27b',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 2048,
     })

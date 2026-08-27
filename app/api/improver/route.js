@@ -30,7 +30,7 @@ export async function POST(request) {
     const prompt = `${buildPrompt(content, type)}\n\nReturn only the improved content, with no preamble or explanation.`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'qwen/qwen3.6-27b',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 2000,
     })

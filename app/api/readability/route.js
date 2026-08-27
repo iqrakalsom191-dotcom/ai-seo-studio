@@ -50,7 +50,7 @@ export async function POST(request) {
     const prompt = `You are a readability expert. Given the following content and its Flesch Reading Ease score of ${score} (${readingLevel}), provide 3-5 concise, actionable suggestions to improve its readability. Return only a plain list of suggestions, one per line, with no numbering, bullets, or preamble.\n\nContent:\n${content}`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'qwen/qwen3.6-27b',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 500,
     })

@@ -22,7 +22,7 @@ export async function POST(request) {
     const { topic, keyword } = body
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'qwen/qwen3.6-27b',
       messages: [{ 
         role: 'user', 
         content: `Write an SEO title and meta description for topic: ${topic}, keyword: ${keyword}. Format: TITLE: ... DESCRIPTION: ...`

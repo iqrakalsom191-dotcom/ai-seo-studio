@@ -28,7 +28,7 @@ ${details}
 Return ONLY the JSON-LD object, wrapped in a <script type="application/ld+json"> tag is NOT needed — return just the raw JSON object itself. Do not include markdown formatting, code fences, explanations, or any extra text — just the valid JSON.`
 
     const completion = await groq.chat.completions.create({
-      model: 'llama-3.3-70b-versatile',
+      model: 'qwen/qwen3.6-27b',
       messages: [{ role: 'user', content: prompt }],
       max_tokens: 1500,
     })
