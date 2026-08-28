@@ -7,6 +7,36 @@ const PLATFORM_GUIDE = {
   LinkedIn: 'Write a professional, insightful LinkedIn post (3-5 short paragraphs) followed by 3-5 relevant hashtags.',
 }
 
+function fallbackParseCaptions(raw, platforms) {
+  const results = []
+  const lines = raw.split('\n')
+
+  let currentPlatform = null
+  let currentCaption = []
+
+  const flush = () => {
+    if (currentPlatform) {
+      results.push({ platform: currentPlatform, caption: currentCaption.join('\n').trim() })
+    }
+  }
+
+  for (const line of lines) {
+    const trimmed = line.trim()
+    const platformMatch = platforms.find((p) => new RegExp(`^#{0,3}\\s*\\**${p.replace('/', '\\/')}\\**[:.]?\\s*$`, 'i').test(trimmed))
+
+    if (platformMatch) {
+      flush()
+      currentPlatform = platformMatch
+      currentCaption = []
+    } else if (currentPlatform && trimmed) {
+      currentCaption.push(trimmed)
+    }
+  }
+  flush()
+
+  return results.filter((r) => r.platform && r.caption)
+}
+
 export async function POST(request) {
   try {
     const body = await request.json()
@@ -32,13 +62,13 @@ ${validPlatforms.map((p) => `${p}: ${PLATFORM_GUIDE[p]}`).join('\n')}
 Blog content:
 ${content}
 
-Return the result strictly as a JSON array with no preamble, no markdown formatting, and no code fences, in this exact shape:
+Return ONLY a JSON array, and nothing else. No preamble, no explanation, no markdown formatting, no code fences. The response must be valid JSON matching exactly this shape:
 [{"platform": "Instagram", "caption": "..."}, ...]`
 
     const completion = await groq.chat.completions.create({
       model: 'qwen/qwen3.6-27b',
       messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely. Output ONLY valid JSON, no markdown, no code fences, no commentary.' },
         { role: 'user', content: prompt },
       ],
       max_tokens: 1500,
@@ -46,19 +76,23 @@ Return the result strictly as a JSON array with no preamble, no markdown formatt
 
     let raw = completion.choices[0]?.message?.content?.trim() || ''
     raw = stripThinkAndMeta(raw)
+
+    let results = null
     const jsonMatch = raw.match(/\[[\s\S]*\]/)
 
-    if (!jsonMatch) {
+    if (jsonMatch) {
+      try {
+        results = JSON.parse(jsonMatch[0])
+      } catch (e) {
+        console.error('SOCIAL: JSON.parse failed:', e.message, '\nRaw content:', raw)
+      }
+    } else {
       console.error('SOCIAL: no JSON array found in raw content:', raw)
-      return NextResponse.json({ error: 'Could not generate captions' }, { status: 500 })
     }
 
-    let results
-    try {
-      results = JSON.parse(jsonMatch[0])
-    } catch (e) {
-      console.error('SOCIAL: JSON.parse failed:', e.message, 'Raw content:', raw)
-      return NextResponse.json({ error: 'Could not parse caption response' }, { status: 500 })
+    if (!Array.isArray(results)) {
+      console.error('SOCIAL: falling back to text parsing. Raw content:', raw)
+      results = fallbackParseCaptions(raw, validPlatforms)
     }
 
     results = results
@@ -66,6 +100,7 @@ Return the result strictly as a JSON array with no preamble, no markdown formatt
       .map((r) => ({ platform: String(r.platform).trim(), caption: String(r.caption).trim() }))
 
     if (results.length === 0) {
+      console.error('SOCIAL: no captions could be extracted. Raw content:', raw)
       return NextResponse.json({ error: 'Could not generate captions' }, { status: 500 })
     }
 
