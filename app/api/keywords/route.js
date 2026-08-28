@@ -2,6 +2,7 @@ import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { checkAndIncrementUsage } from '@/lib/usage'
+import { stripThinkAndMeta } from '@/lib/groq'
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
@@ -40,7 +41,7 @@ TIPS: tip one here | tip two here | tip three here`
     })
 
     let content = completion.choices[0]?.message?.content || ''
-    content = content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    content = stripThinkAndMeta(content)
     console.log('KEYWORD RESPONSE:', content)
 
     const intentMatch = content.match(/INTENT:\s*(.+)/i)

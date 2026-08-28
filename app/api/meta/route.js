@@ -2,6 +2,7 @@ import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { checkAndIncrementUsage } from '@/lib/usage'
+import { stripThinkAndMeta } from '@/lib/groq'
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
@@ -35,7 +36,7 @@ export async function POST(request) {
     })
 
     let content = completion.choices[0]?.message?.content || ''
-    content = content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    content = stripThinkAndMeta(content)
 
     const titleMatch = content.match(/TITLE:\s*(.+)/i)
     const descMatch = content.match(/DESCRIPTION:\s*(.+)/i)

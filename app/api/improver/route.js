@@ -1,4 +1,4 @@
-import { groq } from '@/lib/groq'
+import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
 
 function buildPrompt(content, type) {
@@ -39,7 +39,7 @@ export async function POST(request) {
     })
 
     let result = completion.choices[0]?.message?.content?.trim() || ''
-    result = result.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    result = stripThinkAndMeta(result)
 
     if (!result) {
       return NextResponse.json({ error: 'Could not generate improved content' }, { status: 500 })

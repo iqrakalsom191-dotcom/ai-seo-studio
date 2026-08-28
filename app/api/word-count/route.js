@@ -1,4 +1,4 @@
-import { groq } from '@/lib/groq'
+import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
@@ -29,7 +29,7 @@ Return the recommendations as plain text, using short bullet points (start each 
     })
 
     let recommendations = completion.choices[0]?.message?.content?.trim() || ''
-    recommendations = recommendations.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    recommendations = stripThinkAndMeta(recommendations)
 
     if (!recommendations) {
       return NextResponse.json({ error: 'Could not generate recommendations' }, { status: 500 })

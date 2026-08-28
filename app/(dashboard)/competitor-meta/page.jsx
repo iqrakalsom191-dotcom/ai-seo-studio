@@ -71,7 +71,7 @@ export default function CompetitorMetaPage() {
         <div className="mt-6 space-y-4">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#6C47FF]">
                 <Type size={15} style={{ color: '#00C6AE' }} />
                 Current Title
               </div>
@@ -82,7 +82,7 @@ export default function CompetitorMetaPage() {
 
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#6C47FF]">
                 <AlignLeft size={15} style={{ color: '#00C6AE' }} />
                 Current Meta Description
               </div>
@@ -93,11 +93,25 @@ export default function CompetitorMetaPage() {
 
           {result.analysis && (
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-              <div className="flex items-center gap-2 mb-2 text-sm font-semibold text-gray-700">
+              <div className="flex items-center gap-2 mb-4 text-sm font-bold text-[#6C47FF]">
                 <Sparkles size={15} style={{ color: '#6C47FF' }} />
                 AI Analysis & Suggestions
               </div>
-              <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">{result.analysis}</div>
+              <ul className="space-y-3">
+                {result.analysis
+                  .split('\n')
+                  .map((line) => line.replace(/^[-•]\s*/, '').trim())
+                  .filter(Boolean)
+                  .map((line, i) => (
+                    <li key={i} className="flex items-start gap-3 text-sm text-gray-700 leading-relaxed">
+                      <span
+                        className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: '#00C6AE' }}
+                      />
+                      {line}
+                    </li>
+                  ))}
+              </ul>
             </div>
           )}
         </div>

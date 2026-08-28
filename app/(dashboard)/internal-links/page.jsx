@@ -94,7 +94,7 @@ export default function InternalLinksPage() {
               </div>
               <div className="flex items-center gap-2 mt-3 text-sm text-gray-700">
                 <ArrowRight size={14} style={{ color: '#00C6AE' }} className="flex-shrink-0" />
-                <span className="font-medium">Anchor text:</span> "{s.anchor}"
+                <span className="font-bold text-[#6C47FF]">Anchor text:</span> "{s.anchor}"
               </div>
               <p className="mt-2 text-sm text-gray-500">{s.reason}</p>
             </div>

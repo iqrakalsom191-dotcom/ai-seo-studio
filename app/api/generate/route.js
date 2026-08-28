@@ -2,6 +2,7 @@ import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { checkAndIncrementUsage } from '@/lib/usage'
+import { stripThinkAndMeta } from '@/lib/groq'
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
@@ -39,7 +40,7 @@ Format it in plain text with clear sections.`
     })
 
     let content = completion.choices[0]?.message?.content || ''
-    content = content.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    content = stripThinkAndMeta(content)
     return NextResponse.json({ content, success: true })
 
   } catch (error) {

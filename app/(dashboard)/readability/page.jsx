@@ -111,7 +111,7 @@ export default function ReadabilityPage() {
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
               <div className="flex items-center gap-2 mb-4">
                 <Lightbulb size={18} style={{ color: '#6C47FF' }} />
-                <span className="text-sm font-semibold text-gray-900">Improvement Suggestions</span>
+                <span className="text-sm font-bold text-[#6C47FF]">Improvement Suggestions</span>
               </div>
               <ul className="space-y-3">
                 {result.suggestions.map((s, i) => (

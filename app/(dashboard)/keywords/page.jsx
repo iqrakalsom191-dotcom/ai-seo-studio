@@ -121,7 +121,7 @@ export default function KeywordsPage() {
         <div className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+              <p className="text-xs font-bold text-[#6C47FF] uppercase tracking-wide mb-3 flex items-center gap-1.5">
                 <Target className="w-3.5 h-3.5" /> Search Intent
               </p>
               <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold ${intentColors[result.intent] || intentColors.Unknown}`}>
@@ -129,7 +129,7 @@ export default function KeywordsPage() {
               </span>
             </div>
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3 flex items-center gap-1.5">
+              <p className="text-xs font-bold text-[#6C47FF] uppercase tracking-wide mb-3 flex items-center gap-1.5">
                 <BarChart2 className="w-3.5 h-3.5" /> Keyword Difficulty
               </p>
               <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold ${difficultyColors[result.difficulty] || difficultyColors.Unknown}`}>
@@ -139,7 +139,7 @@ export default function KeywordsPage() {
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <p className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <p className="text-sm font-bold text-[#6C47FF] mb-4 flex items-center gap-2">
               <Tag className="w-4 h-4" style={{ color: '#6C47FF' }} /> Related Keywords
             </p>
             <div className="flex flex-wrap gap-2">
@@ -153,7 +153,7 @@ export default function KeywordsPage() {
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <p className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <p className="text-sm font-bold text-[#6C47FF] mb-4 flex items-center gap-2">
               <Tag className="w-4 h-4" style={{ color: '#00C6AE' }} /> LSI Keywords
             </p>
             <div className="flex flex-wrap gap-2">
@@ -167,7 +167,7 @@ export default function KeywordsPage() {
           </div>
 
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <p className="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+            <p className="text-sm font-bold text-[#6C47FF] mb-4 flex items-center gap-2">
               <Lightbulb className="w-4 h-4" style={{ color: '#6C47FF' }} /> Usage Tips
             </p>
             <ul className="space-y-3">

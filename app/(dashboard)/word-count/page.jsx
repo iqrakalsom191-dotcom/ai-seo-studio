@@ -126,8 +126,22 @@ export default function WordCountPage() {
 
       {recommendations && (
         <div className="mt-6 bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-          <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">AI Recommendations</h2>
-          <div className="text-sm text-gray-700 whitespace-pre-line leading-relaxed">{recommendations}</div>
+          <h2 className="font-bold text-[#6C47FF] mb-4 uppercase tracking-wide text-sm">AI Recommendations</h2>
+          <ul className="space-y-3">
+            {recommendations
+              .split('\n')
+              .map((line) => line.replace(/^[-•]\s*/, '').trim())
+              .filter(Boolean)
+              .map((line, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm text-gray-700 leading-relaxed">
+                  <span
+                    className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: '#00C6AE' }}
+                  />
+                  {line}
+                </li>
+              ))}
+          </ul>
         </div>
       )}
     </div>

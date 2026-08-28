@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase'
 import { Gauge, Zap } from 'lucide-react'
 
-const DAILY_LIMIT = 5
+const DAILY_LIMIT = 50
 
 function lastNDates(n) {
   const dates = []

@@ -1,4 +1,4 @@
-import { groq } from '@/lib/groq'
+import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
 
 function countSyllables(word) {
@@ -59,7 +59,7 @@ export async function POST(request) {
     })
 
     let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = raw.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    raw = stripThinkAndMeta(raw)
     const suggestions = raw
       .split('\n')
       .map((line) => line.replace(/^[-*•\d.)\s]+/, '').trim())

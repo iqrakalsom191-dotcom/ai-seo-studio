@@ -1,4 +1,4 @@
-import { groq } from '@/lib/groq'
+import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
 
 const PLATFORM_GUIDE = {
@@ -45,10 +45,11 @@ Return the result strictly as a JSON array with no preamble, no markdown formatt
     })
 
     let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = raw.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    raw = stripThinkAndMeta(raw)
     const jsonMatch = raw.match(/\[[\s\S]*\]/)
 
     if (!jsonMatch) {
+      console.error('SOCIAL: no JSON array found in raw content:', raw)
       return NextResponse.json({ error: 'Could not generate captions' }, { status: 500 })
     }
 
@@ -56,6 +57,7 @@ Return the result strictly as a JSON array with no preamble, no markdown formatt
     try {
       results = JSON.parse(jsonMatch[0])
     } catch (e) {
+      console.error('SOCIAL: JSON.parse failed:', e.message, 'Raw content:', raw)
       return NextResponse.json({ error: 'Could not parse caption response' }, { status: 500 })
     }
 

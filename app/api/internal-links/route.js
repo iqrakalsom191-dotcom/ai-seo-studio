@@ -1,4 +1,4 @@
-import { groq } from '@/lib/groq'
+import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
@@ -40,7 +40,7 @@ Only include URLs from the list above that are genuinely relevant. Do not invent
     })
 
     let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = raw.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    raw = stripThinkAndMeta(raw)
     const jsonMatch = raw.match(/\[[\s\S]*\]/)
 
     if (!jsonMatch) {

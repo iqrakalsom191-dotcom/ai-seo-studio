@@ -1,4 +1,4 @@
-import { groq } from '@/lib/groq'
+import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
 
 export async function POST(request) {
@@ -24,7 +24,7 @@ Return ONLY the 10 titles, one per line. Do not include numbering, bullets, quot
     })
 
     let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = raw.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    raw = stripThinkAndMeta(raw)
 
     if (!raw) {
       return NextResponse.json({ error: 'Could not generate titles' }, { status: 500 })

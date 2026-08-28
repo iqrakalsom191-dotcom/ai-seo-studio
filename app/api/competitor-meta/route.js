@@ -1,4 +1,4 @@
-import { groq } from '@/lib/groq'
+import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
 
 const BLOCKED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '::1']
@@ -70,7 +70,7 @@ Return the suggestions as plain text using short bullet points (start each with 
     })
 
     let analysis = completion.choices[0]?.message?.content?.trim() || ''
-    analysis = analysis.replace(/<think>[\s\S]*?<\/think>/gi, '').trim()
+    analysis = stripThinkAndMeta(analysis)
 
     return NextResponse.json({ title, description, analysis })
 
