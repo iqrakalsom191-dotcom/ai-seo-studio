@@ -37,6 +37,7 @@ LSI: lsi1, lsi2, lsi3, lsi4, lsi5
 TIPS: tip one here | tip two here | tip three here`
         },
       ],
+      reasoning_effort: 'none',
       max_tokens: 500,
     })
 

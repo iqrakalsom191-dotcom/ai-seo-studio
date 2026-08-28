@@ -71,6 +71,7 @@ Return ONLY a JSON array, and nothing else. No preamble, no explanation, no mark
         { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely. Output ONLY valid JSON, no markdown, no code fences, no commentary.' },
         { role: 'user', content: prompt },
       ],
+      reasoning_effort: 'none',
       max_tokens: 1500,
     })
 
@@ -84,7 +85,13 @@ Return ONLY a JSON array, and nothing else. No preamble, no explanation, no mark
       try {
         results = JSON.parse(jsonMatch[0])
       } catch (e) {
-        console.error('SOCIAL: JSON.parse failed:', e.message, '\nRaw content:', raw)
+        try {
+          // Collapse stray doubled closing braces (e.g. "...}}]" -> "...}]")
+          const repaired = jsonMatch[0].replace(/}(\s*})+(?=\s*[,\]])/g, '}')
+          results = JSON.parse(repaired)
+        } catch (e2) {
+          console.error('SOCIAL: JSON.parse failed:', e.message, '\nRaw content:', raw)
+        }
       }
     } else {
       console.error('SOCIAL: no JSON array found in raw content:', raw)

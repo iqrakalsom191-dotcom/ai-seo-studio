@@ -51,6 +51,7 @@ Return ONLY a JSON array with 10 items, and nothing else. No preamble, no explan
         { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely. Output ONLY valid JSON, no markdown, no code fences, no commentary.' },
         { role: 'user', content: prompt },
       ],
+      reasoning_effort: 'none',
       max_tokens: 2000,
     })
 
@@ -64,7 +65,13 @@ Return ONLY a JSON array with 10 items, and nothing else. No preamble, no explan
       try {
         faqs = JSON.parse(jsonMatch[0])
       } catch (e) {
-        console.error('FAQ: JSON.parse failed:', e.message, '\nRaw content:', raw)
+        try {
+          // Collapse stray doubled closing braces (e.g. "...}}]" -> "...}]")
+          const repaired = jsonMatch[0].replace(/}(\s*})+(?=\s*[,\]])/g, '}')
+          faqs = JSON.parse(repaired)
+        } catch (e2) {
+          console.error('FAQ: JSON.parse failed:', e.message, '\nRaw content:', raw)
+        }
       }
     } else {
       console.error('FAQ: no JSON array found in raw content:', raw)

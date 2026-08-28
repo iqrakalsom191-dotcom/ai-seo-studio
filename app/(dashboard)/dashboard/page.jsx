@@ -94,7 +94,11 @@ export default function DashboardPage() {
   const [toDate, setToDate] = useState('')
   const [allData, setAllData] = useState([])
   const [modal, setModal] = useState(null)
-  const [tip] = useState(() => SEO_TIPS[Math.floor(Math.random() * SEO_TIPS.length)])
+  const [tip, setTip] = useState(SEO_TIPS[0])
+
+  useEffect(() => {
+    setTip(SEO_TIPS[Math.floor(Math.random() * SEO_TIPS.length)])
+  }, [])
 
   const processData = useCallback((data) => {
     const now = new Date()

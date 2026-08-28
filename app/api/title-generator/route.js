@@ -20,6 +20,7 @@ Return ONLY the 10 titles, one per line. Do not include numbering, bullets, quot
         { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
         { role: 'user', content: prompt },
       ],
+      reasoning_effort: 'none',
       max_tokens: 500,
     })
 

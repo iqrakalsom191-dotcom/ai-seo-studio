@@ -31,6 +31,7 @@ export async function POST(request) {
           content: `Write an SEO title and meta description for topic: ${topic}, keyword: ${keyword}. Format: TITLE: ... DESCRIPTION: ...`
         },
       ],
+      reasoning_effort: 'none',
       max_tokens: 1000,
 
     })
