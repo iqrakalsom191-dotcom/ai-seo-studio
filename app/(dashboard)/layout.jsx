@@ -70,6 +70,7 @@ const navGroups = [
     items: [
       { label: 'Usage', href: '/usage', icon: Gauge },
       { label: 'Settings', href: '/settings', icon: Settings },
+      { label: 'WordPress', href: '/settings/wordpress', icon: Globe },
     ],
   },
 ]
