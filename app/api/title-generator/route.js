@@ -12,6 +12,8 @@ export async function POST(request) {
 
     const prompt = `Generate exactly 10 catchy, SEO-optimized blog title options for the keyword "${keyword}". Each title should be attention-grabbing, click-worthy, and optimized for search engines.
 
+Strict requirement: each title must be no more than 60 characters (including spaces).
+
 Return ONLY the 10 titles, one per line. Do not include numbering, bullets, quotes, explanations, reasoning, or any extra text — just the 10 titles and nothing else.`
 
     const completion = await groq.chat.completions.create({
@@ -31,7 +33,14 @@ Return ONLY the 10 titles, one per line. Do not include numbering, bullets, quot
       return NextResponse.json({ error: 'Could not generate titles' }, { status: 500 })
     }
 
-    return NextResponse.json({ titles: raw })
+    const titles = raw
+      .split('\n')
+      .map((t) => t.trim())
+      .filter(Boolean)
+      .map((t) => (t.length > 60 ? t.slice(0, 60).trim() : t))
+      .join('\n')
+
+    return NextResponse.json({ titles })
 
   } catch (error) {
     console.error('TITLE GENERATOR ERROR:', error)

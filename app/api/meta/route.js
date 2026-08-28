@@ -28,7 +28,11 @@ export async function POST(request) {
         { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
         {
           role: 'user',
-          content: `Write an SEO title and meta description for topic: ${topic}, keyword: ${keyword}. Format: TITLE: ... DESCRIPTION: ...`
+          content: `Write an SEO title and meta description for topic: ${topic}, keyword: ${keyword}.
+Strict requirements:
+- TITLE must be no more than 60 characters (including spaces).
+- DESCRIPTION must be no more than 155 characters (including spaces).
+Format: TITLE: ... DESCRIPTION: ...`
         },
       ],
       reasoning_effort: 'none',
@@ -42,12 +46,15 @@ export async function POST(request) {
     const titleMatch = content.match(/TITLE:\s*(.+)/i)
     const descMatch = content.match(/DESCRIPTION:\s*(.+)/i)
 
-    const title = titleMatch?.[1]?.trim() || ''
-    const description = descMatch?.[1]?.trim() || ''
+    let title = titleMatch?.[1]?.trim() || ''
+    let description = descMatch?.[1]?.trim() || ''
 
     if (!title || !description) {
       return NextResponse.json({ error: 'Could not parse response', raw: content }, { status: 500 })
     }
+
+    if (title.length > 60) title = title.slice(0, 60).trim()
+    if (description.length > 155) description = description.slice(0, 155).trim()
 
     return NextResponse.json({ title, description, success: true })
 

@@ -90,7 +90,12 @@ export default function TitleGeneratorPage() {
               key={i}
               className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-4 hover:shadow-md transition"
             >
-              <p className="text-sm font-medium text-gray-800">{title}</p>
+              <div className="min-w-0">
+                <p className="text-sm font-medium text-gray-800">{title}</p>
+                <span className={`text-xs font-medium ${title.length > 60 ? 'text-red-500' : 'text-green-500'}`}>
+                  {title.length}/60
+                </span>
+              </div>
               <button
                 onClick={() => copy(title, i)}
                 className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-gray-200 hover:bg-gray-50 transition"
