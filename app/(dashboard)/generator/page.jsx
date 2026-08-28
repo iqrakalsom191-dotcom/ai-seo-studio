@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Sparkles, Copy, BookmarkPlus, Loader2, CheckCheck } from 'lucide-react'
+import { Sparkles, Copy, BookmarkPlus, Loader2, CheckCheck, Globe, FileEdit, Send, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 
@@ -47,6 +47,8 @@ export default function GeneratorPage() {
   const [saving, setSaving]       = useState(false)
   const [savedOk, setSavedOk]     = useState(false)
   const [error, setError]         = useState('')
+  const [showPublishPanel, setShowPublishPanel] = useState(false)
+  const [publishing, setPublishing] = useState(false)
 
   async function handleGenerate() {
     if (!keyword.trim()) { setError('Please enter a keyword.'); return }
@@ -99,6 +101,49 @@ export default function GeneratorPage() {
     setSaving(false)
     if (!dbErr) { setSavedOk(true); toast.success('Saved to library'); setTimeout(() => setSavedOk(false), 2500) }
     else { setError('Save failed. Please try again.'); toast.error('Save failed. Please try again.') }
+  }
+
+  async function handlePublish(status) {
+    if (!output) return
+    setPublishing(true)
+    try {
+      const res = await fetch('/api/wordpress/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: keyword, content: output, status }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Publish failed')
+      }
+      setShowPublishPanel(false)
+      toast.success(
+        (t) => (
+          <div className="text-sm">
+            <p className="font-semibold mb-1">
+              {status === 'publish' ? 'Published to WordPress!' : 'Saved as draft in WordPress!'}
+            </p>
+            <div className="flex gap-3">
+              {data.postUrl && (
+                <a href={data.postUrl} target="_blank" rel="noopener noreferrer" className="text-[#6C47FF] underline">
+                  View Post
+                </a>
+              )}
+              {data.editUrl && (
+                <a href={data.editUrl} target="_blank" rel="noopener noreferrer" className="text-[#6C47FF] underline">
+                  Edit in WP Admin
+                </a>
+              )}
+            </div>
+          </div>
+        ),
+        { duration: 8000 }
+      )
+    } catch (e) {
+      toast.error(e.message || 'Failed to publish to WordPress')
+    } finally {
+      setPublishing(false)
+    }
   }
 
   const selectClass = 'w-full rounded-lg border border-[#6C47FF]/20 bg-white px-4 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:ring-2 focus:ring-[#6C47FF]/40 appearance-none cursor-pointer'
@@ -223,7 +268,45 @@ export default function GeneratorPage() {
               {copied ? <CheckCheck size={15} /> : <Copy size={15} />}
               {copied ? 'Copied!' : 'Copy to Clipboard'}
             </button>
+
+            <button
+              onClick={() => setShowPublishPanel(true)}
+              disabled={publishing}
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#6C47FF] text-[#6C47FF] hover:bg-[#6C47FF] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {publishing ? <Loader2 size={15} className="animate-spin" /> : <Globe size={15} />}
+              {publishing ? 'Publishing…' : 'Publish to WordPress'}
+            </button>
           </div>
+
+          {showPublishPanel && (
+            <div className="rounded-xl border border-[#6C47FF]/20 bg-[#F0EEFF]/40 p-4 space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-semibold text-[#1A1A2E]">Publish to WordPress</p>
+                <button onClick={() => setShowPublishPanel(false)} className="text-[#4A4A6A] hover:text-[#1A1A2E]">
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => handlePublish('draft')}
+                  disabled={publishing}
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#6C47FF] text-[#6C47FF] hover:bg-[#6C47FF] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {publishing ? <Loader2 size={15} className="animate-spin" /> : <FileEdit size={15} />}
+                  Save as Draft
+                </button>
+                <button
+                  onClick={() => handlePublish('publish')}
+                  disabled={publishing}
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#6C47FF] hover:bg-[#5a38e0] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                >
+                  {publishing ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
+                  Publish Live
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

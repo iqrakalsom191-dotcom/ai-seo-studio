@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import toast from 'react-hot-toast';
-import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save, Download, CheckSquare, Square, FileDown } from 'lucide-react';
+import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save, Download, CheckSquare, Square, FileDown, Globe, Loader2 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import JSZip from 'jszip';
 
@@ -85,6 +85,7 @@ export default function LibraryPage() {
   const [saveSuccess, setSaveSuccess] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
+  const [publishingId, setPublishingId] = useState(null);
   const supabase = createClient();
 
   useEffect(() => { fetchContent(); }, []);
@@ -355,6 +356,49 @@ export default function LibraryPage() {
     }
   }
 
+  async function handlePublishToWordPress(item) {
+    setPublishingId(item.id);
+    try {
+      const res = await fetch('/api/wordpress/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: item.title || item.keyword || 'Untitled',
+          content: item.content || '',
+          status: 'draft',
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Publish failed');
+      }
+      toast.success(
+        (t) => (
+          <div className="text-sm">
+            <p className="font-semibold mb-1">Published to WordPress!</p>
+            <div className="flex gap-3">
+              {data.postUrl && (
+                <a href={data.postUrl} target="_blank" rel="noopener noreferrer" className="text-[#6C47FF] underline">
+                  View Post
+                </a>
+              )}
+              {data.editUrl && (
+                <a href={data.editUrl} target="_blank" rel="noopener noreferrer" className="text-[#6C47FF] underline">
+                  Edit in WP Admin
+                </a>
+              )}
+            </div>
+          </div>
+        ),
+        { duration: 8000 }
+      );
+    } catch (e) {
+      toast.error(e.message || 'Failed to publish to WordPress');
+    } finally {
+      setPublishingId(null);
+    }
+  }
+
   const filters = ['all', 'blog', 'meta', 'keyword'];
 
   return (
@@ -558,6 +602,19 @@ export default function LibraryPage() {
                     <button onClick={() => handleExportWord(item)} className="export-word-btn">
                       <FileText className="w-3.5 h-3.5" />
                       Export Word
+                    </button>
+                  </div>
+                )}
+
+                {!selectMode && item.type === 'blog' && (
+                  <div className="pt-1" onClick={e => e.stopPropagation()}>
+                    <button
+                      onClick={() => handlePublishToWordPress(item)}
+                      disabled={publishingId === item.id}
+                      className="w-full flex items-center justify-center gap-2 rounded-lg border-2 border-[#6C47FF] text-[#6C47FF] hover:bg-[#6C47FF] hover:text-white font-semibold py-2 text-xs transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {publishingId === item.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Globe className="w-3.5 h-3.5" />}
+                      {publishingId === item.id ? 'Publishing…' : 'Publish to WordPress'}
                     </button>
                   </div>
                 )}
