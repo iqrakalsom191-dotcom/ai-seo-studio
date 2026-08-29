@@ -24,16 +24,6 @@ export default function LoginPage() {
     }
   }
 
-  async function handleGoogleLogin() {
-    setError('')
-    const supabase = createClient()
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: 'https://ai-seo-studio-sable.vercel.app/auth/callback' },
-    })
-    if (error) setError(error.message)
-  }
-
   return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       <style>{`
@@ -47,8 +37,6 @@ export default function LoginPage() {
         .input-field:focus { border-color: #6C47FF !important; box-shadow: 0 0 0 3px rgba(108,71,255,0.15) !important; }
         .login-btn:hover { background: #5535e0 !important; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(108,71,255,0.4) !important; }
         .login-btn { transition: all 0.2s ease !important; }
-        .google-btn:hover { background: #f5f5fa !important; border-color: #d8d8e5 !important; }
-        .google-btn { transition: all 0.2s ease !important; }
       `}</style>
 
       {/* Left — Branding */}
@@ -111,27 +99,6 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-
-          <button
-            type="button"
-            className="google-btn"
-            onClick={handleGoogleLogin}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '12px', background: '#fff', color: '#1A1A2E', border: '1.5px solid #e8e8f0', borderRadius: '10px', fontSize: '15px', fontWeight: '600', cursor: 'pointer', marginBottom: '24px' }}
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-              <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84c-.21 1.13-.84 2.09-1.8 2.73v2.27h2.92c1.7-1.57 2.68-3.88 2.68-6.64z"/>
-              <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.17l-2.92-2.27c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.7H.96v2.34C2.44 15.98 5.48 18 9 18z"/>
-              <path fill="#FBBC05" d="M3.97 10.72c-.18-.54-.28-1.12-.28-1.72s.1-1.18.28-1.72V4.94H.96C.35 6.17 0 7.55 0 9s.35 2.83.96 4.06l3.01-2.34z"/>
-              <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.59-2.59C13.46.89 11.43 0 9 0 5.48 0 2.44 2.02.96 4.94l3.01 2.34C4.68 5.16 6.66 3.58 9 3.58z"/>
-            </svg>
-            Continue with Google
-          </button>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
-            <div style={{ flex: 1, height: '1px', background: '#e8e8f0' }} />
-            <span style={{ fontSize: '13px', color: '#9a9ab0', fontWeight: '500' }}>or</span>
-            <div style={{ flex: 1, height: '1px', background: '#e8e8f0' }} />
-          </div>
 
           <div style={{ marginBottom: '16px' }}>
             <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#1A1A2E', marginBottom: '8px', letterSpacing: '0.2px' }}>Email address</label>
