@@ -34,7 +34,7 @@ export default function SignupPage() {
     const supabase = createClient()
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: 'https://ai-seo-studio-sable.vercel.app/dashboard' },
+      options: { redirectTo: 'https://ai-seo-studio-sable.vercel.app/auth/callback' },
     })
     if (error) setError(error.message)
   }
