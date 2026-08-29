@@ -223,6 +223,19 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* Guest Mode Banner */}
+      {user?.is_anonymous && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', background: '#00C6AE', borderRadius: '14px', padding: '16px 24px', marginBottom: '24px', boxShadow: '0 8px 20px rgba(0,198,174,0.25)' }}>
+          <p style={{ fontSize: '14px', fontWeight: '600', color: '#fff', margin: 0 }}>
+            You are using Guest Mode — your data won't be saved. Sign up free to save your work!
+          </p>
+          <Link href="/signup"
+            style={{ flexShrink: 0, padding: '10px 20px', borderRadius: '10px', background: '#fff', color: '#00957f', fontSize: '13px', fontWeight: '700', textDecoration: 'none' }}>
+            Sign Up Free
+          </Link>
+        </div>
+      )}
+
       {/* Hero */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px', marginBottom: '40px', flexWrap: 'wrap' }}>
         <div>

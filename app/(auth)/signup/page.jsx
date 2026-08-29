@@ -1,15 +1,18 @@
 'use client'
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 
 export default function SignupPage() {
+  const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [guestLoading, setGuestLoading] = useState(false)
 
   async function handleSignup() {
     setLoading(true)
@@ -29,6 +32,19 @@ export default function SignupPage() {
     }
   }
 
+  async function handleGuestLogin() {
+    setGuestLoading(true)
+    setError('')
+    const supabase = createClient()
+    const { error } = await supabase.auth.signInAnonymously()
+    if (error) {
+      setError(error.message)
+      setGuestLoading(false)
+    } else {
+      router.push('/dashboard')
+    }
+  }
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       <style>{`
@@ -42,6 +58,8 @@ export default function SignupPage() {
         .input-field:focus { border-color: #6C47FF !important; box-shadow: 0 0 0 3px rgba(108,71,255,0.15) !important; }
         .signup-btn:hover { background: #5535e0 !important; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(108,71,255,0.4) !important; }
         .signup-btn { transition: all 0.2s ease !important; }
+        .guest-btn:hover { background: rgba(108,71,255,0.06) !important; }
+        .guest-btn { transition: all 0.2s ease !important; }
       `}</style>
 
       {/* Left — Branding */}
@@ -128,6 +146,16 @@ export default function SignupPage() {
               </button>
             </>
           )}
+
+          <button
+            type="button"
+            className="guest-btn"
+            onClick={handleGuestLogin}
+            disabled={guestLoading}
+            style={{ width: '100%', padding: '13px', background: 'transparent', color: '#6C47FF', border: '1.5px solid #6C47FF', borderRadius: '10px', fontSize: '14px', fontWeight: '600', cursor: guestLoading ? 'not-allowed' : 'pointer', marginTop: '16px' }}
+          >
+            {guestLoading ? 'Signing in...' : 'Try as Guest — No signup needed'}
+          </button>
 
           <div style={{ textAlign: 'center', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid #f0f0f5' }}>
             <p style={{ color: '#4A4A6A', fontSize: '14px' }}>
