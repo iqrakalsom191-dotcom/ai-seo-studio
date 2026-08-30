@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
-import { BrainCircuit, CheckCircle2, Star } from 'lucide-react'
+import { BrainCircuit, Globe } from 'lucide-react'
 
 const COLORS = {
   bg: '#09090B',
@@ -13,11 +13,10 @@ const COLORS = {
   muted: '#999999',
 }
 
-const BULLETS = [
-  'AI-powered blog generation in seconds',
-  'Smart keyword research & suggestions',
-  'One-click WordPress publishing',
-  'SEO meta tags, generated automatically',
+const STATS = [
+  { value: '10x', label: 'Faster Content' },
+  { value: '17+', label: 'AI Tools' },
+  { value: 'Free', label: 'to Start' },
 ]
 
 export default function LoginPage() {
@@ -43,8 +42,8 @@ export default function LoginPage() {
   return (
     <div style={{ background: COLORS.bg, color: COLORS.text, minHeight: '100vh' }} className="font-sans grid grid-cols-1 md:grid-cols-2">
       {/* Left — Branding */}
-      <div className="hidden md:flex flex-col justify-center px-16 py-16">
-        <div className="max-w-md">
+      <div className="flex flex-col justify-center px-8 sm:px-16 py-16">
+        <div className="max-w-md mx-auto md:mx-0 w-full">
           <Link href="/" className="flex items-center gap-2 mb-12">
             <BrainCircuit size={22} color={COLORS.primary} />
             <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
@@ -54,42 +53,27 @@ export default function LoginPage() {
             Welcome back
           </h1>
           <p className="text-base leading-relaxed mb-10" style={{ color: COLORS.muted }}>
-            Sign in to continue creating SEO content that ranks — powered by AI.
+            Your AI-powered SEO toolkit is ready. Sign in to continue creating content that ranks.
           </p>
 
-          <div className="flex flex-col gap-4 mb-12">
-            {BULLETS.map((b) => (
-              <div key={b} className="flex items-center gap-3">
-                <CheckCircle2 size={18} color={COLORS.primary} className="shrink-0" />
-                <span className="text-sm" style={{ color: COLORS.text }}>{b}</span>
+          <div className="grid grid-cols-3 gap-4 mb-12">
+            {STATS.map((s) => (
+              <div key={s.label} className="p-4 rounded-xl border text-center" style={{ background: '#111', borderColor: '#1f1f1f' }}>
+                <div className="text-2xl font-extrabold" style={{ color: COLORS.accent }}>{s.value}</div>
+                <div className="text-xs mt-1" style={{ color: COLORS.text }}>{s.label}</div>
               </div>
             ))}
           </div>
 
-          <div className="p-6 rounded-xl border" style={{ background: '#111', borderColor: '#1f1f1f' }}>
-            <div className="flex items-center gap-1 mb-3">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} size={14} color={COLORS.accent} fill={COLORS.accent} />
-              ))}
-            </div>
-            <p className="text-sm leading-relaxed mb-4" style={{ color: COLORS.text }}>
-              "The keyword research tool alone is worth it. I use it for every blog brief I write now."
-            </p>
-            <div>
-              <div className="text-sm font-semibold" style={{ color: COLORS.text }}>Rohan Mehta</div>
-              <div className="text-xs mt-0.5" style={{ color: COLORS.muted }}>Content Strategist, Mumbai</div>
-            </div>
+          <div className="flex items-center gap-2">
+            <Globe size={16} color={COLORS.muted} />
+            <span className="text-sm" style={{ color: COLORS.muted }}>Trusted by freelancers worldwide</span>
           </div>
         </div>
       </div>
 
       {/* Right — Form */}
       <div className="flex flex-col justify-center items-center px-6 py-16">
-        <Link href="/" className="flex md:hidden items-center gap-2 mb-8">
-          <BrainCircuit size={20} color={COLORS.primary} />
-          <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
-        </Link>
-
         <div className="w-full max-w-md rounded-2xl border p-8" style={{ background: '#111', borderColor: '#1f1f1f' }}>
           <div className="mb-8">
             <h2 className="text-2xl font-extrabold mb-1" style={{ color: COLORS.text }}>Sign in to your account</h2>
