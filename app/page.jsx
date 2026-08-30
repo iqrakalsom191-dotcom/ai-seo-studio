@@ -171,7 +171,7 @@ export default function Home() {
             </Link>
             <Link
               href="/signup"
-              className="text-sm font-semibold px-4 py-2 rounded-lg hover:-translate-y-0.5 transition-all duration-200"
+              className="text-sm font-semibold px-4 py-2 rounded-lg hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
               style={{ background: COLORS.primary, color: COLORS.text }}
             >
               Start Free
@@ -203,7 +203,7 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold hover:-translate-y-1 hover:bg-purple-600 transition-all duration-200"
             style={{ background: COLORS.primary, color: COLORS.text }}
           >
             Start for free
@@ -212,7 +212,7 @@ export default function Home() {
           <button
             onClick={handleGuestLogin}
             disabled={guestLoading}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold border transition-colors hover:bg-white/5"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold border hover:-translate-y-1 hover:border-white hover:text-white transition-all duration-200"
             style={{ borderColor: 'rgba(255,255,255,0.15)', color: COLORS.text, cursor: guestLoading ? 'not-allowed' : 'pointer' }}
           >
             {guestLoading ? 'Signing in...' : 'Try as Guest'}
@@ -427,13 +427,13 @@ export default function Home() {
               © 2026 AI SEO Studio. All rights reserved.
             </p>
             <div className="flex items-center gap-5">
-              <a href="#" aria-label="Twitter" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
+              <a href="#" aria-label="Twitter" className="hover:text-white hover:-translate-y-0.5 transition-all duration-200" style={{ color: COLORS.muted }}>
                 <TwitterIcon />
               </a>
-              <a href="#" aria-label="GitHub" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
+              <a href="#" aria-label="GitHub" className="hover:text-white hover:-translate-y-0.5 transition-all duration-200" style={{ color: COLORS.muted }}>
                 <GithubIcon />
               </a>
-              <a href="#" aria-label="LinkedIn" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
+              <a href="#" aria-label="LinkedIn" className="hover:text-white hover:-translate-y-0.5 transition-all duration-200" style={{ color: COLORS.muted }}>
                 <LinkedinIcon />
               </a>
             </div>
