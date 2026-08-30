@@ -6,7 +6,6 @@ import { createClient } from '@/lib/supabase'
 import { BrainCircuit, Globe, CheckCircle2 } from 'lucide-react'
 
 const COLORS = {
-  bg: '#09090B',
   primary: '#7C3AED',
   accent: '#F59E0B',
   text: '#FAFAFA',
@@ -68,11 +67,10 @@ export default function SignupPage() {
   }
 
   return (
-    <div style={{ background: COLORS.bg, color: COLORS.text }} className="font-sans min-h-screen flex items-center justify-center py-12">
-    <div className="max-w-6xl w-full mx-auto px-6 grid grid-cols-1 md:grid-cols-2">
-      {/* Left — Branding */}
-      <div className="flex flex-col justify-center px-8 sm:px-16 py-16">
-        <div className="max-w-md mx-auto md:mx-0 w-full">
+    <div className="min-h-screen bg-[#09090B] flex items-center justify-center p-4 font-sans" style={{ color: COLORS.text }}>
+      <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
+        {/* Left — Branding */}
+        <div className="hidden lg:flex flex-col flex-1">
           <Link href="/" className="flex items-center gap-2 mb-12">
             <BrainCircuit size={22} color={COLORS.primary} />
             <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
@@ -87,7 +85,7 @@ export default function SignupPage() {
 
           <div className="grid grid-cols-3 gap-4 mb-12">
             {STATS.map((s) => (
-              <div key={s.label} className="p-4 rounded-xl border border-[#1f1f1f] text-center" style={{ background: '#111', borderColor: '#1f1f1f' }}>
+              <div key={s.label} className="p-4 rounded-xl border border-[#1f1f1f] text-center" style={{ background: '#111' }}>
                 <div className="text-2xl font-extrabold" style={{ color: COLORS.accent }}>{s.value}</div>
                 <div className="text-xs mt-1" style={{ color: COLORS.text }}>{s.label}</div>
               </div>
@@ -111,96 +109,97 @@ export default function SignupPage() {
             <span className="text-sm" style={{ color: COLORS.muted }}>Trusted by freelancers worldwide</span>
           </div>
         </div>
-      </div>
 
-      {/* Right — Form */}
-      <div className="flex flex-col justify-center items-center px-6 py-16">
-        <div className="w-full max-w-md rounded-2xl border p-8" style={{ background: '#111', borderColor: '#1f1f1f' }}>
-          <div className="mb-8">
-            <h2 className="text-2xl font-extrabold mb-1" style={{ color: COLORS.text }}>Create your account</h2>
-            <p className="text-sm" style={{ color: COLORS.muted }}>Get started for free</p>
-          </div>
+        {/* Right — Form */}
+        <div className="w-full max-w-md mx-auto lg:mx-0">
+          <Link href="/" className="flex lg:hidden items-center gap-2 mb-8 justify-center">
+            <BrainCircuit size={20} color={COLORS.primary} />
+            <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
+          </Link>
 
-          {error && (
-            <div className="rounded-lg px-4 py-3 mb-5 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#f87171' }}>
-              {error}
+          <div className="w-full bg-[#111] border border-[#1f1f1f] rounded-2xl p-8">
+            <div className="mb-8">
+              <h2 className="text-2xl font-extrabold mb-1" style={{ color: COLORS.text }}>Create your account</h2>
+              <p className="text-sm" style={{ color: COLORS.muted }}>Get started for free</p>
             </div>
-          )}
 
-          {success && (
-            <div className="rounded-lg px-4 py-4 mb-5 text-sm text-center" style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: COLORS.text }}>
-              Account created! Please check your email to verify.
+            {error && (
+              <div className="rounded-lg px-4 py-3 mb-5 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#f87171' }}>
+                {error}
+              </div>
+            )}
+
+            {success && (
+              <div className="rounded-lg px-4 py-4 mb-5 text-sm text-center" style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: COLORS.text }}>
+                Account created! Please check your email to verify.
+              </div>
+            )}
+
+            {!success && (
+              <>
+                <div className="mb-4">
+                  <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Full Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    placeholder="Your name"
+                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#7C3AED] text-sm transition-colors"
+                  />
+                </div>
+
+                <div className="mb-4">
+                  <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Email address</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#7C3AED] text-sm transition-colors"
+                  />
+                </div>
+
+                <div className="mb-6">
+                  <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Password</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#7C3AED] text-sm transition-colors"
+                  />
+                </div>
+
+                <button
+                  onClick={handleSignup}
+                  disabled={loading}
+                  className="w-full py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
+                  style={{ background: loading ? '#4c2f9e' : COLORS.primary, color: COLORS.text, cursor: loading ? 'not-allowed' : 'pointer' }}
+                >
+                  {loading ? 'Creating account...' : 'Create Account'}
+                </button>
+              </>
+            )}
+
+            <button
+              type="button"
+              onClick={handleGuestLogin}
+              disabled={guestLoading}
+              className="w-full py-3 rounded-lg text-sm font-semibold border mt-4 hover:-translate-y-0.5 hover:border-white hover:text-white transition-all duration-200"
+              style={{ borderColor: 'rgba(255,255,255,0.15)', color: COLORS.text, cursor: guestLoading ? 'not-allowed' : 'pointer' }}
+            >
+              {guestLoading ? 'Signing in...' : 'Try as Guest'}
+            </button>
+
+            <div className="text-center mt-6 pt-6 border-t border-[#1f1f1f]">
+              <p className="text-sm" style={{ color: COLORS.muted }}>
+                Already have an account?{' '}
+                <Link href="/login" className="font-semibold hover:text-white transition-colors duration-200" style={{ color: COLORS.primary }}>Log in</Link>
+              </p>
             </div>
-          )}
-
-          {!success && (
-            <>
-              <div className="mb-4">
-                <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Full Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={e => setName(e.target.value)}
-                  placeholder="Your name"
-                  className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:border-purple-600 transition-colors"
-                  style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: COLORS.text }}
-                />
-              </div>
-
-              <div className="mb-4">
-                <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Email address</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:border-purple-600 transition-colors"
-                  style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: COLORS.text }}
-                />
-              </div>
-
-              <div className="mb-6">
-                <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:border-purple-600 transition-colors"
-                  style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: COLORS.text }}
-                />
-              </div>
-
-              <button
-                onClick={handleSignup}
-                disabled={loading}
-                className="w-full py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
-                style={{ background: loading ? '#4c2f9e' : COLORS.primary, color: COLORS.text, cursor: loading ? 'not-allowed' : 'pointer' }}
-              >
-                {loading ? 'Creating account...' : 'Create Account'}
-              </button>
-            </>
-          )}
-
-          <button
-            type="button"
-            onClick={handleGuestLogin}
-            disabled={guestLoading}
-            className="w-full py-3 rounded-lg text-sm font-semibold border mt-4 hover:-translate-y-0.5 hover:border-white hover:text-white transition-all duration-200"
-            style={{ borderColor: 'rgba(255,255,255,0.15)', color: COLORS.text, cursor: guestLoading ? 'not-allowed' : 'pointer' }}
-          >
-            {guestLoading ? 'Signing in...' : 'Try as Guest'}
-          </button>
-
-          <div className="text-center mt-6 pt-6 border-t" style={{ borderColor: '#1f1f1f' }}>
-            <p className="text-sm" style={{ color: COLORS.muted }}>
-              Already have an account?{' '}
-              <Link href="/login" className="font-semibold hover:text-white transition-colors duration-200" style={{ color: COLORS.primary }}>Log in</Link>
-            </p>
           </div>
         </div>
       </div>
-    </div>
     </div>
   )
 }
