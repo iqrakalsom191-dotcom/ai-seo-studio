@@ -14,9 +14,9 @@ function highlightJson(json) {
   return escaped.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(\.\d+)?([eE][+-]?\d+)?)/g,
     (match) => {
-      let color = '#00C6AE' // number
+      let color = '#F59E0B' // number
       if (/^"/.test(match)) {
-        color = /:$/.test(match) ? '#6C47FF' : '#E3A008' // key vs string
+        color = /:$/.test(match) ? '#7C3AED' : '#E3A008' // key vs string
       } else if (/true|false/.test(match)) {
         color = '#FF6B6B'
       } else if (/null/.test(match)) {
@@ -91,22 +91,23 @@ export default function SchemaPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Braces style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>Schema Markup</h1>
+        <Braces style={{ color: '#7C3AED' }} size={28} />
+        <h1 className="text-2xl font-bold text-white">Schema Markup</h1>
       </div>
-      <p className="text-gray-500 mb-8">Generate valid JSON-LD schema markup for your content.</p>
+      <p className="text-[#999] mb-8">Generate valid JSON-LD schema markup for your content.</p>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+      <div className="rounded-2xl border p-6 space-y-4" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Schema Type</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Schema Type</label>
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-            onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-            onBlur={(e) => (e.target.style.borderColor = '')}
+            className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white"
+            style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           >
             {SCHEMA_TYPES.map((t) => (
               <option key={t} value={t}>{t}</option>
@@ -117,50 +118,54 @@ export default function SchemaPage() {
         {type === 'Article' && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Title</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Title</label>
               <input
                 type="text"
                 value={fields.title}
                 onChange={(e) => updateField('title', e.target.value)}
                 placeholder="e.g. The Ultimate Guide to SEO"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Description</label>
               <input
                 type="text"
                 value={fields.description}
                 onChange={(e) => updateField('description', e.target.value)}
                 placeholder="Short summary of the article"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Author</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Author</label>
               <input
                 type="text"
                 value={fields.author}
                 onChange={(e) => updateField('author', e.target.value)}
                 placeholder="e.g. Jane Doe"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date Published</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Date Published</label>
               <input
                 type="date"
                 value={fields.date}
                 onChange={(e) => updateField('date', e.target.value)}
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
           </div>
@@ -168,15 +173,16 @@ export default function SchemaPage() {
 
         {type === 'FAQ' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Q&A Pairs</label>
+            <label className="block text-sm font-medium text-[#999] mb-1">Q&A Pairs</label>
             <textarea
               value={fields.qa}
               onChange={(e) => updateField('qa', e.target.value)}
               placeholder={'Q: What is SEO?\nA: SEO stands for Search Engine Optimization...\n\nQ: Why does SEO matter?\nA: It helps your site rank higher...'}
               rows={8}
-              className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 resize-none"
-              onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-              onBlur={(e) => (e.target.style.borderColor = '')}
+              className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none resize-none text-white placeholder-gray-600"
+              style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+              onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+              onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
             />
           </div>
         )}
@@ -184,76 +190,80 @@ export default function SchemaPage() {
         {type === 'Product' && (
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Name</label>
               <input
                 type="text"
                 value={fields.name}
                 onChange={(e) => updateField('name', e.target.value)}
                 placeholder="e.g. Wireless Noise-Cancelling Headphones"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Price</label>
               <input
                 type="text"
                 value={fields.price}
                 onChange={(e) => updateField('price', e.target.value)}
                 placeholder="e.g. 199.99"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Description</label>
               <input
                 type="text"
                 value={fields.description}
                 onChange={(e) => updateField('description', e.target.value)}
                 placeholder="Short product description"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+              <label className="block text-sm font-medium text-[#999] mb-1">Brand</label>
               <input
                 type="text"
                 value={fields.brand}
                 onChange={(e) => updateField('brand', e.target.value)}
                 placeholder="e.g. Acme"
-                className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-                onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-                onBlur={(e) => (e.target.style.borderColor = '')}
+                className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+                style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
           </div>
         )}
 
-        {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">{error}</div>}
+        {error && <div className="text-sm px-4 py-3 rounded-lg" style={{ background: 'rgba(239,68,68,0.1)', color: '#f87171' }}>{error}</div>}
 
         <button
           onClick={generate}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#6C47FF' }}
+          style={{ backgroundColor: '#7C3AED' }}
         >
           {loading ? 'Generating...' : '✦ Generate Schema'}
         </button>
       </div>
 
       {schema && (
-        <div className="mt-6 bg-[#0F0F0F] rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-          <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
-            <span className="text-xs font-semibold text-white/50 uppercase tracking-wide">JSON-LD</span>
+        <div className="mt-6 rounded-2xl border overflow-hidden" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
+          <div className="flex items-center justify-between px-5 py-3 border-b" style={{ borderColor: '#1f1f1f' }}>
+            <span className="text-xs font-semibold text-[#999] uppercase tracking-wide">JSON-LD</span>
             <button
               onClick={copy}
-              className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-white/10 hover:bg-white/5 transition"
-              style={{ color: copied ? '#00C6AE' : '#6C47FF' }}
+              className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition"
+              style={{ borderColor: '#1f1f1f', color: copied ? '#F59E0B' : '#7C3AED' }}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? 'Copied!' : 'Copy'}

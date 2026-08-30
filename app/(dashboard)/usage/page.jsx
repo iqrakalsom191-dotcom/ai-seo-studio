@@ -48,59 +48,59 @@ export default function UsagePage() {
   const maxHistoryCount = Math.max(...history.map((h) => h.count), 1)
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Gauge style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>Usage Limits</h1>
+        <Gauge style={{ color: '#7C3AED' }} size={28} />
+        <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>Usage Limits</h1>
       </div>
-      <p className="text-gray-500 mb-8">Track your daily AI generation usage.</p>
+      <p className="text-[#999] mb-8">Track your daily AI generation usage.</p>
 
       {!loading && (
         <>
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-4">
+          <div className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-6 mb-4">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">Today's usage</span>
-              <span className="text-sm text-gray-500">{todayCount} / {DAILY_LIMIT}</span>
+              <span className="text-sm font-medium text-[#999]">Today's usage</span>
+              <span className="text-sm text-[#999]">{todayCount} / {DAILY_LIMIT}</span>
             </div>
-            <div className="w-full h-3 rounded-full bg-gray-100 overflow-hidden">
+            <div className="w-full h-3 rounded-full bg-[#1a1a1a] overflow-hidden">
               <div
                 className="h-full rounded-full transition-all"
                 style={{
                   width: `${usedPct}%`,
-                  background: usedPct >= 100 ? '#FF6B6B' : 'linear-gradient(90deg, #6C47FF, #00C6AE)',
+                  background: usedPct >= 100 ? '#FF6B6B' : 'linear-gradient(90deg, #7C3AED, #F59E0B)',
                 }}
               />
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-6 flex items-center gap-4">
+          <div className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-5 mb-6 flex items-center gap-4">
             <div style={{
               width: '44px', height: '44px', borderRadius: '12px',
-              background: 'rgba(0,198,174,0.12)', display: 'flex',
+              background: 'rgba(245,158,11,0.15)', display: 'flex',
               alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
-              <Zap style={{ color: '#00C6AE' }} size={20} />
+              <Zap style={{ color: '#F59E0B' }} size={20} />
             </div>
             <div>
-              <div className="text-xl font-bold" style={{ color: 'var(--foreground)' }}>{remaining}</div>
-              <div className="text-xs text-gray-500">generations remaining today</div>
+              <div className="text-xl font-bold" style={{ color: '#FAFAFA' }}>{remaining}</div>
+              <div className="text-xs text-[#999]">generations remaining today</div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-sm font-semibold text-gray-700 mb-4 uppercase tracking-wide">Last 7 Days</h2>
+          <div className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-6">
+            <h2 className="text-sm font-semibold text-[#999] mb-4 uppercase tracking-wide">Last 7 Days</h2>
             <div className="flex items-end justify-between gap-2" style={{ height: '140px' }}>
               {history.map(({ date, count }) => (
                 <div key={date} className="flex-1 flex flex-col items-center gap-2 h-full justify-end">
-                  <span className="text-xs text-gray-500">{count}</span>
+                  <span className="text-xs text-[#999]">{count}</span>
                   <div
                     className="w-full rounded-t-md"
                     style={{
                       height: `${Math.max((count / maxHistoryCount) * 100, 4)}%`,
-                      background: 'linear-gradient(180deg, #6C47FF, #00C6AE)',
+                      background: 'linear-gradient(180deg, #7C3AED, #F59E0B)',
                     }}
                   />
-                  <span className="text-[10px] text-gray-400">
+                  <span className="text-[10px] text-[#999]">
                     {new Date(date).toLocaleDateString(undefined, { weekday: 'short' })}
                   </span>
                 </div>

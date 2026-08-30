@@ -11,7 +11,7 @@ function parseBold(line) {
   const parts = line.split(/\*\*/)
   return parts.map((part, i) =>
     i % 2 === 1
-      ? <strong key={i} className="font-semibold text-[#1A1A2E]">{part}</strong>
+      ? <strong key={i} className="font-semibold text-white">{part}</strong>
       : part
   )
 }
@@ -19,22 +19,22 @@ function parseBold(line) {
 function renderMarkdown(text) {
   return text.split('\n').map((line, i) => {
     if (line.startsWith('# '))
-      return <h1 key={i} className="text-2xl font-bold text-[#1A1A2E] mt-6 mb-3">{parseBold(line.slice(2))}</h1>
+      return <h1 key={i} className="text-2xl font-bold text-white mt-6 mb-3">{parseBold(line.slice(2))}</h1>
     if (line.startsWith('## '))
-      return <h2 key={i} className="text-xl font-bold text-[#1A1A2E] mt-5 mb-2">{parseBold(line.slice(3))}</h2>
+      return <h2 key={i} className="text-xl font-bold text-white mt-5 mb-2">{parseBold(line.slice(3))}</h2>
     if (line.startsWith('### '))
-      return <h3 key={i} className="text-lg font-semibold text-[#6C47FF] mt-4 mb-2">{parseBold(line.slice(4))}</h3>
+      return <h3 key={i} className="text-lg font-semibold text-[#7C3AED] mt-4 mb-2">{parseBold(line.slice(4))}</h3>
     if (line.startsWith('#### '))
-      return <h4 key={i} className="text-base font-semibold text-[#4A4A6A] mt-3 mb-1">{parseBold(line.slice(5))}</h4>
+      return <h4 key={i} className="text-base font-semibold text-[#999] mt-3 mb-1">{parseBold(line.slice(5))}</h4>
     if (line.startsWith('- ') || line.startsWith('* '))
-      return <li key={i} className="ml-4 text-[#1A1A2E] leading-relaxed list-disc my-0.5">{parseBold(line.slice(2))}</li>
+      return <li key={i} className="ml-4 text-[#ccc] leading-relaxed list-disc my-0.5">{parseBold(line.slice(2))}</li>
     if (line.match(/^\d+\. /))
-      return <li key={i} className="ml-4 text-[#1A1A2E] leading-relaxed list-decimal my-0.5">{parseBold(line.replace(/^\d+\. /, ''))}</li>
+      return <li key={i} className="ml-4 text-[#ccc] leading-relaxed list-decimal my-0.5">{parseBold(line.replace(/^\d+\. /, ''))}</li>
     if (line.startsWith('---') || line.startsWith('***'))
-      return <hr key={i} className="border-[#6C47FF]/10 my-4" />
+      return <hr key={i} className="border-[#1f1f1f] my-4" />
     if (line.trim() === '')
       return <div key={i} className="h-2" />
-    return <p key={i} className="text-[#1A1A2E] leading-relaxed my-1">{parseBold(line)}</p>
+    return <p key={i} className="text-[#ccc] leading-relaxed my-1">{parseBold(line)}</p>
   })
 }
 
@@ -128,12 +128,12 @@ export default function GeneratorPage() {
             </p>
             <div className="flex gap-3">
               {data.postUrl && (
-                <a href={data.postUrl} target="_blank" rel="noopener noreferrer" className="text-[#6C47FF] underline">
+                <a href={data.postUrl} target="_blank" rel="noopener noreferrer" className="text-[#7C3AED] underline">
                   View Post
                 </a>
               )}
               {data.editUrl && (
-                <a href={data.editUrl} target="_blank" rel="noopener noreferrer" className="text-[#6C47FF] underline">
+                <a href={data.editUrl} target="_blank" rel="noopener noreferrer" className="text-[#7C3AED] underline">
                   Edit in WP Admin
                 </a>
               )}
@@ -149,79 +149,79 @@ export default function GeneratorPage() {
     }
   })
 
-  const selectClass = 'w-full rounded-lg border border-[#6C47FF]/20 bg-white px-4 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:ring-2 focus:ring-[#6C47FF]/40 appearance-none cursor-pointer'
+  const selectClass = 'w-full rounded-lg border border-[#1f1f1f] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/40 appearance-none cursor-pointer'
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-4xl mx-auto px-4 py-8 space-y-8" style={{ background: '#09090B' }}>
 
       <div>
-        <h1 className="text-2xl font-semibold flex items-center gap-2" style={{ color: 'var(--foreground)' }}>
-          <Sparkles size={22} className="text-[#6C47FF]" />
+        <h1 className="text-2xl font-semibold flex items-center gap-2" style={{ color: '#FAFAFA' }}>
+          <Sparkles size={22} className="text-[#7C3AED]" />
           AI Blog Generator
         </h1>
-        <p className="mt-1 text-sm text-[#4A4A6A]">
+        <p className="mt-1 text-sm text-[#999]">
           Enter a keyword and let AI write a full blog post for you.
         </p>
       </div>
 
-      <div className="bg-white rounded-2xl border border-[#6C47FF]/10 shadow-[0_4px_24px_rgba(108,71,255,0.06)] p-6 space-y-5">
+      <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-[0_4px_24px_rgba(124,58,237,0.06)] p-6 space-y-5">
 
         <div className="space-y-1.5">
-          <label className="block text-sm font-medium text-[#1A1A2E]">Keyword</label>
+          <label className="block text-sm font-medium text-white">Keyword</label>
           <input
             type="text"
             placeholder="e.g. WordPress SEO plugins"
             value={keyword}
             onChange={e => setKeyword(e.target.value)}
-            className="w-full rounded-lg border border-[#6C47FF]/20 bg-white px-4 py-2.5 text-sm text-[#1A1A2E] placeholder:text-[#4A4A6A]/50 focus:outline-none focus:ring-2 focus:ring-[#6C47FF]/40"
+            className="w-full rounded-lg border border-[#1f1f1f] bg-[#1a1a1a] px-4 py-2.5 text-sm text-white placeholder:text-[#666] focus:outline-none focus:ring-2 focus:ring-[#7C3AED]/40"
           />
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-[#1A1A2E]">Tone</label>
+            <label className="block text-sm font-medium text-white">Tone</label>
             <div className="relative">
               <select value={tone} onChange={e => setTone(e.target.value)} className={selectClass}>
                 <option value="professional">Professional</option>
                 <option value="casual">Casual</option>
                 <option value="friendly">Friendly</option>
               </select>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6C47FF]">▾</span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#7C3AED]">▾</span>
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-[#1A1A2E]">Word Count</label>
+            <label className="block text-sm font-medium text-white">Word Count</label>
             <div className="relative">
               <select value={wordCount} onChange={e => setWordCount(e.target.value)} className={selectClass}>
                 <option value="500">500 words</option>
                 <option value="1000">1000 words</option>
                 <option value="1500">1500 words</option>
               </select>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6C47FF]">▾</span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#7C3AED]">▾</span>
             </div>
           </div>
 
           <div className="space-y-1.5">
-            <label className="block text-sm font-medium text-[#1A1A2E]">Language</label>
+            <label className="block text-sm font-medium text-white">Language</label>
             <div className="relative">
               <select value={language} onChange={e => setLanguage(e.target.value)} className={selectClass}>
                 <option value="english">English</option>
                 <option value="urdu">Urdu</option>
               </select>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#6C47FF]">▾</span>
+              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[#7C3AED]">▾</span>
             </div>
           </div>
         </div>
 
         {error && (
-          <p className="text-sm text-red-500 bg-red-50 rounded-lg px-4 py-2">{error}</p>
+          <p className="text-sm text-[#f87171] bg-[#ef4444]/10 rounded-lg px-4 py-2">{error}</p>
         )}
 
         <button
           onClick={handleGenerate}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#6C47FF] hover:bg-[#5a38e0] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 text-sm transition-colors duration-200"
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#7C3AED] hover:bg-[#6d28d9] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 text-sm transition-colors duration-200"
         >
           {loading ? (
             <><Loader2 size={16} className="animate-spin" /> Generating…</>
@@ -232,25 +232,25 @@ export default function GeneratorPage() {
       </div>
 
       {loading && !output && (
-        <div className="bg-white rounded-2xl border border-[#6C47FF]/10 shadow-[0_4px_24px_rgba(108,71,255,0.06)] p-6">
-          <div className="flex flex-col items-center justify-center py-16 gap-3 text-[#4A4A6A]">
-            <Loader2 size={32} className="animate-spin text-[#6C47FF]" />
+        <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-[0_4px_24px_rgba(124,58,237,0.06)] p-6">
+          <div className="flex flex-col items-center justify-center py-16 gap-3 text-[#999]">
+            <Loader2 size={32} className="animate-spin text-[#7C3AED]" />
             <p className="text-sm">AI is writing your blog post…</p>
           </div>
         </div>
       )}
 
       {output && (
-        <div className="bg-white rounded-2xl border-2 border-[#6C47FF]/20 shadow-[0_8px_32px_rgba(108,71,255,0.10)] p-6 space-y-4">
+        <div className="bg-[#111] rounded-2xl border-2 border-[#7C3AED]/20 shadow-[0_8px_32px_rgba(124,58,237,0.10)] p-6 space-y-4">
 
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-[#1A1A2E]">Generated Content</h2>
-            <span className="bg-[#00C6AE]/10 text-[#00C6AE] text-xs font-semibold px-3 py-1 rounded-full">
+            <h2 className="text-sm font-semibold text-white">Generated Content</h2>
+            <span className="bg-[#F59E0B]/10 text-[#F59E0B] text-xs font-semibold px-3 py-1 rounded-full">
               {output.split(/\s+/).length} words
             </span>
           </div>
 
-          <div className="overflow-y-auto max-h-[500px] rounded-xl border border-[#6C47FF]/10 bg-[#F0EEFF]/30 px-5 py-4 text-sm">
+          <div className="overflow-y-auto max-h-[500px] rounded-xl border border-[#1f1f1f] bg-[#1a1a1a] px-5 py-4 text-sm">
             {renderMarkdown(output)}
           </div>
 
@@ -258,7 +258,7 @@ export default function GeneratorPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#6C47FF] hover:bg-[#5a38e0] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#7C3AED] hover:bg-[#6d28d9] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {saving ? <Loader2 size={15} className="animate-spin" /> : savedOk ? <CheckCheck size={15} /> : <BookmarkPlus size={15} />}
               {saving ? 'Saving…' : savedOk ? 'Saved!' : 'Save to Library'}
@@ -266,7 +266,7 @@ export default function GeneratorPage() {
 
             <button
               onClick={handleCopy}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#00C6AE] text-[#00C6AE] hover:bg-[#00C6AE] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200"
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#F59E0B] text-[#F59E0B] hover:bg-[#F59E0B] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200"
             >
               {copied ? <CheckCheck size={15} /> : <Copy size={15} />}
               {copied ? 'Copied!' : 'Copy to Clipboard'}
@@ -275,7 +275,7 @@ export default function GeneratorPage() {
             <button
               onClick={() => setShowPublishPanel(true)}
               disabled={publishing}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#6C47FF] text-[#6C47FF] hover:bg-[#6C47FF] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#7C3AED] text-[#7C3AED] hover:bg-[#7C3AED] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {publishing ? <Loader2 size={15} className="animate-spin" /> : <Globe size={15} />}
               {publishing ? 'Publishing…' : 'Publish to WordPress'}
@@ -283,10 +283,10 @@ export default function GeneratorPage() {
           </div>
 
           {showPublishPanel && (
-            <div className="rounded-xl border border-[#6C47FF]/20 bg-[#F0EEFF]/40 p-4 space-y-3">
+            <div className="rounded-xl border border-[#7C3AED]/20 bg-[#1a1a1a] p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-[#1A1A2E]">Publish to WordPress</p>
-                <button onClick={() => setShowPublishPanel(false)} className="text-[#4A4A6A] hover:text-[#1A1A2E]">
+                <p className="text-sm font-semibold text-white">Publish to WordPress</p>
+                <button onClick={() => setShowPublishPanel(false)} className="text-[#999] hover:text-white">
                   <X size={16} />
                 </button>
               </div>
@@ -294,7 +294,7 @@ export default function GeneratorPage() {
                 <button
                   onClick={() => handlePublish('draft')}
                   disabled={publishing}
-                  className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#6C47FF] text-[#6C47FF] hover:bg-[#6C47FF] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 border-[#7C3AED] text-[#7C3AED] hover:bg-[#7C3AED] hover:text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {publishing ? <Loader2 size={15} className="animate-spin" /> : <FileEdit size={15} />}
                   Save as Draft
@@ -302,7 +302,7 @@ export default function GeneratorPage() {
                 <button
                   onClick={() => handlePublish('publish')}
                   disabled={publishing}
-                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#6C47FF] hover:bg-[#5a38e0] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#7C3AED] hover:bg-[#6d28d9] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {publishing ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
                   Publish Live

@@ -45,34 +45,34 @@ export default function SlugPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Link2 style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold " style={{ color: 'var(--foreground)' }}>Slug Generator</h1>
+        <Link2 style={{ color: '#7C3AED' }} size={28} />
+        <h1 className="text-2xl font-bold " style={{ color: '#FAFAFA' }}>Slug Generator</h1>
       </div>
-      <p className="text-gray-500 mb-8">Enter a keyword and get 5 SEO-friendly URL slugs.</p>
+      <p className="text-[#999] mb-8">Enter a keyword and get 5 SEO-friendly URL slugs.</p>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+      <div className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-6 space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Keyword</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Keyword</label>
           <input
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="e.g. best coffee makers 2026"
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-            onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
+            className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
+            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
 
-        {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">{error}</div>}
+        {error && <div className="bg-[#ef4444]/10 text-[#f87171] text-sm px-4 py-3 rounded-lg">{error}</div>}
 
         <button
           onClick={generate}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#6C47FF' }}
+          style={{ backgroundColor: '#7C3AED' }}
         >
           {loading ? 'Generating...' : '✦ Generate Slugs'}
         </button>
@@ -83,13 +83,13 @@ export default function SlugPage() {
           {slugs.map((slug, i) => (
             <div
               key={i}
-              className="bg-white rounded-2xl border border-gray-100 shadow-sm p-4 flex items-center justify-between gap-4 hover:shadow-md transition"
+              className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-4 flex items-center justify-between gap-4 hover:shadow-md transition"
             >
-              <code className="text-sm font-medium text-gray-800 break-all">/{slug}</code>
+              <code className="text-sm font-medium text-white break-all">/{slug}</code>
               <button
                 onClick={() => copy(slug, i)}
-                className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-gray-200 hover:bg-gray-50 transition"
-                style={{ color: copiedIndex === i ? '#00C6AE' : '#6C47FF' }}
+                className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-[#1f1f1f] hover:bg-[#1a1a1a] transition"
+                style={{ color: copiedIndex === i ? '#F59E0B' : '#7C3AED' }}
               >
                 {copiedIndex === i ? <Check size={14} /> : <Copy size={14} />}
                 {copiedIndex === i ? 'Copied!' : 'Copy'}

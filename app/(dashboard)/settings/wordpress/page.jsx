@@ -111,56 +111,56 @@ export default function WordPressSettingsPage() {
   })
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className="max-w-2xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Globe className="text-violet-600" size={28} style={{ color: '#6C47FF' }} />
-        <h1 className="text-2xl font-bold" style={{ color: 'var(--foreground)' }}>WordPress Connection</h1>
+        <Globe size={28} style={{ color: '#7C3AED' }} />
+        <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>WordPress Connection</h1>
       </div>
-      <p className="text-gray-500 mb-8">Connect your WordPress site to publish content directly from AI SEO Studio.</p>
+      <p className="text-[#999] mb-8">Connect your WordPress site to publish content directly from AI SEO Studio.</p>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+      <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6 space-y-4">
         {connected && (
-          <div className="flex items-center gap-2 bg-green-50 text-green-700 text-sm px-4 py-3 rounded-lg">
+          <div className="flex items-center gap-2 text-sm px-4 py-3 rounded-lg" style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}>
             <CheckCircle2 size={16} />
             Credentials on file
           </div>
         )}
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Site URL</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Site URL</label>
           <input
             type="text"
             value={siteUrl}
             onChange={(e) => setSiteUrl(e.target.value)}
             placeholder="https://yoursite.com"
             disabled={loading}
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 disabled:opacity-50"
+            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] disabled:opacity-50"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Username</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Username</label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             placeholder="e.g. admin"
             disabled={loading}
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 disabled:opacity-50"
+            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] disabled:opacity-50"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Application Password</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Application Password</label>
           <input
             type="password"
             value={appPassword}
             onChange={(e) => setAppPassword(e.target.value)}
             placeholder="xxxx xxxx xxxx xxxx xxxx xxxx"
             disabled={loading}
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 disabled:opacity-50"
+            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] disabled:opacity-50"
           />
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-[#999] mt-1">
             Generate one from your WordPress admin under Users → Profile → Application Passwords.
           </p>
         </div>
@@ -169,7 +169,7 @@ export default function WordPressSettingsPage() {
           <button
             onClick={testConnection}
             disabled={testing || loading}
-            className="flex-1 flex items-center justify-center gap-2 border border-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition hover:bg-gray-50 disabled:opacity-50"
+            className="flex-1 flex items-center justify-center gap-2 border border-[#1f1f1f] text-[#999] font-semibold py-3 rounded-xl transition hover:bg-[#1a1a1a] disabled:opacity-50"
           >
             <Plug size={16} />
             {testing ? 'Testing...' : 'Test Connection'}
@@ -178,7 +178,7 @@ export default function WordPressSettingsPage() {
             onClick={save}
             disabled={saving || loading}
             className="flex-1 flex items-center justify-center gap-2 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-            style={{ backgroundColor: '#6C47FF' }}
+            style={{ backgroundColor: '#7C3AED' }}
           >
             <Save size={16} />
             {saving ? 'Saving...' : 'Save'}

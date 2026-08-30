@@ -69,42 +69,49 @@ export default function MetaPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Tag className="text-violet-600" size={28} />
-        <h1 className="text-2xl font-bold " style={{ color: 'var(--foreground)' }}>Meta Tag Generator</h1>
+        <Tag style={{ color: '#7C3AED' }} size={28} />
+        <h1 className="text-2xl font-bold text-white">Meta Tag Generator</h1>
       </div>
-      <p className="text-gray-500 mb-8">Generate SEO-optimized title and meta description for any page.</p>
+      <p className="text-[#999] mb-8">Generate SEO-optimized title and meta description for any page.</p>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+      <div className="rounded-2xl border p-6 space-y-4" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Page Topic</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Page Topic</label>
           <input
             type="text"
             value={topic}
             onChange={(e) => setTopic(e.target.value)}
             placeholder="e.g. Best WordPress SEO Plugins"
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+            style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Target Keyword</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Target Keyword</label>
           <input
             type="text"
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="e.g. WordPress SEO plugins"
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"
+            className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
+            style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           />
         </div>
 
-        {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">{error}</div>}
+        {error && <div className="text-sm px-4 py-3 rounded-lg" style={{ background: 'rgba(239,68,68,0.1)', color: '#f87171' }}>{error}</div>}
 
         <button
           onClick={generate}
           disabled={loading}
-          className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50"
+          className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
+          style={{ backgroundColor: '#7C3AED' }}
         >
           {loading ? 'Generating...' : '✦ Generate Meta Tags'}
         </button>
@@ -112,44 +119,44 @@ export default function MetaPage() {
 
       {result && (
         <div className="mt-6 space-y-4">
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="rounded-2xl border p-6" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-semibold text-gray-700">SEO Title</span>
+              <span className="text-sm font-semibold text-[#999]">SEO Title</span>
               <span className={`text-xs font-medium ${result.title.length > 60 ? 'text-red-500' : 'text-green-500'}`}>
                 {result.title.length}/60
               </span>
             </div>
-            <p className="text-gray-800 text-sm mb-3">{result.title}</p>
-            <button onClick={() => copy(result.title)} className="flex items-center gap-2 text-xs text-violet-600 hover:text-violet-800">
+            <p className="text-white text-sm mb-3">{result.title}</p>
+            <button onClick={() => copy(result.title)} className="flex items-center gap-2 text-xs text-[#7C3AED] hover:opacity-80">
               <Copy size={14} /> Copy Title
             </button>
           </div>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+          <div className="rounded-2xl border p-6" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-semibold text-gray-700">Meta Description</span>
+              <span className="text-sm font-semibold text-[#999]">Meta Description</span>
               <span className={`text-xs font-medium ${result.description.length > 155 ? 'text-red-500' : 'text-green-500'}`}>
                 {result.description.length}/155
               </span>
             </div>
-            <p className="text-gray-800 text-sm mb-3">{result.description}</p>
-            <button onClick={() => copy(result.description)} className="flex items-center gap-2 text-xs text-violet-600 hover:text-violet-800">
+            <p className="text-white text-sm mb-3">{result.description}</p>
+            <button onClick={() => copy(result.description)} className="flex items-center gap-2 text-xs text-[#7C3AED] hover:opacity-80">
               <Copy size={14} /> Copy Description
             </button>
           </div>
 
-          <div className="bg-gray-50 rounded-2xl border border-gray-100 p-6">
-            <p className="text-xs font-semibold text-gray-500 mb-3">GOOGLE PREVIEW</p>
-            <p className="text-blue-600 text-sm font-medium hover:underline cursor-pointer">{result.title}</p>
-            <p className="text-green-700 text-xs">yourwebsite.com</p>
-            <p className="text-gray-600 text-xs mt-1">{result.description}</p>
+          <div className="rounded-2xl border p-6" style={{ background: '#1a1a1a', borderColor: '#1f1f1f' }}>
+            <p className="text-xs font-semibold text-[#999] mb-3">GOOGLE PREVIEW</p>
+            <p className="text-sm font-medium hover:underline cursor-pointer" style={{ color: '#8ab4f8' }}>{result.title}</p>
+            <p className="text-xs" style={{ color: '#34a853' }}>yourwebsite.com</p>
+            <p className="text-[#999] text-xs mt-1">{result.description}</p>
           </div>
 
           <button
             onClick={saveToLibrary}
             disabled={saving || saved}
             className="w-full py-3 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50"
-            style={{ backgroundColor: '#6C47FF' }}
+            style={{ backgroundColor: '#7C3AED' }}
           >
             <Save size={16} />
             {saving ? 'Saving...' : saved ? 'Saved to Library ✓' : 'Save to Library'}
