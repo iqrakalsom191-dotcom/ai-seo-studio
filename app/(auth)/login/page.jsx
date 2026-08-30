@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
-import { BrainCircuit, Globe } from 'lucide-react'
+import { BrainCircuit, Globe, CheckCircle2 } from 'lucide-react'
 
 const COLORS = {
   bg: '#09090B',
@@ -17,6 +17,13 @@ const STATS = [
   { value: '10x', label: 'Faster Content' },
   { value: '17+', label: 'AI Tools' },
   { value: 'Free', label: 'to Start' },
+]
+
+const CAPABILITIES = [
+  'Generate full blog posts in seconds',
+  'Publish directly to WordPress',
+  'Analyze keywords and search intent',
+  'Create meta tags automatically',
 ]
 
 export default function LoginPage() {
@@ -40,7 +47,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div style={{ background: COLORS.bg, color: COLORS.text, minHeight: '100vh' }} className="font-sans grid grid-cols-1 md:grid-cols-2">
+    <div style={{ background: COLORS.bg, color: COLORS.text }} className="font-sans min-h-screen flex items-center justify-center py-12">
+    <div className="w-full grid grid-cols-1 md:grid-cols-2">
       {/* Left — Branding */}
       <div className="flex flex-col justify-center px-8 sm:px-16 py-16">
         <div className="max-w-md mx-auto md:mx-0 w-full">
@@ -58,11 +66,23 @@ export default function LoginPage() {
 
           <div className="grid grid-cols-3 gap-4 mb-12">
             {STATS.map((s) => (
-              <div key={s.label} className="p-4 rounded-xl border text-center" style={{ background: '#111', borderColor: '#1f1f1f' }}>
+              <div key={s.label} className="p-4 rounded-xl border border-[#1f1f1f] text-center" style={{ background: '#111', borderColor: '#1f1f1f' }}>
                 <div className="text-2xl font-extrabold" style={{ color: COLORS.accent }}>{s.value}</div>
                 <div className="text-xs mt-1" style={{ color: COLORS.text }}>{s.label}</div>
               </div>
             ))}
+          </div>
+
+          <div className="mb-12">
+            <h3 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>What you can do</h3>
+            <div className="flex flex-col gap-4">
+              {CAPABILITIES.map((c) => (
+                <div key={c} className="flex items-center gap-3">
+                  <CheckCircle2 size={18} color={COLORS.primary} className="shrink-0" />
+                  <span className="text-sm" style={{ color: COLORS.text }}>{c}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -133,6 +153,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }
