@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   ArrowRight,
   X,
+  Star,
 } from 'lucide-react'
 
 function TwitterIcon(props) {
@@ -106,6 +107,39 @@ const STATS = [
   { value: 'Free', label: 'to start' },
 ]
 
+const REVIEWS = [
+  {
+    name: 'Ayesha Siddiqui',
+    role: 'SEO Freelancer, Karachi',
+    text: 'AI SEO Studio cut my content research time in half. My clients are ranking on page one within weeks.',
+  },
+  {
+    name: 'Rohan Mehta',
+    role: 'Content Strategist, Mumbai',
+    text: 'The keyword research tool alone is worth it. I use it for every blog brief I write now.',
+  },
+  {
+    name: 'Fatima Raza',
+    role: 'Digital Marketer, Lahore',
+    text: 'Meta tag generation used to take me hours across dozens of pages. Now it takes minutes.',
+  },
+  {
+    name: 'Arjun Nair',
+    role: 'SEO Consultant, Bangalore',
+    text: 'The WordPress integration is a game changer — I publish optimized posts straight from the dashboard.',
+  },
+  {
+    name: 'Sana Malik',
+    role: 'Freelance Copywriter, Islamabad',
+    text: 'Finally an AI tool that actually understands search intent, not just keyword stuffing.',
+  },
+  {
+    name: 'Vikram Joshi',
+    role: 'Growth Marketer, Delhi',
+    text: 'My clients keep asking how I write so much optimized content so fast. This is the secret.',
+  },
+]
+
 export default function Home() {
   const router = useRouter()
   const [guestLoading, setGuestLoading] = useState(false)
@@ -159,6 +193,7 @@ export default function Home() {
             <a href="#features" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Features</a>
             <a href="#how-it-works" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>How it works</a>
             <a href="#pricing" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Pricing</a>
+            <Link href="/blog" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Blog</Link>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -334,6 +369,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Reviews */}
+      <section id="reviews" className="max-w-6xl mx-auto px-6 py-24">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Loved by SEO professionals</h2>
+          <p style={{ color: COLORS.muted }}>See what freelancers and marketers are saying</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {REVIEWS.map((r) => (
+            <div
+              key={r.name}
+              className="p-6 rounded-xl border hover:-translate-y-1 hover:border-purple-600 transition-all duration-200"
+              style={{ background: '#111', borderColor: '#1f1f1f' }}
+            >
+              <div className="flex items-center gap-1 mb-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} size={16} color={COLORS.accent} fill={COLORS.accent} />
+                ))}
+              </div>
+              <p className="text-sm leading-relaxed mb-6" style={{ color: COLORS.text }}>"{r.text}"</p>
+              <div>
+                <div className="text-sm font-semibold" style={{ color: COLORS.text }}>{r.name}</div>
+                <div className="text-xs mt-0.5" style={{ color: COLORS.muted }}>{r.role}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="px-6 py-24 border border-purple-900" style={{ background: '#13102a' }}>
         <div className="max-w-3xl mx-auto text-center">
@@ -379,7 +443,13 @@ export default function Home() {
           <div>
             <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>Product</h4>
             <ul className="space-y-3">
-              {['Features', 'Pricing', 'Blog', 'Changelog'].map((item) => (
+              <li>
+                <a href="#features" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Features</a>
+              </li>
+              <li>
+                <a href="/#reviews" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Testimonials</a>
+              </li>
+              {['Pricing', 'Blog', 'Changelog'].map((item) => (
                 <li key={item}>
                   <a href="#" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>{item}</a>
                 </li>

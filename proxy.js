@@ -6,6 +6,7 @@ export async function proxy(request) {
 
   if (
     pathname === '/' ||
+    pathname.startsWith('/blog') ||
     pathname.startsWith('/api/') ||
     pathname.startsWith('/auth/') ||
     pathname.startsWith('/signup') ||
