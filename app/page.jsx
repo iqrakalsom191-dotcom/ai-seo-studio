@@ -185,7 +185,7 @@ export default function Home() {
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${scrolled ? 'backdrop-blur border-b' : 'border-b border-transparent'}`}
         style={{ background: scrolled ? 'rgba(9,9,11,0.9)' : 'transparent', borderColor: scrolled ? 'rgba(255,255,255,0.08)' : 'transparent' }}
       >
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+        <div className="max-w-6xl w-full mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
             <BrainCircuit size={20} color={COLORS.primary} />
             <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
@@ -230,7 +230,7 @@ export default function Home() {
             className="md:hidden border-t"
             style={{ background: 'rgba(9,9,11,0.98)', borderColor: 'rgba(255,255,255,0.08)' }}
           >
-            <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4">
+            <div className="max-w-6xl w-full mx-auto px-6 py-4 flex flex-col gap-4">
               <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Features</a>
               <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>How it works</a>
               <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Pricing</a>
@@ -260,7 +260,7 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-40 pb-20 text-center">
+      <section className="max-w-6xl w-full mx-auto px-6 pt-40 pb-20 text-center">
         <div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-8"
           style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: COLORS.primary }}
@@ -301,7 +301,7 @@ export default function Home() {
 
       {/* Stats */}
       <section className="border-y" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-        <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div className="max-w-6xl w-full mx-auto px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {STATS.map((s) => (
             <div key={s.label}>
               <div className="text-3xl font-extrabold" style={{ color: COLORS.accent }}>{s.value}</div>
@@ -312,7 +312,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section id="features" className="max-w-6xl mx-auto px-6 py-24">
+      <section id="features" className="max-w-6xl w-full mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Everything you need to rank</h2>
           <p style={{ color: COLORS.muted }}>A complete SEO toolkit powered by AI</p>
@@ -343,7 +343,7 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="max-w-5xl mx-auto px-6 py-24">
+      <section id="how-it-works" className="max-w-6xl w-full mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">How it works</h2>
           <p style={{ color: COLORS.muted }}>Three simple steps to better rankings</p>
@@ -366,7 +366,7 @@ export default function Home() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="max-w-5xl mx-auto px-6 py-24">
+      <section id="pricing" className="max-w-6xl w-full mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Simple, transparent pricing</h2>
           <p style={{ color: COLORS.muted }}>Start free, upgrade when you need more</p>
@@ -414,7 +414,7 @@ export default function Home() {
       </section>
 
       {/* Reviews */}
-      <section id="reviews" className="max-w-6xl mx-auto px-6 py-24">
+      <section id="reviews" className="max-w-6xl w-full mx-auto px-6 py-24">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Loved by SEO professionals</h2>
           <p style={{ color: COLORS.muted }}>See what freelancers and marketers are saying</p>
@@ -444,7 +444,7 @@ export default function Home() {
 
       {/* CTA */}
       <section className="px-6 py-24 border border-purple-900" style={{ background: '#13102a' }}>
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="max-w-6xl w-full mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4" style={{ color: COLORS.text }}>
             Ready to start ranking?
           </h2>
@@ -473,7 +473,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="border-t border-white/5" style={{ background: COLORS.bg }}>
-        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-5 gap-10">
+        <div className="max-w-6xl w-full mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-5 gap-10">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-3">
               <BrainCircuit size={20} color={COLORS.primary} />
@@ -536,7 +536,7 @@ export default function Home() {
         </div>
 
         <div className="border-t border-white/5">
-          <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="max-w-6xl w-full mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm" style={{ color: COLORS.muted }}>
               © 2026 AI SEO Studio. All rights reserved.
             </p>
