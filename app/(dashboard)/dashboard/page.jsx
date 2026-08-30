@@ -193,6 +193,7 @@ export default function DashboardPage() {
 
   return (
     <div className="p-6 md:p-8" style={{ background: COLORS.bg, minHeight: '100vh' }}>
+    <div className="max-w-7xl mx-auto w-full">
       <style>{`
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,0.15) !important; }
         .stat-card { transition: all 0.2s ease; }
@@ -281,7 +282,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Stats Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '24px' }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: '20px', marginBottom: '24px' }}>
         {statCards.map(({ label, value, icon: Icon, trend, href, color }) => {
           const inner = (
             <>
@@ -326,7 +327,7 @@ export default function DashboardPage() {
       {/* Quick Actions */}
       <div style={{ marginBottom: '40px' }}>
         <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: '16px' }}>
           {actions.map(({ label, desc, icon: Icon, href, color }) => (
             <Link key={href} href={href} className="action-card"
               style={{ textDecoration: 'none', background: COLORS.card, border: `1px solid ${COLORS.border}`, borderLeft: `4px solid ${color}`, borderRadius: '18px', padding: '28px', display: 'block', minHeight: '160px' }}>
@@ -350,7 +351,7 @@ export default function DashboardPage() {
       {/* Tools */}
       <div style={{ marginBottom: '40px' }}>
         <h2 className="text-lg font-semibold text-white mb-4">Tools</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '14px' }}>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6" style={{ gap: '14px' }}>
           {tools.map(({ label, icon: Icon, href }) => (
             <Link key={href} href={href} className="tool-card hover:bg-[#1a0a3e] min-h-[100px] flex flex-col items-center justify-center gap-2"
               style={{ textDecoration: 'none', background: COLORS.card, borderRadius: '14px', padding: '18px 12px', border: `1px solid ${COLORS.border}`, textAlign: 'center' }}>
@@ -366,7 +367,7 @@ export default function DashboardPage() {
       {/* Content Breakdown */}
       <div style={{ marginBottom: '40px' }}>
         <h2 className="text-lg font-semibold text-white mb-4">Content Breakdown</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" style={{ gap: '16px' }}>
           {[
             { label: 'Blog Posts', count: breakdown.blog,    color: COLORS.primary },
             { label: 'Meta Tags',  count: breakdown.meta,    color: COLORS.accent },
@@ -391,7 +392,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Top Keywords + Recent Activity */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '40px' }}>
+      <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: '20px', marginBottom: '40px' }}>
         <div>
           <h2 className="text-lg font-semibold text-white mb-4">Top Keywords</h2>
           <div style={{ background: COLORS.card, borderRadius: '16px', border: `1px solid ${COLORS.border}`, padding: '20px', minHeight: '100px' }}>
@@ -452,6 +453,7 @@ export default function DashboardPage() {
           <div style={{ fontSize: '14px', color: COLORS.text, lineHeight: '1.6' }}>{tip}</div>
         </div>
       </div>
+    </div>
     </div>
   )
 }
