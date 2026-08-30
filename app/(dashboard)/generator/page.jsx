@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { Sparkles, Copy, BookmarkPlus, Loader2, CheckCheck, Globe, FileEdit, Send, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
+import useGuestGuard from '@/hooks/useGuestGuard'
+import GuestModal from '@/components/ui/GuestModal'
 
 function parseBold(line) {
   const parts = line.split(/\*\*/)
@@ -49,6 +51,7 @@ export default function GeneratorPage() {
   const [error, setError]         = useState('')
   const [showPublishPanel, setShowPublishPanel] = useState(false)
   const [publishing, setPublishing] = useState(false)
+  const { showModal, setShowModal, guardedAction } = useGuestGuard()
 
   async function handleGenerate() {
     if (!keyword.trim()) { setError('Please enter a keyword.'); return }
@@ -84,7 +87,7 @@ export default function GeneratorPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  async function handleSave() {
+  const handleSave = guardedAction(async function handleSave() {
     if (!output) return
     setSaving(true)
     setSavedOk(false)
@@ -101,9 +104,9 @@ export default function GeneratorPage() {
     setSaving(false)
     if (!dbErr) { setSavedOk(true); toast.success('Saved to library'); setTimeout(() => setSavedOk(false), 2500) }
     else { setError('Save failed. Please try again.'); toast.error('Save failed. Please try again.') }
-  }
+  })
 
-  async function handlePublish(status) {
+  const handlePublish = guardedAction(async function handlePublish(status) {
     if (!output) return
     setPublishing(true)
     try {
@@ -144,7 +147,7 @@ export default function GeneratorPage() {
     } finally {
       setPublishing(false)
     }
-  }
+  })
 
   const selectClass = 'w-full rounded-lg border border-[#6C47FF]/20 bg-white px-4 py-2.5 text-sm text-[#1A1A2E] focus:outline-none focus:ring-2 focus:ring-[#6C47FF]/40 appearance-none cursor-pointer'
 
@@ -309,6 +312,8 @@ export default function GeneratorPage() {
           )}
         </div>
       )}
+
+      <GuestModal open={showModal} onClose={() => setShowModal(false)} />
     </div>
   )
 }

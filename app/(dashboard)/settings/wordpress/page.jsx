@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 import { Globe, Save, Plug, CheckCircle2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
+import useGuestGuard from '@/hooks/useGuestGuard'
+import GuestModal from '@/components/ui/GuestModal'
 
 export default function WordPressSettingsPage() {
   const [siteUrl, setSiteUrl] = useState('')
@@ -13,6 +15,7 @@ export default function WordPressSettingsPage() {
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
   const [connected, setConnected] = useState(false)
+  const { showModal, setShowModal, guardedAction } = useGuestGuard()
 
   useEffect(() => {
     const load = async () => {
@@ -42,7 +45,7 @@ export default function WordPressSettingsPage() {
     load()
   }, [])
 
-  const save = async () => {
+  const save = guardedAction(async () => {
     if (!siteUrl || !username || !appPassword) {
       toast.error('Please fill all fields')
       return
@@ -75,9 +78,9 @@ export default function WordPressSettingsPage() {
     } finally {
       setSaving(false)
     }
-  }
+  })
 
-  const testConnection = async () => {
+  const testConnection = guardedAction(async () => {
     if (!siteUrl || !username || !appPassword) {
       toast.error('Please fill all fields before testing')
       return
@@ -105,7 +108,7 @@ export default function WordPressSettingsPage() {
     } finally {
       setTesting(false)
     }
-  }
+  })
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -182,6 +185,8 @@ export default function WordPressSettingsPage() {
           </button>
         </div>
       </div>
+
+      <GuestModal open={showModal} onClose={() => setShowModal(false)} />
     </div>
   )
 }

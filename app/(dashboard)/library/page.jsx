@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 import { Search, Copy, Trash2, BookOpen, FileText, Tag, Check, X, Save, Download, CheckSquare, Square, FileDown, Globe, Loader2 } from 'lucide-react';
 import jsPDF from 'jspdf';
 import JSZip from 'jszip';
+import useGuestGuard from '@/hooks/useGuestGuard';
+import GuestModal from '@/components/ui/GuestModal';
 
 const TYPE_LABELS = {
   blog:    { label: 'Blog',    color: 'bg-purple-100 text-purple-700' },
@@ -86,6 +88,7 @@ export default function LibraryPage() {
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const [publishingId, setPublishingId] = useState(null);
+  const { showModal, setShowModal, guardedAction } = useGuestGuard();
   const supabase = createClient();
 
   useEffect(() => { fetchContent(); }, []);
@@ -110,7 +113,7 @@ export default function LibraryPage() {
     setLoading(false);
   }
 
-  async function handleDelete(id) {
+  const handleDelete = guardedAction(async function handleDelete(id) {
     try {
       const { error } = await supabase.from('saved_content').delete().eq('id', id);
       if (error) throw error;
@@ -119,7 +122,7 @@ export default function LibraryPage() {
     } catch (e) {
       toast.error('Delete failed');
     }
-  }
+  });
 
   async function handleCopy(item) {
     await navigator.clipboard.writeText(item.content || '');
@@ -356,7 +359,7 @@ export default function LibraryPage() {
     }
   }
 
-  async function handlePublishToWordPress(item) {
+  const handlePublishToWordPress = guardedAction(async function handlePublishToWordPress(item) {
     setPublishingId(item.id);
     try {
       const res = await fetch('/api/wordpress/publish', {
@@ -397,7 +400,7 @@ export default function LibraryPage() {
     } finally {
       setPublishingId(null);
     }
-  }
+  });
 
   const filters = ['all', 'blog', 'meta', 'keyword'];
 
@@ -623,6 +626,8 @@ export default function LibraryPage() {
           })}
         </div>
       )}
+
+      <GuestModal open={showModal} onClose={() => setShowModal(false)} />
     </div>
   );
 }
