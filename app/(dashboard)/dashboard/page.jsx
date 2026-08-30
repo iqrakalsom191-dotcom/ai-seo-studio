@@ -6,10 +6,22 @@ import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import { FileText, Key, Calendar, Flame, Sparkles, Tags, Search, ArrowRight, ArrowUpRight, Clock, Lightbulb, X, Link2, HelpCircle, Braces, ChevronRight } from 'lucide-react'
 
+const DAILY_LIMIT = 50
+
+const COLORS = {
+  bg: '#09090B',
+  card: '#111',
+  border: '#1f1f1f',
+  primary: '#7C3AED',
+  accent: '#F59E0B',
+  text: '#FAFAFA',
+  muted: '#999999',
+}
+
 const typeBadge = {
-  blog:    { label: 'Blog',    bg: 'rgba(108,71,255,0.12)', color: '#6C47FF' },
-  meta:    { label: 'Meta',    bg: 'rgba(0,198,174,0.12)',  color: '#00957f' },
-  keyword: { label: 'Keyword', bg: 'rgba(245,158,11,0.12)', color: '#b45309' },
+  blog:    { label: 'Blog',    bg: 'rgba(124,58,237,0.15)', color: '#a78bfa' },
+  meta:    { label: 'Meta',    bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
+  keyword: { label: 'Keyword', bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
 }
 
 const SEO_TIPS = [
@@ -95,6 +107,7 @@ export default function DashboardPage() {
   const [allData, setAllData] = useState([])
   const [modal, setModal] = useState(null)
   const [tip, setTip] = useState(SEO_TIPS[0])
+  const [todayCount, setTodayCount] = useState(0)
 
   useEffect(() => {
     setTip(SEO_TIPS[Math.floor(Math.random() * SEO_TIPS.length)])
@@ -119,6 +132,7 @@ export default function DashboardPage() {
       keyword: data.filter(r => r.type === 'keyword').length,
     })
     setTopKeywords(data.filter(r => r.type === 'keyword').slice(0, 5))
+    setTodayCount(data.filter(r => new Date(r.created_at).toDateString() === now.toDateString()).length)
   }, [])
 
   useEffect(() => {
@@ -151,16 +165,16 @@ export default function DashboardPage() {
   }
 
   const statCards = [
-    { label: 'Total Content',  value: stats.total,            icon: FileText, color: '#6C47FF', bg: 'rgba(108,71,255,0.12)', trend: '+12%', href: '/library' },
-    { label: 'Keywords Saved', value: stats.keywords,         icon: Key,      color: '#00C6AE', bg: 'rgba(0,198,174,0.12)',  trend: '+8%',  href: '/library?type=keyword' },
-    { label: 'This Week',      value: stats.thisWeek,         icon: Calendar, color: '#3b82f6', bg: 'rgba(59,130,246,0.12)', trend: '+24%', href: '/library' },
-    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    color: '#f59e0b', bg: 'rgba(245,158,11,0.12)', trend: null,   href: null },
+    { label: 'Total Content',  value: stats.total,            icon: FileText, trend: '+12%', href: '/library' },
+    { label: 'Keywords Saved', value: stats.keywords,         icon: Key,      trend: '+8%',  href: '/library?type=keyword' },
+    { label: 'This Week',      value: stats.thisWeek,         icon: Calendar, trend: '+24%', href: '/library' },
+    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    trend: null,   href: null },
   ]
 
   const actions = [
-    { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator', gradient: 'linear-gradient(135deg, #6C47FF, #9b7bff)' },
-    { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta',      gradient: 'linear-gradient(135deg, #00C6AE, #34d9c4)' },
-    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords',  gradient: 'linear-gradient(135deg, #6C47FF, #00C6AE)' },
+    { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator' },
+    { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta' },
+    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords' },
   ]
 
   const tools = [
@@ -174,37 +188,40 @@ export default function DashboardPage() {
 
   const formatDate = (iso) => new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 
+  const usagePct = Math.min(100, Math.round((todayCount / DAILY_LIMIT) * 100))
+  const usageWarning = todayCount > 40
+
   return (
-    <div style={{ padding: '40px 48px', maxWidth: '1100px' }}>
+    <div style={{ padding: '40px 48px', maxWidth: '1100px', background: COLORS.bg, minHeight: '100vh' }}>
       <style>{`
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(108,71,255,0.10) !important; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,0.15) !important; }
         .stat-card { transition: all 0.2s ease; }
-        .action-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px rgba(108,71,255,0.22) !important; }
+        .action-card:hover { transform: translateY(-4px); }
         .action-card { transition: all 0.2s ease; }
-        .tool-card:hover { transform: translateY(-2px); border-color: #6C47FF !important; box-shadow: 0 8px 20px rgba(108,71,255,0.12) !important; }
+        .tool-card:hover { transform: translateY(-2px); border-color: #7C3AED !important; box-shadow: 0 8px 20px rgba(124,58,237,0.15) !important; }
         .tool-card { transition: all 0.2s ease; }
-        .activity-row:hover { background: rgba(108,71,255,0.05) !important; cursor: pointer; }
+        .activity-row:hover { background: rgba(124,58,237,0.08) !important; cursor: pointer; }
         .activity-row:hover .activity-arrow { opacity: 1 !important; transform: translateX(2px); }
         .activity-row { transition: background 0.15s ease; }
         .activity-arrow { transition: all 0.15s ease; }
-        .cta-btn:hover { background: #5b3ae6 !important; transform: translateY(-1px); }
+        .cta-btn:hover { background: #6b2fe0 !important; transform: translateY(-1px); }
         .cta-btn { transition: all 0.2s ease; }
       `}</style>
 
       {/* Content Modal */}
       {modal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
           onClick={() => setModal(null)}>
-          <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '640px', width: '100%', height: '80vh', maxHeight: '80vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.15)' }}
+          <div style={{ background: '#fff', borderRadius: '20px', maxWidth: '640px', width: '100%', height: '80vh', maxHeight: '80vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 24px 64px rgba(0,0,0,0.4)' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ position: 'sticky', top: 0, background: '#fff', zIndex: 10, padding: '16px 24px', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
-                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', flexShrink: 0, background: typeBadge[modal.type]?.bg || 'var(--subtle-bg)', color: typeBadge[modal.type]?.color || '#6b7280' }}>
+                <span style={{ padding: '4px 12px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', flexShrink: 0, background: typeBadge[modal.type]?.bg || '#f3f4f6', color: typeBadge[modal.type]?.color || '#6b7280' }}>
                   {typeBadge[modal.type]?.label || modal.type}
                 </span>
-                <h3 style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{modal.title}</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: '700', color: '#0F0F0F', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{modal.title}</h3>
               </div>
-              <button onClick={() => setModal(null)} style={{ background: 'var(--subtle-bg)', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '12px' }}>
+              <button onClick={() => setModal(null)} style={{ background: '#f3f4f6', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginLeft: '12px' }}>
                 <X size={16} color="#6b7280" />
               </button>
             </div>
@@ -215,7 +232,7 @@ export default function DashboardPage() {
 
             <div style={{ position: 'sticky', bottom: 0, background: '#fff', zIndex: 10, padding: '16px 24px', borderTop: '1px solid #eee', display: 'flex', justifyContent: 'flex-end', flexShrink: 0 }}>
               <button onClick={() => setModal(null)}
-                style={{ padding: '10px 24px', borderRadius: '10px', background: '#6C47FF', color: '#fff', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>
+                style={{ padding: '10px 24px', borderRadius: '10px', background: COLORS.primary, color: '#fff', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>
                 Close
               </button>
             </div>
@@ -225,12 +242,12 @@ export default function DashboardPage() {
 
       {/* Guest Mode Banner */}
       {user?.is_anonymous && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', background: '#00C6AE', borderRadius: '14px', padding: '16px 24px', marginBottom: '24px', boxShadow: '0 8px 20px rgba(0,198,174,0.25)' }}>
-          <p style={{ fontSize: '14px', fontWeight: '600', color: '#fff', margin: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', background: '#13102a', border: '1px solid #6b21a8', borderRadius: '14px', padding: '16px 24px', marginBottom: '24px' }}>
+          <p style={{ fontSize: '14px', fontWeight: '600', color: COLORS.text, margin: 0 }}>
             You are using Guest Mode — your data won't be saved. Sign up free to save your work!
           </p>
           <Link href="/signup"
-            style={{ flexShrink: 0, padding: '10px 20px', borderRadius: '10px', background: '#fff', color: '#00957f', fontSize: '13px', fontWeight: '700', textDecoration: 'none' }}>
+            style={{ flexShrink: 0, padding: '10px 20px', borderRadius: '10px', background: COLORS.primary, color: '#fff', fontSize: '13px', fontWeight: '700', textDecoration: 'none' }}>
             Sign Up Free
           </Link>
         </div>
@@ -239,14 +256,14 @@ export default function DashboardPage() {
       {/* Hero */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '24px', marginBottom: '40px', flexWrap: 'wrap' }}>
         <div>
-          <p style={{ fontSize: '14px', color: '#00C6AE', fontWeight: '600', marginBottom: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Welcome back</p>
-          <h1 style={{ fontSize: '36px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.8px', marginBottom: '8px' }}>
+          <p style={{ fontSize: '14px', color: COLORS.primary, fontWeight: '600', marginBottom: '6px', letterSpacing: '0.5px', textTransform: 'uppercase' }}>Welcome back</p>
+          <h1 style={{ fontSize: '36px', fontWeight: '800', color: COLORS.text, letterSpacing: '-0.8px', marginBottom: '8px' }}>
             {user?.user_metadata?.full_name || 'There'} 👋
           </h1>
-          <p style={{ fontSize: '16px', color: 'var(--text-secondary)' }}>Here's what's happening with your SEO content today.</p>
+          <p style={{ fontSize: '16px', color: COLORS.muted }}>Here's what's happening with your SEO content today.</p>
         </div>
         <Link href="/generator" className="cta-btn"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 24px', borderRadius: '12px', background: '#6C47FF', color: '#fff', fontSize: '15px', fontWeight: '700', textDecoration: 'none', boxShadow: '0 8px 20px rgba(108,71,255,0.3)', flexShrink: 0 }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 24px', borderRadius: '12px', background: COLORS.primary, color: '#fff', fontSize: '15px', fontWeight: '700', textDecoration: 'none', flexShrink: 0 }}>
           <Sparkles size={18} />
           Generate Content
         </Link>
@@ -255,53 +272,67 @@ export default function DashboardPage() {
       {/* Date Filter */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px', flexWrap: 'wrap' }}>
         <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)}
-          style={{ border: '1px solid #e5e7eb', borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: 'var(--text-primary)', outline: 'none' }} />
-        <span style={{ fontSize: '13px', color: '#9ca3af' }}>to</span>
+          style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: COLORS.text, outline: 'none' }} />
+        <span style={{ fontSize: '13px', color: COLORS.muted }}>to</span>
         <input type="date" value={toDate} onChange={e => setToDate(e.target.value)}
-          style={{ border: '1px solid #e5e7eb', borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: 'var(--text-primary)', outline: 'none' }} />
-        <button onClick={applyFilter} style={{ padding: '8px 18px', borderRadius: '10px', background: '#6C47FF', color: '#fff', fontSize: '13px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>Filter</button>
-        <button onClick={resetFilter} style={{ padding: '8px 18px', borderRadius: '10px', background: 'var(--subtle-bg)', color: 'var(--text-secondary)', fontSize: '13px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>Reset</button>
+          style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: '10px', padding: '8px 12px', fontSize: '13px', color: COLORS.text, outline: 'none' }} />
+        <button onClick={applyFilter} style={{ padding: '8px 18px', borderRadius: '10px', background: COLORS.primary, color: '#fff', fontSize: '13px', fontWeight: '600', border: 'none', cursor: 'pointer' }}>Filter</button>
+        <button onClick={resetFilter} style={{ padding: '8px 18px', borderRadius: '10px', background: COLORS.card, border: `1px solid ${COLORS.border}`, color: COLORS.muted, fontSize: '13px', fontWeight: '600', cursor: 'pointer' }}>Reset</button>
       </div>
 
       {/* Stats Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '40px' }}>
-        {statCards.map(({ label, value, icon: Icon, color, bg, trend, href }) => {
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '24px' }}>
+        {statCards.map(({ label, value, icon: Icon, trend, href }) => {
           const inner = (
             <>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon size={20} style={{ color }} />
+                <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(124,58,237,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={20} style={{ color: COLORS.primary }} />
                 </div>
                 {trend && (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '11px', fontWeight: '700', color: '#10b981' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '11px', fontWeight: '700', color: COLORS.accent }}>
                     <ArrowUpRight size={12} />
                     {trend}
                   </span>
                 )}
               </div>
-              <div style={{ fontSize: '28px', fontWeight: '800', color: 'var(--text-primary)', letterSpacing: '-0.5px', marginBottom: '4px' }}>{value}</div>
-              <div style={{ fontSize: '13px', color: 'var(--text-secondary)', fontWeight: '500' }}>{label}</div>
+              <div style={{ fontSize: '28px', fontWeight: '800', color: COLORS.primary, letterSpacing: '-0.5px', marginBottom: '4px' }}>{value}</div>
+              <div style={{ fontSize: '13px', color: COLORS.text, fontWeight: '500' }}>{label}</div>
             </>
           )
-          const style = { background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', borderLeft: `4px solid ${color}`, boxShadow: '0 4px 16px rgba(0,0,0,0.04)', textDecoration: 'none', display: 'block' }
+          const style = { background: COLORS.card, borderRadius: '16px', padding: '24px', border: `1px solid ${COLORS.border}`, textDecoration: 'none', display: 'block' }
           return href
             ? <Link key={label} href={href} className="stat-card" style={style}>{inner}</Link>
             : <div key={label} className="stat-card" style={style}>{inner}</div>
         })}
       </div>
 
+      {/* Usage Progress */}
+      <div style={{ background: COLORS.card, border: `1px solid ${COLORS.border}`, borderRadius: '16px', padding: '20px 24px', marginBottom: '40px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <span style={{ fontSize: '13px', fontWeight: '600', color: COLORS.text }}>Daily Usage</span>
+          <span style={{ fontSize: '13px', fontWeight: '700', color: usageWarning ? COLORS.accent : COLORS.primary }}>
+            {todayCount} / {DAILY_LIMIT} daily generations used
+          </span>
+        </div>
+        <div style={{ height: '8px', borderRadius: '99px', background: '#1a1a1a', overflow: 'hidden' }}>
+          <div style={{ height: '8px', borderRadius: '99px', background: usageWarning ? COLORS.accent : COLORS.primary, width: usagePct + '%', transition: 'width 0.6s ease' }} />
+        </div>
+      </div>
+
       {/* Quick Actions */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Quick Actions</h2>
+        <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Quick Actions</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {actions.map(({ label, desc, icon: Icon, href, gradient }) => (
-            <Link key={href} href={href} className="action-card" style={{ textDecoration: 'none', background: gradient, borderRadius: '18px', padding: '28px', display: 'block', boxShadow: '0 8px 20px rgba(108,71,255,0.18)', minHeight: '160px' }}>
-              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                <Icon size={26} style={{ color: '#fff' }} />
+          {actions.map(({ label, desc, icon: Icon, href }) => (
+            <Link key={href} href={href} className="action-card"
+              style={{ textDecoration: 'none', background: COLORS.card, border: `1px solid ${COLORS.border}`, borderLeft: `4px solid ${COLORS.primary}`, borderRadius: '18px', padding: '28px', display: 'block', minHeight: '160px' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'rgba(124,58,237,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Icon size={26} style={{ color: COLORS.primary }} />
               </div>
-              <div style={{ fontSize: '16px', fontWeight: '800', color: '#fff', marginBottom: '6px' }}>{label}</div>
-              <div style={{ fontSize: '13px', color: 'rgba(255,255,255,0.85)', lineHeight: '1.5', marginBottom: '18px' }}>{desc}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color: '#fff' }}>
+              <div style={{ fontSize: '16px', fontWeight: '800', color: COLORS.text, marginBottom: '6px' }}>{label}</div>
+              <div style={{ fontSize: '13px', color: COLORS.muted, lineHeight: '1.5', marginBottom: '18px' }}>{desc}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color: COLORS.primary }}>
                 Get started <ArrowRight size={14} />
               </div>
             </Link>
@@ -311,15 +342,15 @@ export default function DashboardPage() {
 
       {/* Tools */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Tools</h2>
+        <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Tools</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '14px' }}>
           {tools.map(({ label, icon: Icon, href }) => (
             <Link key={href} href={href} className="tool-card"
-              style={{ textDecoration: 'none', background: 'var(--card-bg)', borderRadius: '14px', padding: '18px 12px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 2px 10px rgba(0,0,0,0.03)', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '10px' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: 'rgba(108,71,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Icon size={18} style={{ color: '#6C47FF' }} />
+              style={{ textDecoration: 'none', background: COLORS.card, borderRadius: '14px', padding: '18px 12px', border: `1px solid ${COLORS.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '10px' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#1a0a3e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon size={18} style={{ color: COLORS.primary }} />
               </div>
-              <span style={{ fontSize: '12px', fontWeight: '600', color: 'var(--text-primary)' }}>{label}</span>
+              <span style={{ fontSize: '12px', fontWeight: '600', color: COLORS.text }}>{label}</span>
             </Link>
           ))}
         </div>
@@ -327,25 +358,25 @@ export default function DashboardPage() {
 
       {/* Content Breakdown */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Content Breakdown</h2>
+        <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Content Breakdown</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
           {[
-            { label: 'Blog Posts', count: breakdown.blog,    bg: 'rgba(108,71,255,0.08)', color: '#6C47FF', bar: '#6C47FF' },
-            { label: 'Meta Tags',  count: breakdown.meta,    bg: 'rgba(0,198,174,0.08)',  color: '#00957f', bar: '#00C6AE' },
-            { label: 'Keywords',   count: breakdown.keyword, bg: 'rgba(245,158,11,0.08)', color: '#b45309', bar: '#f59e0b' },
-          ].map(({ label, count, bg, color, bar }) => {
+            { label: 'Blog Posts', count: breakdown.blog },
+            { label: 'Meta Tags',  count: breakdown.meta },
+            { label: 'Keywords',   count: breakdown.keyword },
+          ].map(({ label, count }) => {
             const total = breakdown.blog + breakdown.meta + breakdown.keyword || 1
             const pct = Math.round((count / total) * 100)
             return (
-              <div key={label} style={{ background: 'var(--card-bg)', borderRadius: '16px', padding: '24px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)' }}>
+              <div key={label} style={{ background: COLORS.card, borderRadius: '16px', padding: '24px', border: `1px solid ${COLORS.border}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                  <span style={{ fontSize: '13px', fontWeight: '600', color: 'var(--text-secondary)' }}>{label}</span>
-                  <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: bg, color }}>{count}</span>
+                  <span style={{ fontSize: '13px', fontWeight: '600', color: COLORS.muted }}>{label}</span>
+                  <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: 'rgba(124,58,237,0.15)', color: COLORS.primary }}>{count}</span>
                 </div>
-                <div style={{ height: '8px', borderRadius: '99px', background: 'var(--subtle-bg)', overflow: 'hidden' }}>
-                  <div style={{ height: '8px', borderRadius: '99px', background: bar, width: pct + '%', transition: 'width 0.6s ease' }} />
+                <div style={{ height: '8px', borderRadius: '99px', background: '#1a1a1a', overflow: 'hidden' }}>
+                  <div style={{ height: '8px', borderRadius: '99px', background: COLORS.primary, width: pct + '%', transition: 'width 0.6s ease' }} />
                 </div>
-                <div style={{ fontSize: '11px', color: '#9ca3af', marginTop: '6px' }}>{pct}% of total</div>
+                <div style={{ fontSize: '11px', color: COLORS.muted, marginTop: '6px' }}>{pct}% of total</div>
               </div>
             )
           })}
@@ -355,13 +386,13 @@ export default function DashboardPage() {
       {/* Top Keywords + Recent Activity */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '40px' }}>
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Top Keywords</h2>
-          <div style={{ background: 'var(--card-bg)', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', padding: '20px', minHeight: '100px' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Top Keywords</h2>
+          <div style={{ background: COLORS.card, borderRadius: '16px', border: `1px solid ${COLORS.border}`, padding: '20px', minHeight: '100px' }}>
             {topKeywords.length === 0
-              ? <p style={{ fontSize: '13px', color: '#9ca3af', textAlign: 'center', padding: '24px 0' }}>No keywords saved yet</p>
+              ? <p style={{ fontSize: '13px', color: COLORS.muted, textAlign: 'center', padding: '24px 0' }}>No keywords saved yet</p>
               : <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {topKeywords.map((item) => (
-                    <span key={item.id} style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', background: 'rgba(0,198,174,0.10)', color: '#00957f', border: '1px solid rgba(0,198,174,0.2)' }}>
+                    <span key={item.id} style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', background: 'rgba(245,158,11,0.12)', color: COLORS.accent, border: '1px solid rgba(245,158,11,0.25)' }}>
                       {item.keyword || item.title}
                     </span>
                   ))}
@@ -371,30 +402,30 @@ export default function DashboardPage() {
         </div>
 
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '16px', letterSpacing: '-0.3px' }}>Recent Activity</h2>
-          <div style={{ background: 'var(--card-bg)', borderRadius: '16px', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 4px 16px rgba(0,0,0,0.04)', overflow: 'hidden' }}>
+          <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Recent Activity</h2>
+          <div style={{ background: COLORS.card, borderRadius: '16px', border: `1px solid ${COLORS.border}`, overflow: 'hidden' }}>
             {recent.length === 0 ? (
               <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(108,71,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
-                  <Clock size={24} style={{ color: '#6C47FF' }} />
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(124,58,237,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                  <Clock size={24} style={{ color: COLORS.primary }} />
                 </div>
-                <div style={{ fontSize: '15px', fontWeight: '600', color: 'var(--text-primary)', marginBottom: '6px' }}>No activity yet</div>
-                <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>Your generated content will appear here</div>
+                <div style={{ fontSize: '15px', fontWeight: '600', color: COLORS.text, marginBottom: '6px' }}>No activity yet</div>
+                <div style={{ fontSize: '13px', color: COLORS.muted }}>Your generated content will appear here</div>
               </div>
             ) : (
               <div>
                 {recent.map((item, i) => {
-                  const badge = typeBadge[item.type] || { label: item.type, bg: 'var(--subtle-bg)', color: '#6b7280' }
+                  const badge = typeBadge[item.type] || { label: item.type, bg: '#1a1a1a', color: COLORS.muted }
                   return (
                     <div key={item.id} className="activity-row"
                       onClick={() => setModal(item)}
-                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: i < recent.length - 1 ? '1px solid rgba(0,0,0,0.05)' : 'none', gap: '12px' }}>
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: i < recent.length - 1 ? `1px solid ${COLORS.border}` : 'none', gap: '12px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flex: 1, minWidth: 0 }}>
                         <span style={{ padding: '3px 8px', borderRadius: '20px', fontSize: '10px', fontWeight: '700', background: badge.bg, color: badge.color, flexShrink: 0 }}>{badge.label}</span>
-                        <span style={{ fontSize: '13px', color: 'var(--text-primary)', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
+                        <span style={{ fontSize: '13px', color: COLORS.text, fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</span>
                       </div>
-                      <span style={{ fontSize: '11px', color: '#9ca3af', flexShrink: 0 }}>{formatDate(item.created_at)}</span>
-                      <ChevronRight size={15} className="activity-arrow" style={{ color: '#6C47FF', flexShrink: 0, opacity: 0.5 }} />
+                      <span style={{ fontSize: '11px', color: COLORS.muted, flexShrink: 0 }}>{formatDate(item.created_at)}</span>
+                      <ChevronRight size={15} className="activity-arrow" style={{ color: COLORS.primary, flexShrink: 0, opacity: 0.5 }} />
                     </div>
                   )
                 })}
@@ -405,13 +436,13 @@ export default function DashboardPage() {
       </div>
 
       {/* SEO Tip */}
-      <div style={{ background: 'linear-gradient(135deg, #6C47FF, #00C6AE)', borderRadius: '16px', padding: '24px', boxShadow: '0 8px 24px rgba(108,71,255,0.25)', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Lightbulb size={18} style={{ color: '#fff' }} />
+      <div style={{ background: '#13102a', border: `1px solid ${COLORS.border}`, borderLeft: `4px solid ${COLORS.primary}`, borderRadius: '16px', padding: '24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+          <Lightbulb size={18} style={{ color: COLORS.accent }} />
         </div>
         <div>
-          <div style={{ fontSize: '12px', fontWeight: '700', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px', opacity: 0.9 }}>SEO Tip of the Day</div>
-          <div style={{ fontSize: '14px', color: '#fff', lineHeight: '1.6' }}>{tip}</div>
+          <div style={{ fontSize: '12px', fontWeight: '700', color: COLORS.accent, textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '6px' }}>SEO Tip of the Day</div>
+          <div style={{ fontSize: '14px', color: COLORS.text, lineHeight: '1.6' }}>{tip}</div>
         </div>
       </div>
     </div>
