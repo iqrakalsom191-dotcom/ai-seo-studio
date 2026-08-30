@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { useTheme } from 'next-themes'
 import { createClient } from '@/lib/supabase'
 import {
   LayoutDashboard,
@@ -20,12 +19,11 @@ import {
   Share2,
   CalendarDays,
   Braces,
-  Sun,
-  Moon,
   FileText,
   Globe,
   Gauge,
-  ChevronDown
+  ChevronDown,
+  BrainCircuit,
 } from 'lucide-react'
 
 const navGroups = [
@@ -79,8 +77,6 @@ export default function DashboardLayout({ children }) {
   const router = useRouter()
   const pathname = usePathname()
   const [user, setUser] = useState(null)
-  const { resolvedTheme, setTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
   const [expanded, setExpanded] = useState(() =>
     Object.fromEntries(navGroups.map(({ label }) => [label, label === 'Overview']))
   )
@@ -122,10 +118,6 @@ export default function DashboardLayout({ children }) {
   }
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) router.push('/login')
@@ -143,43 +135,34 @@ export default function DashboardLayout({ children }) {
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        .nav-link:hover { background: rgba(108,71,255,0.15) !important; color: #fff !important; backdrop-filter: blur(10px); }
-        .nav-link:hover svg { color: #00C6AE !important; }
+        .nav-link:hover { background: rgba(124,58,237,0.15) !important; color: #fff !important; }
+        .nav-link:hover svg { color: #7C3AED !important; }
         .logout-btn:hover { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
         .nav-link { transition: all 150ms ease !important; }
         .logout-btn { transition: all 0.18s ease !important; }
-        .nav-group-toggle:hover { background: rgba(108,71,255,0.15) !important; color: #fff !important; }
+        .nav-group-toggle:hover { background: rgba(124,58,237,0.15) !important; color: #fff !important; }
         .nav-group-toggle { transition: all 150ms ease !important; }
         .nav-group-chevron { transition: transform 0.25s ease !important; }
         .nav-group-body { transition: grid-template-rows 0.25s ease !important; display: grid; overflow: hidden; }
         .nav-group-body[data-open="false"] { height: 0; overflow: hidden; visibility: hidden; }
-        .flyout-link:hover { background: rgba(108,71,255,0.2) !important; color: #fff !important; }
+        .flyout-link:hover { background: rgba(124,58,237,0.2) !important; color: #fff !important; }
         .flyout-link { transition: all 150ms ease !important; }
       `}</style>
 
       {/* Sidebar */}
       <div style={{
-        width: '260px', height: '100vh', background: '#0F0F0F',
+        width: '260px', height: '100vh', background: '#0d0d0d',
         display: 'flex', flexDirection: 'column', position: 'fixed',
         top: 0, left: 0, zIndex: 100, overflowY: 'auto',
-        borderRight: '1px solid rgba(108,71,255,0.25)',
-        boxShadow: '4px 0 24px rgba(108,71,255,0.08)'
+        borderRight: '1px solid #1f1f1f',
       }}>
 
         {/* Logo */}
-        <div style={{ padding: '28px 20px 24px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+        <div style={{ padding: '28px 20px 24px', borderBottom: '1px solid #1f1f1f' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <div style={{
-              width: '36px', height: '36px',
-              background: 'linear-gradient(135deg, #6C47FF, #00C6AE)',
-              borderRadius: '10px', display: 'flex', alignItems: 'center',
-              justifyContent: 'center', fontSize: '18px',
-              boxShadow: '0 4px 12px rgba(108,71,255,0.4)'
-            }}>🔍</div>
+            <BrainCircuit size={26} color="#7C3AED" />
             <span style={{
-              fontSize: '16px', fontWeight: '800', letterSpacing: '-0.4px',
-              background: 'linear-gradient(90deg, #fff 0%, #a89be0 100%)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+              fontSize: '16px', fontWeight: '800', letterSpacing: '-0.4px', color: '#fff'
             }}>AI SEO Studio</span>
           </div>
         </div>
@@ -206,11 +189,11 @@ export default function DashboardLayout({ children }) {
                   }}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    background: hasActiveChild ? 'rgba(108,71,255,0.1)' : 'transparent',
+                    background: hasActiveChild ? 'rgba(124,58,237,0.12)' : 'transparent',
                     border: 'none', cursor: 'pointer',
-                    borderLeft: hasActiveChild ? '3px solid #6C47FF' : '3px solid transparent',
+                    borderLeft: hasActiveChild ? '3px solid #7C3AED' : '3px solid transparent',
                     fontSize: '14px', fontWeight: '600', letterSpacing: '0.08em',
-                    textTransform: 'uppercase', color: '#aaaaaa',
+                    textTransform: 'uppercase', color: '#999999',
                     padding: '8px 14px', borderRadius: '8px',
                   }}
                 >
@@ -224,7 +207,7 @@ export default function DashboardLayout({ children }) {
                 {hoveredGroup === groupLabel && isOpen && (
                   <div style={{
                     position: 'absolute', left: '100%', top: '4px', marginLeft: '8px',
-                    background: '#1a1a1a', border: '1px solid #333', color: 'white',
+                    background: '#1a1a1a', border: '1px solid #1f1f1f', color: 'white',
                     padding: '4px 10px', borderRadius: '6px', fontSize: '12px',
                     whiteSpace: 'nowrap', zIndex: 200, pointerEvents: 'none'
                   }}>
@@ -237,14 +220,14 @@ export default function DashboardLayout({ children }) {
                     onMouseLeave={closeFlyoutImmediately}
                     style={{
                       position: 'fixed', left: '260px', top: flyout.top,
-                      background: '#1a1a1a', border: '1px solid #444',
+                      background: '#1a1a1a', border: '1px solid #1f1f1f',
                       borderRadius: '8px', padding: '8px', minWidth: '180px',
                       zIndex: 9999, display: 'flex', flexDirection: 'column', gap: '2px'
                     }}
                   >
                     <div style={{
                       fontSize: '11px', fontWeight: '700', letterSpacing: '0.08em',
-                      textTransform: 'uppercase', color: '#aaaaaa',
+                      textTransform: 'uppercase', color: '#999999',
                       padding: '4px 8px 6px'
                     }}>
                       {groupLabel}
@@ -261,13 +244,11 @@ export default function DashboardLayout({ children }) {
                             padding: '8px 10px', borderRadius: '8px', textDecoration: 'none',
                             fontSize: '13px', fontWeight: isActive ? '600' : '500',
                             width: '100%',
-                            background: isActive
-                              ? 'linear-gradient(135deg, rgba(108,71,255,0.9), rgba(108,71,255,0.6))'
-                              : 'transparent',
-                            color: isActive ? '#fff' : 'rgba(255,255,255,0.65)',
+                            background: isActive ? '#7C3AED' : 'transparent',
+                            color: isActive ? '#fff' : '#999999',
                           }}
                         >
-                          <Icon size={15} strokeWidth={isActive ? 2.5 : 1.8} style={{ color: isActive ? '#fff' : '#00C6AE', flexShrink: 0 }} />
+                          <Icon size={15} strokeWidth={isActive ? 2.5 : 1.8} style={{ color: isActive ? '#fff' : '#7C3AED', flexShrink: 0 }} />
                           {label}
                         </Link>
                       )
@@ -293,18 +274,15 @@ export default function DashboardLayout({ children }) {
                             padding: '10px 14px', borderRadius: '10px', textDecoration: 'none',
                             fontSize: '14px', fontWeight: isActive ? '600' : '500',
                             position: 'relative', overflow: 'hidden',
-                            background: isActive
-                              ? 'linear-gradient(135deg, rgba(108,71,255,0.9), rgba(108,71,255,0.6))'
-                              : 'transparent',
-                            color: isActive ? '#fff' : 'rgba(255,255,255,0.45)',
-                            boxShadow: isActive ? '0 4px 16px rgba(108,71,255,0.35), inset 0 1px 0 rgba(255,255,255,0.15)' : 'none',
-                            border: isActive ? '1px solid rgba(108,71,255,0.5)' : '1px solid transparent',
+                            background: isActive ? '#7C3AED' : 'transparent',
+                            color: isActive ? '#fff' : '#999999',
+                            border: '1px solid transparent',
                           }}
                         >
                           <Icon
                             size={17}
                             strokeWidth={isActive ? 2.5 : 1.8}
-                            style={{ color: isActive ? '#fff' : '#00C6AE', flexShrink: 0 }}
+                            style={{ color: isActive ? '#fff' : '#7C3AED', flexShrink: 0 }}
                           />
                           {label}
                           {isActive && (
@@ -324,32 +302,16 @@ export default function DashboardLayout({ children }) {
         </nav>
 
         {/* User + Logout */}
-        <div style={{ padding: '12px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <button
-            className="logout-btn"
-            onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-            aria-label="Toggle dark mode"
-            style={{
-              width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
-              padding: '10px 14px', borderRadius: '10px', background: 'transparent',
-              border: '1px solid transparent', color: 'rgba(255,255,255,0.45)',
-              fontSize: '13px', fontWeight: '500', cursor: 'pointer', marginBottom: '4px'
-            }}
-          >
-            {mounted && resolvedTheme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
-            {mounted && resolvedTheme === 'dark' ? 'Light mode' : 'Dark mode'}
-          </button>
-
+        <div style={{ padding: '12px', borderTop: '1px solid #1f1f1f' }}>
           <div style={{
             padding: '14px', marginBottom: '6px', borderRadius: '12px',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            backdropFilter: 'blur(10px)'
+            background: '#111',
+            border: '1px solid #1f1f1f',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{
                 width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #6C47FF, #00C6AE)',
+                background: '#7C3AED',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '13px', fontWeight: '700', color: '#fff'
               }}>
@@ -359,7 +321,7 @@ export default function DashboardLayout({ children }) {
                 <div style={{ fontSize: '13px', fontWeight: '600', color: '#fff', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {user?.user_metadata?.full_name || 'User'}
                 </div>
-                <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.35)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div style={{ fontSize: '11px', color: '#999999', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {user?.email || '...'}
                 </div>
               </div>
@@ -372,7 +334,7 @@ export default function DashboardLayout({ children }) {
             style={{
               width: '100%', display: 'flex', alignItems: 'center', gap: '10px',
               padding: '10px 14px', borderRadius: '10px', background: 'transparent',
-              border: '1px solid transparent', color: 'rgba(255,255,255,0.35)',
+              border: '1px solid transparent', color: '#999999',
               fontSize: '13px', fontWeight: '500', cursor: 'pointer'
             }}
           >
@@ -383,7 +345,7 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Main Content */}
-      <div style={{ marginLeft: '260px', flex: 1, background: 'var(--page-bg)', minHeight: '100vh' }}>
+      <div style={{ marginLeft: '260px' }} className="flex-1 w-full bg-[#09090B] min-h-screen">
         {children}
       </div>
     </div>
