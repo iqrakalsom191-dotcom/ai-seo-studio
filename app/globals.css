@@ -2,18 +2,22 @@
 @config "../tailwind.config.js";
 
 :root {
-  --background: #09090B;
+  --background: #0A0A0A;
   --foreground: #FAFAFA;
 
-  --page-bg: #09090B;
+  --page-bg: #0A0A0A;
   --card-bg: #111111;
   --text-primary: #FAFAFA;
   --text-secondary: #999999;
   --subtle-bg: #1a1a1a;
-  --accent-soft-bg: rgba(124, 58, 237, 0.15);
+  --accent-soft-bg: rgba(255, 107, 53, 0.15);
   --border-color: #1f1f1f;
-  --primary: #7C3AED;
-  --accent: #F59E0B;
+  --primary: #FF6B35;
+  --accent: #FFD4C2;
+
+  --primary-hover: #E55A25;
+  --peach: #FFD4C2;
+  --peach-soft: rgba(255, 212, 194, 0.15);
 }
 
 @theme inline {
