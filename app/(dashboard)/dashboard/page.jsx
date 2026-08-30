@@ -165,16 +165,16 @@ export default function DashboardPage() {
   }
 
   const statCards = [
-    { label: 'Total Content',  value: stats.total,            icon: FileText, trend: '+12%', href: '/library' },
-    { label: 'Keywords Saved', value: stats.keywords,         icon: Key,      trend: '+8%',  href: '/library?type=keyword' },
-    { label: 'This Week',      value: stats.thisWeek,         icon: Calendar, trend: '+24%', href: '/library' },
-    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    trend: null,   href: null },
+    { label: 'Total Content',  value: stats.total,            icon: FileText, trend: '+12%', href: '/library',              color: COLORS.primary },
+    { label: 'Keywords Saved', value: stats.keywords,         icon: Key,      trend: '+8%',  href: '/library?type=keyword', color: COLORS.primary },
+    { label: 'This Week',      value: stats.thisWeek,         icon: Calendar, trend: '+24%', href: '/library',              color: COLORS.accent },
+    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    trend: null,   href: null,                    color: '#10b981' },
   ]
 
   const actions = [
-    { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator' },
-    { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta' },
-    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords' },
+    { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator', color: COLORS.primary },
+    { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta',      color: COLORS.accent },
+    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords',  color: '#10b981' },
   ]
 
   const tools = [
@@ -192,7 +192,7 @@ export default function DashboardPage() {
   const usageWarning = todayCount > 40
 
   return (
-    <div style={{ padding: '40px 48px', maxWidth: '1100px', background: COLORS.bg, minHeight: '100vh' }}>
+    <div className="p-6 md:p-8" style={{ background: COLORS.bg, minHeight: '100vh' }}>
       <style>{`
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,0.15) !important; }
         .stat-card { transition: all 0.2s ease; }
@@ -282,12 +282,12 @@ export default function DashboardPage() {
 
       {/* Stats Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '24px' }}>
-        {statCards.map(({ label, value, icon: Icon, trend, href }) => {
+        {statCards.map(({ label, value, icon: Icon, trend, href, color }) => {
           const inner = (
             <>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: 'rgba(124,58,237,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon size={20} style={{ color: COLORS.primary }} />
+                <div style={{ width: '42px', height: '42px', borderRadius: '12px', background: `${color}1f`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon size={20} style={{ color }} />
                 </div>
                 {trend && (
                   <span style={{ display: 'flex', alignItems: 'center', gap: '2px', fontSize: '11px', fontWeight: '700', color: COLORS.accent }}>
@@ -296,7 +296,7 @@ export default function DashboardPage() {
                   </span>
                 )}
               </div>
-              <div style={{ fontSize: '28px', fontWeight: '800', color: COLORS.primary, letterSpacing: '-0.5px', marginBottom: '4px' }}>{value}</div>
+              <div style={{ fontSize: '28px', fontWeight: '800', color, letterSpacing: '-0.5px', marginBottom: '4px' }}>{value}</div>
               <div style={{ fontSize: '13px', color: COLORS.text, fontWeight: '500' }}>{label}</div>
             </>
           )
@@ -315,24 +315,27 @@ export default function DashboardPage() {
             {todayCount} / {DAILY_LIMIT} daily generations used
           </span>
         </div>
-        <div style={{ height: '8px', borderRadius: '99px', background: '#1a1a1a', overflow: 'hidden' }}>
-          <div style={{ height: '8px', borderRadius: '99px', background: usageWarning ? COLORS.accent : COLORS.primary, width: usagePct + '%', transition: 'width 0.6s ease' }} />
+        <div className="w-full h-2 rounded-full bg-[#1a1a1a] overflow-hidden">
+          <div
+            className="h-2 rounded-full transition-all duration-500"
+            style={{ background: usageWarning ? COLORS.accent : COLORS.primary, width: usagePct + '%' }}
+          />
         </div>
       </div>
 
       {/* Quick Actions */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {actions.map(({ label, desc, icon: Icon, href }) => (
+          {actions.map(({ label, desc, icon: Icon, href, color }) => (
             <Link key={href} href={href} className="action-card"
-              style={{ textDecoration: 'none', background: COLORS.card, border: `1px solid ${COLORS.border}`, borderLeft: `4px solid ${COLORS.primary}`, borderRadius: '18px', padding: '28px', display: 'block', minHeight: '160px' }}>
-              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: 'rgba(124,58,237,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                <Icon size={26} style={{ color: COLORS.primary }} />
+              style={{ textDecoration: 'none', background: COLORS.card, border: `1px solid ${COLORS.border}`, borderLeft: `4px solid ${color}`, borderRadius: '18px', padding: '28px', display: 'block', minHeight: '160px' }}>
+              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: `${color}26`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <Icon size={26} style={{ color }} />
               </div>
               <div style={{ fontSize: '16px', fontWeight: '800', color: COLORS.text, marginBottom: '6px' }}>{label}</div>
               <div style={{ fontSize: '13px', color: COLORS.muted, lineHeight: '1.5', marginBottom: '18px' }}>{desc}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color: COLORS.primary }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color }}>
                 Get started <ArrowRight size={14} />
               </div>
             </Link>
@@ -342,10 +345,10 @@ export default function DashboardPage() {
 
       {/* Tools */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Tools</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Tools</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '14px' }}>
           {tools.map(({ label, icon: Icon, href }) => (
-            <Link key={href} href={href} className="tool-card"
+            <Link key={href} href={href} className="tool-card hover:bg-[#1a0a3e]"
               style={{ textDecoration: 'none', background: COLORS.card, borderRadius: '14px', padding: '18px 12px', border: `1px solid ${COLORS.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '10px' }}>
               <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#1a0a3e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size={18} style={{ color: COLORS.primary }} />
@@ -358,23 +361,23 @@ export default function DashboardPage() {
 
       {/* Content Breakdown */}
       <div style={{ marginBottom: '40px' }}>
-        <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Content Breakdown</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Content Breakdown</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
           {[
-            { label: 'Blog Posts', count: breakdown.blog },
-            { label: 'Meta Tags',  count: breakdown.meta },
-            { label: 'Keywords',   count: breakdown.keyword },
-          ].map(({ label, count }) => {
+            { label: 'Blog Posts', count: breakdown.blog,    color: COLORS.primary },
+            { label: 'Meta Tags',  count: breakdown.meta,    color: COLORS.accent },
+            { label: 'Keywords',   count: breakdown.keyword, color: '#10b981' },
+          ].map(({ label, count, color }) => {
             const total = breakdown.blog + breakdown.meta + breakdown.keyword || 1
             const pct = Math.round((count / total) * 100)
             return (
               <div key={label} style={{ background: COLORS.card, borderRadius: '16px', padding: '24px', border: `1px solid ${COLORS.border}` }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                   <span style={{ fontSize: '13px', fontWeight: '600', color: COLORS.muted }}>{label}</span>
-                  <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: 'rgba(124,58,237,0.15)', color: COLORS.primary }}>{count}</span>
+                  <span style={{ padding: '3px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '700', background: `${color}26`, color }}>{count}</span>
                 </div>
                 <div style={{ height: '8px', borderRadius: '99px', background: '#1a1a1a', overflow: 'hidden' }}>
-                  <div style={{ height: '8px', borderRadius: '99px', background: COLORS.primary, width: pct + '%', transition: 'width 0.6s ease' }} />
+                  <div style={{ height: '8px', borderRadius: '99px', background: color, width: pct + '%', transition: 'width 0.6s ease' }} />
                 </div>
                 <div style={{ fontSize: '11px', color: COLORS.muted, marginTop: '6px' }}>{pct}% of total</div>
               </div>
@@ -386,7 +389,7 @@ export default function DashboardPage() {
       {/* Top Keywords + Recent Activity */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '40px' }}>
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Top Keywords</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Top Keywords</h2>
           <div style={{ background: COLORS.card, borderRadius: '16px', border: `1px solid ${COLORS.border}`, padding: '20px', minHeight: '100px' }}>
             {topKeywords.length === 0
               ? <p style={{ fontSize: '13px', color: COLORS.muted, textAlign: 'center', padding: '24px 0' }}>No keywords saved yet</p>
@@ -402,7 +405,7 @@ export default function DashboardPage() {
         </div>
 
         <div>
-          <h2 style={{ fontSize: '18px', fontWeight: '700', color: COLORS.text, marginBottom: '16px', letterSpacing: '-0.3px' }}>Recent Activity</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Recent Activity</h2>
           <div style={{ background: COLORS.card, borderRadius: '16px', border: `1px solid ${COLORS.border}`, overflow: 'hidden' }}>
             {recent.length === 0 ? (
               <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
@@ -436,7 +439,7 @@ export default function DashboardPage() {
       </div>
 
       {/* SEO Tip */}
-      <div style={{ background: '#13102a', border: `1px solid ${COLORS.border}`, borderLeft: `4px solid ${COLORS.primary}`, borderRadius: '16px', padding: '24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+      <div className="border-l-4 border-amber-500" style={{ background: '#13102a', borderTop: `1px solid ${COLORS.border}`, borderRight: `1px solid ${COLORS.border}`, borderBottom: `1px solid ${COLORS.border}`, borderRadius: '16px', padding: '24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
         <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Lightbulb size={18} style={{ color: COLORS.accent }} />
         </div>

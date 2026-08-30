@@ -345,7 +345,7 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Main Content */}
-      <div style={{ marginLeft: '260px' }} className="flex-1 w-full bg-[#09090B] min-h-screen">
+      <div style={{ marginLeft: '260px' }} className="flex-1 overflow-auto bg-[#09090B] min-h-screen">
         {children}
       </div>
     </div>
