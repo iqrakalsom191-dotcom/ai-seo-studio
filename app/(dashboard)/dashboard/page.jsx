@@ -315,10 +315,10 @@ export default function DashboardPage() {
             {todayCount} / {DAILY_LIMIT} daily generations used
           </span>
         </div>
-        <div className="w-full h-2 rounded-full bg-[#1a1a1a] overflow-hidden">
+        <div className="w-full bg-[#1f1f1f] rounded-full h-2 mt-3">
           <div
-            className="h-2 rounded-full transition-all duration-500"
-            style={{ background: usageWarning ? COLORS.accent : COLORS.primary, width: usagePct + '%' }}
+            className="bg-[#7C3AED] h-2 rounded-full transition-all"
+            style={{ width: `${Math.min((todayCount / 50) * 100, 100)}%`, background: usageWarning ? COLORS.accent : COLORS.primary }}
           />
         </div>
       </div>
@@ -330,13 +330,17 @@ export default function DashboardPage() {
           {actions.map(({ label, desc, icon: Icon, href, color }) => (
             <Link key={href} href={href} className="action-card"
               style={{ textDecoration: 'none', background: COLORS.card, border: `1px solid ${COLORS.border}`, borderLeft: `4px solid ${color}`, borderRadius: '18px', padding: '28px', display: 'block', minHeight: '160px' }}>
-              <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: `${color}26`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
-                <Icon size={26} style={{ color }} />
-              </div>
-              <div style={{ fontSize: '16px', fontWeight: '800', color: COLORS.text, marginBottom: '6px' }}>{label}</div>
-              <div style={{ fontSize: '13px', color: COLORS.muted, lineHeight: '1.5', marginBottom: '18px' }}>{desc}</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color }}>
-                Get started <ArrowRight size={14} />
+              <div className="h-full flex flex-col justify-between">
+                <div>
+                  <div style={{ width: '52px', height: '52px', borderRadius: '14px', background: `${color}26`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                    <Icon size={26} style={{ color }} />
+                  </div>
+                  <div style={{ fontSize: '16px', fontWeight: '800', color: COLORS.text, marginBottom: '6px' }}>{label}</div>
+                  <div style={{ fontSize: '13px', color: COLORS.muted, lineHeight: '1.5' }}>{desc}</div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '13px', fontWeight: '700', color }}>
+                  Get started <ArrowRight size={14} />
+                </div>
               </div>
             </Link>
           ))}
@@ -348,8 +352,8 @@ export default function DashboardPage() {
         <h2 className="text-lg font-semibold text-white mb-4">Tools</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: '14px' }}>
           {tools.map(({ label, icon: Icon, href }) => (
-            <Link key={href} href={href} className="tool-card hover:bg-[#1a0a3e]"
-              style={{ textDecoration: 'none', background: COLORS.card, borderRadius: '14px', padding: '18px 12px', border: `1px solid ${COLORS.border}`, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: '10px' }}>
+            <Link key={href} href={href} className="tool-card hover:bg-[#1a0a3e] min-h-[100px] flex flex-col items-center justify-center gap-2"
+              style={{ textDecoration: 'none', background: COLORS.card, borderRadius: '14px', padding: '18px 12px', border: `1px solid ${COLORS.border}`, textAlign: 'center' }}>
               <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#1a0a3e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size={18} style={{ color: COLORS.primary }} />
               </div>
