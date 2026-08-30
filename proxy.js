@@ -5,6 +5,7 @@ export async function proxy(request) {
   const { pathname } = request.nextUrl
 
   if (
+    pathname === '/' ||
     pathname.startsWith('/api/') ||
     pathname.startsWith('/auth/') ||
     pathname.startsWith('/signup') ||
