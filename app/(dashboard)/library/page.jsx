@@ -10,7 +10,7 @@ import useGuestGuard from '@/hooks/useGuestGuard';
 import GuestModal from '@/components/ui/GuestModal';
 
 const TYPE_LABELS = {
-  blog:    { label: 'Blog',    color: 'bg-[#FF6B35]/15 text-[#a78bfa]' },
+  blog:    { label: 'Blog',    color: 'bg-[#FF6B35]/15 text-[#FFD4C2]' },
   meta:    { label: 'Meta',    color: 'bg-[#FFD4C2]/15 text-[#FFD4C2]' },
   keyword: { label: 'Keyword', color: 'bg-[#FFD4C2]/15 text-[#FFD4C2]' },
 };
@@ -22,7 +22,7 @@ const TYPE_ICONS = {
 };
 
 const typeBadge = {
-  blog:    { bg: 'rgba(255, 107, 53,0.15)', color: '#a78bfa' },
+  blog:    { bg: 'rgba(255, 107, 53,0.15)', color: '#FFD4C2' },
   meta:    { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
   keyword: { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
 };

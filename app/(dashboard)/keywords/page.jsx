@@ -145,7 +145,7 @@ export default function KeywordsPage() {
             <div className="flex flex-wrap gap-2">
               {result.related.map((kw, i) => (
                 <span key={i} className="px-3 py-1.5 rounded-lg text-xs font-medium border"
-                  style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#a78bfa', borderColor: 'rgba(255, 107, 53, 0.3)' }}>
+                  style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#FFD4C2', borderColor: 'rgba(255, 107, 53, 0.3)' }}>
                   {kw}
                 </span>
               ))}
@@ -174,7 +174,7 @@ export default function KeywordsPage() {
               {result.tips.map((tip, i) => (
                 <li key={i} className="flex gap-3 text-sm text-[#999]">
                   <span className="flex-shrink-0 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center mt-0.5"
-                    style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#a78bfa' }}>
+                    style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#FFD4C2' }}>
                     {i + 1}
                   </span>
                   {tip}

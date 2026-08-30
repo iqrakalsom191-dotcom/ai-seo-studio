@@ -19,7 +19,7 @@ const COLORS = {
 }
 
 const typeBadge = {
-  blog:    { label: 'Blog',    bg: 'rgba(255, 107, 53,0.15)', color: '#a78bfa' },
+  blog:    { label: 'Blog',    bg: 'rgba(255, 107, 53,0.15)', color: '#FFD4C2' },
   meta:    { label: 'Meta',    bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
   keyword: { label: 'Keyword', bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
 }
@@ -243,7 +243,7 @@ export default function DashboardPage() {
 
       {/* Guest Mode Banner */}
       {user?.is_anonymous && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', background: '#1a1a1a', border: '1px solid #6b21a8', borderRadius: '14px', padding: '16px 24px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', background: '#1a1a1a', border: '1px solid #FF6B35', borderRadius: '14px', padding: '16px 24px', marginBottom: '24px' }}>
           <p style={{ fontSize: '14px', fontWeight: '600', color: COLORS.text, margin: 0 }}>
             You are using Guest Mode — your data won't be saved. Sign up free to save your work!
           </p>

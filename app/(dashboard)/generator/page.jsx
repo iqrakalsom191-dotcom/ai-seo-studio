@@ -221,7 +221,7 @@ export default function GeneratorPage() {
         <button
           onClick={handleGenerate}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FF6B35] hover:bg-[#6d28d9] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 text-sm transition-colors duration-200"
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#FF6B35] hover:bg-[#FF6B35] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 text-sm transition-colors duration-200"
         >
           {loading ? (
             <><Loader2 size={16} className="animate-spin" /> Generating…</>
@@ -258,7 +258,7 @@ export default function GeneratorPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#FF6B35] hover:bg-[#6d28d9] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#FF6B35] hover:bg-[#FF6B35] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
             >
               {saving ? <Loader2 size={15} className="animate-spin" /> : savedOk ? <CheckCheck size={15} /> : <BookmarkPlus size={15} />}
               {saving ? 'Saving…' : savedOk ? 'Saved!' : 'Save to Library'}
@@ -302,7 +302,7 @@ export default function GeneratorPage() {
                 <button
                   onClick={() => handlePublish('publish')}
                   disabled={publishing}
-                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#FF6B35] hover:bg-[#6d28d9] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-[#FF6B35] hover:bg-[#FF6B35] text-white font-semibold py-2.5 text-sm transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                 >
                   {publishing ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
                   Publish Live

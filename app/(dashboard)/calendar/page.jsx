@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 import { CalendarDays, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
 
 const TYPE_COLORS = {
-  blog: { bg: 'rgba(255, 107, 53,0.15)', color: '#a78bfa' },
+  blog: { bg: 'rgba(255, 107, 53,0.15)', color: '#FFD4C2' },
   meta: { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
   social: { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
 }
