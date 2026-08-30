@@ -70,7 +70,7 @@ export default function SignupPage() {
     <div className="min-h-screen bg-[#09090B] flex items-center justify-center p-4 font-sans" style={{ color: COLORS.text }}>
       <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-16 items-center">
         {/* Left — Branding */}
-        <div className="hidden lg:flex flex-col flex-1">
+        <div className="flex flex-col flex-1 items-center lg:items-start text-center lg:text-left">
           <Link href="/" className="flex items-center gap-2 mb-12">
             <BrainCircuit size={22} color={COLORS.primary} />
             <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
@@ -83,7 +83,7 @@ export default function SignupPage() {
             Generate SEO content, publish to WordPress, and grow your traffic — all with AI.
           </p>
 
-          <div className="grid grid-cols-3 gap-4 mb-12">
+          <div className="grid grid-cols-3 gap-4 mb-12 w-full">
             {STATS.map((s) => (
               <div key={s.label} className="p-4 rounded-xl border border-[#1f1f1f] text-center" style={{ background: '#111' }}>
                 <div className="text-2xl font-extrabold" style={{ color: COLORS.accent }}>{s.value}</div>
@@ -111,12 +111,7 @@ export default function SignupPage() {
         </div>
 
         {/* Right — Form */}
-        <div className="w-full max-w-md mx-auto lg:mx-0">
-          <Link href="/" className="flex lg:hidden items-center gap-2 mb-8 justify-center">
-            <BrainCircuit size={20} color={COLORS.primary} />
-            <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
-          </Link>
-
+        <div className="w-full max-w-lg mx-auto lg:mx-0 lg:max-w-md">
           <div className="w-full bg-[#111] border border-[#1f1f1f] rounded-2xl p-8">
             <div className="mb-8">
               <h2 className="text-2xl font-extrabold mb-1" style={{ color: COLORS.text }}>Create your account</h2>
