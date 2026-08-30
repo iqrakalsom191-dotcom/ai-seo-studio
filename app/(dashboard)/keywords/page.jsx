@@ -9,7 +9,7 @@ const intentColors = {
   Informational: 'bg-blue-500/15 text-blue-400',
   Commercial: 'bg-yellow-500/15 text-yellow-400',
   Transactional: 'bg-green-500/15 text-green-400',
-  Navigational: 'bg-purple-500/15 text-purple-400',
+  Navigational: 'bg-orange-500/15 text-orange-400',
   Unknown: 'bg-[#1a1a1a] text-[#999]',
 };
 
@@ -93,14 +93,14 @@ export default function KeywordsPage() {
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleAnalyze()}
               placeholder="e.g. best SEO plugins for WordPress"
-              className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-3 bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
             />
           </div>
           <button
             onClick={handleAnalyze}
             disabled={loading || !keyword.trim()}
             className="px-6 py-3 rounded-xl text-white text-sm font-semibold flex items-center gap-2 transition-opacity disabled:opacity-50"
-            style={{ backgroundColor: '#7C3AED' }}
+            style={{ backgroundColor: '#FF6B35' }}
           >
             {loading ? (
               <><Loader2 className="w-4 h-4 animate-spin" /> Analyzing...</>
@@ -121,7 +121,7 @@ export default function KeywordsPage() {
         <div className="space-y-5">
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-5">
-              <p className="text-xs font-bold text-[#7C3AED] uppercase tracking-wide mb-3 flex items-center gap-1.5">
+              <p className="text-xs font-bold text-[#FF6B35] uppercase tracking-wide mb-3 flex items-center gap-1.5">
                 <Target className="w-3.5 h-3.5" /> Search Intent
               </p>
               <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold ${intentColors[result.intent] || intentColors.Unknown}`}>
@@ -129,7 +129,7 @@ export default function KeywordsPage() {
               </span>
             </div>
             <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-5">
-              <p className="text-xs font-bold text-[#7C3AED] uppercase tracking-wide mb-3 flex items-center gap-1.5">
+              <p className="text-xs font-bold text-[#FF6B35] uppercase tracking-wide mb-3 flex items-center gap-1.5">
                 <BarChart2 className="w-3.5 h-3.5" /> Keyword Difficulty
               </p>
               <span className={`inline-block px-4 py-1.5 rounded-full text-sm font-semibold ${difficultyColors[result.difficulty] || difficultyColors.Unknown}`}>
@@ -139,13 +139,13 @@ export default function KeywordsPage() {
           </div>
 
           <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6">
-            <p className="text-sm font-bold text-[#7C3AED] mb-4 flex items-center gap-2">
-              <Tag className="w-4 h-4" style={{ color: '#7C3AED' }} /> Related Keywords
+            <p className="text-sm font-bold text-[#FF6B35] mb-4 flex items-center gap-2">
+              <Tag className="w-4 h-4" style={{ color: '#FF6B35' }} /> Related Keywords
             </p>
             <div className="flex flex-wrap gap-2">
               {result.related.map((kw, i) => (
                 <span key={i} className="px-3 py-1.5 rounded-lg text-xs font-medium border"
-                  style={{ backgroundColor: 'rgba(124, 58, 237, 0.15)', color: '#a78bfa', borderColor: 'rgba(124, 58, 237, 0.3)' }}>
+                  style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#a78bfa', borderColor: 'rgba(255, 107, 53, 0.3)' }}>
                   {kw}
                 </span>
               ))}
@@ -153,13 +153,13 @@ export default function KeywordsPage() {
           </div>
 
           <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6">
-            <p className="text-sm font-bold text-[#7C3AED] mb-4 flex items-center gap-2">
-              <Tag className="w-4 h-4" style={{ color: '#F59E0B' }} /> LSI Keywords
+            <p className="text-sm font-bold text-[#FF6B35] mb-4 flex items-center gap-2">
+              <Tag className="w-4 h-4" style={{ color: '#FFD4C2' }} /> LSI Keywords
             </p>
             <div className="flex flex-wrap gap-2">
               {result.lsi.map((kw, i) => (
                 <span key={i} className="px-3 py-1.5 rounded-lg text-xs font-medium border"
-                  style={{ backgroundColor: 'rgba(245, 158, 11, 0.15)', color: '#F59E0B', borderColor: 'rgba(245, 158, 11, 0.3)' }}>
+                  style={{ backgroundColor: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2', borderColor: 'rgba(255, 212, 194, 0.3)' }}>
                   {kw}
                 </span>
               ))}
@@ -167,14 +167,14 @@ export default function KeywordsPage() {
           </div>
 
           <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6">
-            <p className="text-sm font-bold text-[#7C3AED] mb-4 flex items-center gap-2">
-              <Lightbulb className="w-4 h-4" style={{ color: '#7C3AED' }} /> Usage Tips
+            <p className="text-sm font-bold text-[#FF6B35] mb-4 flex items-center gap-2">
+              <Lightbulb className="w-4 h-4" style={{ color: '#FF6B35' }} /> Usage Tips
             </p>
             <ul className="space-y-3">
               {result.tips.map((tip, i) => (
                 <li key={i} className="flex gap-3 text-sm text-[#999]">
                   <span className="flex-shrink-0 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center mt-0.5"
-                    style={{ backgroundColor: 'rgba(124, 58, 237, 0.15)', color: '#a78bfa' }}>
+                    style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#a78bfa' }}>
                     {i + 1}
                   </span>
                   {tip}
@@ -187,7 +187,7 @@ export default function KeywordsPage() {
             onClick={saveToLibrary}
             disabled={saving || saved}
             className="w-full py-3 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50"
-            style={{ backgroundColor: '#7C3AED' }}
+            style={{ backgroundColor: '#FF6B35' }}
           >
             <Save className="w-4 h-4" />
             {saving ? 'Saving...' : saved ? 'Saved to Library ✓' : 'Save to Library'}

@@ -4,7 +4,7 @@ import { BrainCircuit, ArrowLeft } from 'lucide-react'
 
 const COLORS = {
   bg: '#09090B',
-  primary: '#7C3AED',
+  primary: '#FF6B35',
   text: '#FAFAFA',
   muted: '#999999',
 }
@@ -31,7 +31,7 @@ export default function BlogPage() {
         </p>
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:bg-orange-500 transition-all duration-200"
           style={{ background: COLORS.primary, color: COLORS.text }}
         >
           <ArrowLeft size={16} />

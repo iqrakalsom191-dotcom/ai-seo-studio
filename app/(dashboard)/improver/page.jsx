@@ -75,7 +75,7 @@ export default function ImproverPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Wand2 style={{ color: '#7C3AED' }} size={28} />
+        <Wand2 style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold " style={{ color: '#FAFAFA' }}>AI Content Improver</h1>
       </div>
       <p className="text-[#999] mb-8">Paste your content, pick an improvement type, and let AI polish it up.</p>
@@ -89,8 +89,8 @@ export default function ImproverPage() {
             placeholder="Paste your content here..."
             rows={8}
             className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 resize-y"
-            style={{ '--tw-ring-color': '#7C3AED' }}
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            style={{ '--tw-ring-color': '#FF6B35' }}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
@@ -100,7 +100,7 @@ export default function ImproverPage() {
           <select
             value={type}
             onChange={(e) => setType(e.target.value)}
-            className="w-full bg-[#1a1a1a] text-white border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED]"
+            className="w-full bg-[#1a1a1a] text-white border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35]"
           >
             {IMPROVEMENT_TYPES.map((t) => (
               <option key={t} value={t}>{t}</option>
@@ -114,7 +114,7 @@ export default function ImproverPage() {
           onClick={improve}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Improving...' : '✦ Improve Content'}
         </button>
@@ -124,7 +124,7 @@ export default function ImproverPage() {
         <div className="mt-6 space-y-4">
           <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6">
             <div className="flex justify-between items-center mb-3">
-              <span className="text-sm font-semibold" style={{ color: '#F59E0B' }}>Improved Content</span>
+              <span className="text-sm font-semibold" style={{ color: '#FFD4C2' }}>Improved Content</span>
               <span className="text-xs font-medium text-[#999]">{result.length} chars</span>
             </div>
             <textarea
@@ -139,7 +139,7 @@ export default function ImproverPage() {
             <button
               onClick={copy}
               className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition border border-[#1f1f1f] hover:bg-[#1a1a1a]"
-              style={{ color: '#7C3AED' }}
+              style={{ color: '#FF6B35' }}
             >
               {copied ? <Check size={16} /> : <Copy size={16} />}
               {copied ? 'Copied!' : 'Copy'}
@@ -148,7 +148,7 @@ export default function ImproverPage() {
               onClick={saveToLibrary}
               disabled={saving || saved}
               className="flex-1 py-3 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50 hover:opacity-90"
-              style={{ backgroundColor: '#7C3AED' }}
+              style={{ backgroundColor: '#FF6B35' }}
             >
               <Save size={16} />
               {saving ? 'Saving...' : saved ? 'Saved to Library ✓' : 'Save to Library'}

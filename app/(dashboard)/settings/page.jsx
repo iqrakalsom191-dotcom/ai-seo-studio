@@ -115,7 +115,7 @@ export default function SettingsPage() {
       {/* Profile */}
       <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6 mb-5">
         <div className="flex items-center gap-2 mb-5">
-          <User className="w-5 h-5" style={{ color: '#7C3AED' }} />
+          <User className="w-5 h-5" style={{ color: '#FF6B35' }} />
           <h2 className="text-base font-semibold text-white">Profile</h2>
         </div>
         <div className="space-y-4">
@@ -126,7 +126,7 @@ export default function SettingsPage() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your name"
-              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
+              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
             />
           </div>
           <div>
@@ -143,7 +143,7 @@ export default function SettingsPage() {
             onClick={updateProfile}
             disabled={profileLoading}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition disabled:opacity-50"
-            style={{ backgroundColor: '#7C3AED' }}
+            style={{ backgroundColor: '#FF6B35' }}
           >
             <Save className="w-4 h-4" />
             {profileLoading ? 'Saving...' : 'Save Profile'}
@@ -154,7 +154,7 @@ export default function SettingsPage() {
       {/* Password */}
       <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6 mb-5">
         <div className="flex items-center gap-2 mb-5">
-          <Lock className="w-5 h-5" style={{ color: '#7C3AED' }} />
+          <Lock className="w-5 h-5" style={{ color: '#FF6B35' }} />
           <h2 className="text-base font-semibold text-white">Change Password</h2>
         </div>
         <div className="space-y-4">
@@ -165,7 +165,7 @@ export default function SettingsPage() {
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
+              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
             />
           </div>
           <div>
@@ -175,7 +175,7 @@ export default function SettingsPage() {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
+              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
             />
           </div>
           <div>
@@ -185,14 +185,14 @@ export default function SettingsPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
+              className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
             />
           </div>
           <button
             onClick={updatePassword}
             disabled={passwordLoading}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition disabled:opacity-50"
-            style={{ backgroundColor: '#7C3AED' }}
+            style={{ backgroundColor: '#FF6B35' }}
           >
             <Lock className="w-4 h-4" />
             {passwordLoading ? 'Updating...' : 'Update Password'}

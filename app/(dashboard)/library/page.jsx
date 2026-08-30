@@ -10,9 +10,9 @@ import useGuestGuard from '@/hooks/useGuestGuard';
 import GuestModal from '@/components/ui/GuestModal';
 
 const TYPE_LABELS = {
-  blog:    { label: 'Blog',    color: 'bg-[#7C3AED]/15 text-[#a78bfa]' },
-  meta:    { label: 'Meta',    color: 'bg-[#F59E0B]/15 text-[#F59E0B]' },
-  keyword: { label: 'Keyword', color: 'bg-[#F59E0B]/15 text-[#F59E0B]' },
+  blog:    { label: 'Blog',    color: 'bg-[#FF6B35]/15 text-[#a78bfa]' },
+  meta:    { label: 'Meta',    color: 'bg-[#FFD4C2]/15 text-[#FFD4C2]' },
+  keyword: { label: 'Keyword', color: 'bg-[#FFD4C2]/15 text-[#FFD4C2]' },
 };
 
 const TYPE_ICONS = {
@@ -22,9 +22,9 @@ const TYPE_ICONS = {
 };
 
 const typeBadge = {
-  blog:    { bg: 'rgba(124,58,237,0.15)', color: '#a78bfa' },
-  meta:    { bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
-  keyword: { bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
+  blog:    { bg: 'rgba(255, 107, 53,0.15)', color: '#a78bfa' },
+  meta:    { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
+  keyword: { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
 };
 
 function parseMarkdownLines(content) {
@@ -49,15 +49,15 @@ function MarkdownPreview({ content }) {
       {lines.map((line, idx) => {
         switch (line.type) {
           case 'h3':
-            return <h3 key={idx} style={{ color: '#7C3AED', fontSize: '18px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h3>;
+            return <h3 key={idx} style={{ color: '#FF6B35', fontSize: '18px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h3>;
           case 'h2':
-            return <h2 key={idx} style={{ color: '#7C3AED', fontSize: '22px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h2>;
+            return <h2 key={idx} style={{ color: '#FF6B35', fontSize: '22px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h2>;
           case 'bold':
             return <p key={idx} style={{ color: '#FAFAFA', fontWeight: 700, margin: '4px 0' }}>{line.text}</p>;
           case 'bullet':
             return (
               <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', margin: '4px 0', color: '#999999', lineHeight: 1.7 }}>
-                <span style={{ color: '#F59E0B', marginTop: '2px' }}>●</span>
+                <span style={{ color: '#FFD4C2', marginTop: '2px' }}>●</span>
                 <span>{line.text}</span>
               </div>
             );
@@ -214,7 +214,7 @@ export default function LibraryPage() {
       }
     };
 
-    doc.setTextColor('#7C3AED');
+    doc.setTextColor('#FF6B35');
     doc.setFontSize(18);
     doc.setFont('helvetica', 'bold');
     const titleLines = doc.splitTextToSize(title, maxWidth);
@@ -235,8 +235,8 @@ export default function LibraryPage() {
       let color = '#333333';
       let fontStyle = 'normal';
       let indent = margin;
-      if (line.type === 'h3') { fontSize = 14; color = '#7C3AED'; fontStyle = 'bold'; }
-      else if (line.type === 'h2') { fontSize = 16; color = '#7C3AED'; fontStyle = 'bold'; }
+      if (line.type === 'h3') { fontSize = 14; color = '#FF6B35'; fontStyle = 'bold'; }
+      else if (line.type === 'h2') { fontSize = 16; color = '#FF6B35'; fontStyle = 'bold'; }
       else if (line.type === 'bold') { fontSize = 11; color = '#0F0F0F'; fontStyle = 'bold'; }
       else if (line.type === 'bullet') { text = `•  ${text}`; indent = margin + 4; }
 
@@ -269,7 +269,7 @@ export default function LibraryPage() {
       container.style.padding = '0';
       container.style.fontFamily = 'Helvetica, Arial, sans-serif';
       container.innerHTML = `
-        <h1 style="color:#7C3AED;font-size:24px;font-weight:700;margin:0 0 16px;">${title}</h1>
+        <h1 style="color:#FF6B35;font-size:24px;font-weight:700;margin:0 0 16px;">${title}</h1>
         ${markdownLinesToHtml(item.content)}
       `;
       document.body.appendChild(container);
@@ -298,13 +298,13 @@ export default function LibraryPage() {
     return parseMarkdownLines(content).map((line) => {
       switch (line.type) {
         case 'h3':
-          return `<h3 style="color:#7C3AED;font-size:18px;font-weight:700;margin:16px 0 8px;">${line.text}</h3>`;
+          return `<h3 style="color:#FF6B35;font-size:18px;font-weight:700;margin:16px 0 8px;">${line.text}</h3>`;
         case 'h2':
-          return `<h2 style="color:#7C3AED;font-size:22px;font-weight:700;margin:16px 0 8px;">${line.text}</h2>`;
+          return `<h2 style="color:#FF6B35;font-size:22px;font-weight:700;margin:16px 0 8px;">${line.text}</h2>`;
         case 'bold':
           return `<p style="color:#0F0F0F;font-weight:700;margin:4px 0;">${line.text}</p>`;
         case 'bullet':
-          return `<p style="margin:4px 0;color:#333;line-height:1.7;"><span style="color:#F59E0B;">&#9679;</span>&nbsp; ${line.text}</p>`;
+          return `<p style="margin:4px 0;color:#333;line-height:1.7;"><span style="color:#FFD4C2;">&#9679;</span>&nbsp; ${line.text}</p>`;
         case 'hr':
           return `<hr style="border:none;border-top:1px solid #e0e0e0;margin:12px 0;" />`;
         case 'blank':
@@ -322,7 +322,7 @@ export default function LibraryPage() {
         <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
         <head><meta charset="utf-8"><title>${title}</title></head>
         <body>
-          <h1 style="color:#7C3AED;">${title}</h1>
+          <h1 style="color:#FF6B35;">${title}</h1>
           ${markdownLinesToHtml(item.content)}
         </body>
         </html>`;
@@ -381,12 +381,12 @@ export default function LibraryPage() {
             <p className="font-semibold mb-1">Published to WordPress!</p>
             <div className="flex gap-3">
               {data.postUrl && (
-                <a href={data.postUrl} target="_blank" rel="noopener noreferrer" className="text-[#7C3AED] underline">
+                <a href={data.postUrl} target="_blank" rel="noopener noreferrer" className="text-[#FF6B35] underline">
                   View Post
                 </a>
               )}
               {data.editUrl && (
-                <a href={data.editUrl} target="_blank" rel="noopener noreferrer" className="text-[#7C3AED] underline">
+                <a href={data.editUrl} target="_blank" rel="noopener noreferrer" className="text-[#FF6B35] underline">
                   Edit in WP Admin
                 </a>
               )}
@@ -423,7 +423,7 @@ export default function LibraryPage() {
       {modal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px' }}
           onClick={closeModal}>
-          <div style={{ background: '#111111', borderRadius: '20px', maxWidth: '660px', width: '100%', height: '90vh', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 24px 64px rgba(108,71,255,0.15)' }}
+          <div style={{ background: '#111111', borderRadius: '20px', maxWidth: '660px', width: '100%', height: '90vh', maxHeight: '90vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 24px 64px rgba(255, 107, 53,0.15)' }}
             onClick={e => e.stopPropagation()}>
             <div style={{ position: 'sticky', top: 0, background: '#111111', zIndex: 10, padding: '16px 24px', borderBottom: '1px solid #1f1f1f', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
@@ -436,7 +436,7 @@ export default function LibraryPage() {
               </div>
               <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                 <button onClick={() => setIsEditing(prev => !prev)}
-                  style={{ background: isEditing ? '#7C3AED' : '#1a1a1a', color: isEditing ? '#fff' : '#999999', border: 'none', borderRadius: '8px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', marginLeft: '12px' }}>
+                  style={{ background: isEditing ? '#FF6B35' : '#1a1a1a', color: isEditing ? '#fff' : '#999999', border: 'none', borderRadius: '8px', padding: '6px 12px', cursor: 'pointer', fontSize: '12px', fontWeight: '600', marginLeft: '12px' }}>
                   {isEditing ? 'Preview' : 'Edit'}
                 </button>
                 <button onClick={closeModal} style={{ background: '#1a1a1a', border: 'none', borderRadius: '8px', padding: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '8px' }}>
@@ -451,7 +451,7 @@ export default function LibraryPage() {
                   value={editContent}
                   onChange={e => setEditContent(e.target.value)}
                   style={{ width: '100%', height: '100%', minHeight: '320px', border: '1px solid #1f1f1f', borderRadius: '12px', padding: '16px', fontSize: '13px', lineHeight: '1.7', color: '#FAFAFA', resize: 'vertical', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
-                  onFocus={e => e.target.style.borderColor = '#7C3AED'}
+                  onFocus={e => e.target.style.borderColor = '#FF6B35'}
                   onBlur={e => e.target.style.borderColor = '#1f1f1f'}
                 />
               ) : (
@@ -467,7 +467,7 @@ export default function LibraryPage() {
                 Close
               </button>
               <button onClick={handleSaveChanges} disabled={saving}
-                style={{ padding: '10px 24px', borderRadius: '10px', background: saveSuccess ? '#10b981' : '#7C3AED', color: '#fff', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'background 0.2s', opacity: saving ? 0.7 : 1 }}>
+                style={{ padding: '10px 24px', borderRadius: '10px', background: saveSuccess ? '#10b981' : '#FF6B35', color: '#fff', fontSize: '14px', fontWeight: '600', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: 'background 0.2s', opacity: saving ? 0.7 : 1 }}>
                 {saveSuccess ? <><Check size={15} /> Saved</> : saving ? 'Saving...' : <><Save size={15} /> Save Changes</>}
               </button>
             </div>
@@ -482,7 +482,7 @@ export default function LibraryPage() {
         </div>
         <button onClick={toggleSelectMode}
           className="flex-shrink-0 px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
-          style={selectMode ? { backgroundColor: '#7C3AED', color: '#fff' } : { backgroundColor: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+          style={selectMode ? { backgroundColor: '#FF6B35', color: '#fff' } : { backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#FF6B35' }}>
           {selectMode ? <X size={15} /> : <CheckSquare size={15} />}
           {selectMode ? 'Cancel' : 'Select'}
         </button>
@@ -496,21 +496,21 @@ export default function LibraryPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by title..."
-            className="w-full pl-10 pr-4 py-2.5 border bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2.5 border bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-transparent"
           />
         </div>
         <div className="flex gap-2 flex-wrap">
           {filters.map((f) => (
             <button key={f} onClick={() => setActiveFilter(f)}
               className="px-4 py-2.5 rounded-xl text-sm font-medium capitalize transition-all"
-              style={activeFilter === f ? { backgroundColor: '#7C3AED', color: '#fff' } : { backgroundColor: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+              style={activeFilter === f ? { backgroundColor: '#FF6B35', color: '#fff' } : { backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#FF6B35' }}>
               {f}
             </button>
           ))}
           {selectMode && (
             <button onClick={handleSelectAll}
               className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
-              style={{ backgroundColor: 'rgba(124, 58, 237, 0.15)', color: '#7C3AED' }}>
+              style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)', color: '#FF6B35' }}>
               <CheckSquare size={15} />
               {selectedIds.size === filtered.length && filtered.length > 0 ? 'Deselect All' : 'Select All'}
             </button>
@@ -518,7 +518,7 @@ export default function LibraryPage() {
           {selectMode && selectedIds.size > 0 && (
             <button onClick={handleExportSelected}
               className="px-4 py-2.5 rounded-xl text-sm font-medium transition-all flex items-center gap-2"
-              style={{ backgroundColor: '#7C3AED', color: '#fff' }}>
+              style={{ backgroundColor: '#FF6B35', color: '#fff' }}>
               <Download size={15} />
               Download Selected (.zip)
             </button>
@@ -536,8 +536,8 @@ export default function LibraryPage() {
 
       {!loading && filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: 'rgba(124, 58, 237, 0.15)' }}>
-            <BookOpen className="w-8 h-8" style={{ color: '#7C3AED' }} />
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4" style={{ backgroundColor: 'rgba(255, 107, 53, 0.15)' }}>
+            <BookOpen className="w-8 h-8" style={{ color: '#FF6B35' }} />
           </div>
           <h3 className="text-lg font-semibold text-white mb-1">Nothing saved yet</h3>
           <p className="text-sm text-[#999]">Generate content and save it to see it here.</p>
@@ -557,18 +557,18 @@ export default function LibraryPage() {
                 onClick={() => selectMode ? toggleSelectItem(item.id) : openModal(item)}
                 className="relative bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-5 flex flex-col gap-3 hover:shadow-md transition-all cursor-pointer"
                 style={{ transition: 'box-shadow 0.2s, border-color 0.2s' }}
-                onMouseEnter={e => e.currentTarget.style.borderColor = '#7C3AED'}
+                onMouseEnter={e => e.currentTarget.style.borderColor = '#FF6B35'}
                 onMouseLeave={e => e.currentTarget.style.borderColor = '#1f1f1f'}>
                 {selectMode && (
                   <div className="absolute top-4 right-4" onClick={e => { e.stopPropagation(); toggleSelectItem(item.id); }}>
                     {selectedIds.has(item.id)
-                      ? <CheckSquare size={20} style={{ color: '#7C3AED' }} />
+                      ? <CheckSquare size={20} style={{ color: '#FF6B35' }} />
                       : <Square size={20} className="text-gray-600" />}
                   </div>
                 )}
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2 min-w-0">
-                    <Icon className="w-4 h-4 flex-shrink-0" style={{ color: '#7C3AED' }} />
+                    <Icon className="w-4 h-4 flex-shrink-0" style={{ color: '#FF6B35' }} />
                     <h3 className="text-sm font-semibold text-white truncate">{item.title || item.keyword || 'Untitled'}</h3>
                   </div>
                   {!selectMode && (
@@ -614,7 +614,7 @@ export default function LibraryPage() {
                     <button
                       onClick={() => handlePublishToWordPress(item)}
                       disabled={publishingId === item.id}
-                      className="w-full flex items-center justify-center gap-2 rounded-lg border-2 border-[#7C3AED] text-[#7C3AED] hover:bg-[#7C3AED] hover:text-white font-semibold py-2 text-xs transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="w-full flex items-center justify-center gap-2 rounded-lg border-2 border-[#FF6B35] text-[#FF6B35] hover:bg-[#FF6B35] hover:text-white font-semibold py-2 text-xs transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       {publishingId === item.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Globe className="w-3.5 h-3.5" />}
                       {publishingId === item.id ? 'Publishing…' : 'Publish to WordPress'}

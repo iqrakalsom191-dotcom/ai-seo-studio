@@ -50,7 +50,7 @@ export default function UsagePage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Gauge style={{ color: '#7C3AED' }} size={28} />
+        <Gauge style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>Usage Limits</h1>
       </div>
       <p className="text-[#999] mb-8">Track your daily AI generation usage.</p>
@@ -67,7 +67,7 @@ export default function UsagePage() {
                 className="h-full rounded-full transition-all"
                 style={{
                   width: `${usedPct}%`,
-                  background: usedPct >= 100 ? '#FF6B6B' : 'linear-gradient(90deg, #7C3AED, #F59E0B)',
+                  background: usedPct >= 100 ? '#FF6B6B' : 'linear-gradient(90deg, #FF6B35, #FFD4C2)',
                 }}
               />
             </div>
@@ -76,10 +76,10 @@ export default function UsagePage() {
           <div className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-5 mb-6 flex items-center gap-4">
             <div style={{
               width: '44px', height: '44px', borderRadius: '12px',
-              background: 'rgba(245,158,11,0.15)', display: 'flex',
+              background: 'rgba(255, 212, 194, 0.15)', display: 'flex',
               alignItems: 'center', justifyContent: 'center', flexShrink: 0,
             }}>
-              <Zap style={{ color: '#F59E0B' }} size={20} />
+              <Zap style={{ color: '#FFD4C2' }} size={20} />
             </div>
             <div>
               <div className="text-xl font-bold" style={{ color: '#FAFAFA' }}>{remaining}</div>
@@ -97,7 +97,7 @@ export default function UsagePage() {
                     className="w-full rounded-t-md"
                     style={{
                       height: `${Math.max((count / maxHistoryCount) * 100, 4)}%`,
-                      background: 'linear-gradient(180deg, #7C3AED, #F59E0B)',
+                      background: 'linear-gradient(180deg, #FF6B35, #FFD4C2)',
                     }}
                   />
                   <span className="text-[10px] text-[#999]">

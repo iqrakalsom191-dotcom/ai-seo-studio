@@ -41,7 +41,7 @@ export default function FaqPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <HelpCircle style={{ color: '#7C3AED' }} size={28} />
+        <HelpCircle style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>FAQ Generator</h1>
       </div>
       <p className="text-[#999] mb-8">Enter a topic and get 10 SEO-optimized FAQs.</p>
@@ -55,7 +55,7 @@ export default function FaqPage() {
             onChange={(e) => setTopic(e.target.value)}
             placeholder="e.g. email marketing automation"
             className="w-full border bg-[#1a1a1a] text-white placeholder-gray-600 border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
@@ -66,7 +66,7 @@ export default function FaqPage() {
           onClick={generate}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Generating...' : '✦ Generate FAQs'}
         </button>
@@ -89,7 +89,7 @@ export default function FaqPage() {
                   <ChevronDown
                     size={18}
                     style={{
-                      color: '#7C3AED',
+                      color: '#FF6B35',
                       flexShrink: 0,
                       transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
                       transition: 'transform 0.2s ease',
@@ -99,7 +99,7 @@ export default function FaqPage() {
                 {isOpen && (
                   <div
                     className="px-5 pb-4 text-sm text-[#999] leading-relaxed"
-                    style={{ borderTop: `1px solid rgba(245,158,11,0.2)`, paddingTop: '12px' }}
+                    style={{ borderTop: `1px solid rgba(255, 212, 194, 0.2)`, paddingTop: '12px' }}
                   >
                     {faq.answer}
                   </div>

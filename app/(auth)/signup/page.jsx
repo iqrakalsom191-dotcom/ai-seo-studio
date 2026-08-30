@@ -6,8 +6,8 @@ import { createClient } from '@/lib/supabase'
 import { BrainCircuit, Globe, CheckCircle2 } from 'lucide-react'
 
 const COLORS = {
-  primary: '#7C3AED',
-  accent: '#F59E0B',
+  primary: '#FF6B35',
+  accent: '#FFD4C2',
   text: '#FAFAFA',
   muted: '#999999',
 }
@@ -125,7 +125,7 @@ export default function SignupPage() {
             )}
 
             {success && (
-              <div className="rounded-lg px-4 py-4 mb-5 text-sm text-center" style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: COLORS.text }}>
+              <div className="rounded-lg px-4 py-4 mb-5 text-sm text-center" style={{ background: 'rgba(255, 107, 53,0.1)', border: '1px solid rgba(255, 107, 53,0.3)', color: COLORS.text }}>
                 Account created! Please check your email to verify.
               </div>
             )}
@@ -139,7 +139,7 @@ export default function SignupPage() {
                     value={name}
                     onChange={e => setName(e.target.value)}
                     placeholder="Your name"
-                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#7C3AED] text-sm transition-colors"
+                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#FF6B35] text-sm transition-colors"
                   />
                 </div>
 
@@ -150,7 +150,7 @@ export default function SignupPage() {
                     value={email}
                     onChange={e => setEmail(e.target.value)}
                     placeholder="you@example.com"
-                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#7C3AED] text-sm transition-colors"
+                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#FF6B35] text-sm transition-colors"
                   />
                 </div>
 
@@ -161,14 +161,14 @@ export default function SignupPage() {
                     value={password}
                     onChange={e => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#7C3AED] text-sm transition-colors"
+                    className="w-full bg-[#1a1a1a] border border-[#1f1f1f] rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-[#FF6B35] text-sm transition-colors"
                   />
                 </div>
 
                 <button
                   onClick={handleSignup}
                   disabled={loading}
-                  className="w-full py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
+                  className="w-full py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:bg-orange-500 transition-all duration-200"
                   style={{ background: loading ? '#4c2f9e' : COLORS.primary, color: COLORS.text, cursor: loading ? 'not-allowed' : 'pointer' }}
                 >
                   {loading ? 'Creating account...' : 'Create Account'}

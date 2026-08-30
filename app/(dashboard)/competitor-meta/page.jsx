@@ -38,7 +38,7 @@ export default function CompetitorMetaPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Globe style={{ color: '#7C3AED' }} size={28} />
+        <Globe style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold text-white">Competitor Meta</h1>
       </div>
       <p className="text-[#999] mb-8">Analyze a competitor's title tag and meta description, and get AI-powered improvement suggestions.</p>
@@ -53,7 +53,7 @@ export default function CompetitorMetaPage() {
             placeholder="https://example.com/some-page"
             className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
             style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           />
         </div>
@@ -62,7 +62,7 @@ export default function CompetitorMetaPage() {
           onClick={analyze}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Analyzing...' : '✦ Analyze'}
         </button>
@@ -72,8 +72,8 @@ export default function CompetitorMetaPage() {
         <div className="mt-6 space-y-4">
           <div className="rounded-2xl border p-5" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-sm font-bold text-[#7C3AED]">
-                <Type size={15} style={{ color: '#F59E0B' }} />
+              <div className="flex items-center gap-2 text-sm font-bold text-[#FF6B35]">
+                <Type size={15} style={{ color: '#FFD4C2' }} />
                 Current Title
               </div>
               <span className="text-xs text-[#999]">{result.title?.length || 0} chars</span>
@@ -83,8 +83,8 @@ export default function CompetitorMetaPage() {
 
           <div className="rounded-2xl border p-5" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
             <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2 text-sm font-bold text-[#7C3AED]">
-                <AlignLeft size={15} style={{ color: '#F59E0B' }} />
+              <div className="flex items-center gap-2 text-sm font-bold text-[#FF6B35]">
+                <AlignLeft size={15} style={{ color: '#FFD4C2' }} />
                 Current Meta Description
               </div>
               <span className="text-xs text-[#999]">{result.description?.length || 0} chars</span>
@@ -94,8 +94,8 @@ export default function CompetitorMetaPage() {
 
           {result.analysis && (
             <div className="rounded-2xl border p-5" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
-              <div className="flex items-center gap-2 mb-4 text-sm font-bold text-[#7C3AED]">
-                <Sparkles size={15} style={{ color: '#7C3AED' }} />
+              <div className="flex items-center gap-2 mb-4 text-sm font-bold text-[#FF6B35]">
+                <Sparkles size={15} style={{ color: '#FF6B35' }} />
                 AI Analysis & Suggestions
               </div>
               <ul className="space-y-3">
@@ -107,7 +107,7 @@ export default function CompetitorMetaPage() {
                     <li key={i} className="flex items-start gap-3 text-sm text-[#999] leading-relaxed">
                       <span
                         className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: '#F59E0B' }}
+                        style={{ backgroundColor: '#FFD4C2' }}
                       />
                       {line}
                     </li>

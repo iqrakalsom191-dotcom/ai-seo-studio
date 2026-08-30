@@ -4,8 +4,8 @@ import toast from 'react-hot-toast'
 import { BookOpenCheck, Type, AlignLeft, Lightbulb } from 'lucide-react'
 
 function badgeColor(score) {
-  if (score >= 70) return '#F59E0B'
-  if (score >= 50) return '#7C3AED'
+  if (score >= 70) return '#FFD4C2'
+  if (score >= 50) return '#FF6B35'
   return '#FF4757'
 }
 
@@ -45,7 +45,7 @@ export default function ReadabilityPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <BookOpenCheck style={{ color: '#7C3AED' }} size={28} />
+        <BookOpenCheck style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>Readability Checker</h1>
       </div>
       <p className="text-[#999] mb-8">Paste your content and get a Flesch Reading Ease score with AI-powered suggestions.</p>
@@ -59,7 +59,7 @@ export default function ReadabilityPage() {
             placeholder="Paste your content here..."
             rows={10}
             className="w-full border bg-[#1a1a1a] text-white placeholder-gray-600 border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 resize-y"
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
@@ -70,7 +70,7 @@ export default function ReadabilityPage() {
           onClick={analyze}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Analyzing...' : '✦ Check Readability'}
         </button>
@@ -86,12 +86,12 @@ export default function ReadabilityPage() {
               </div>
             </div>
             <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-5 text-center flex flex-col items-center justify-center">
-              <Type size={18} style={{ color: '#F59E0B' }} className="mb-1" />
+              <Type size={18} style={{ color: '#FFD4C2' }} className="mb-1" />
               <div className="text-xs font-semibold text-[#999] uppercase mb-1">Words</div>
               <div className="text-xl font-bold text-white">{result.wordCount}</div>
             </div>
             <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-5 text-center flex flex-col items-center justify-center">
-              <AlignLeft size={18} style={{ color: '#F59E0B' }} className="mb-1" />
+              <AlignLeft size={18} style={{ color: '#FFD4C2' }} className="mb-1" />
               <div className="text-xs font-semibold text-[#999] uppercase mb-1">Sentences</div>
               <div className="text-xl font-bold text-white">{result.sentenceCount}</div>
             </div>
@@ -110,15 +110,15 @@ export default function ReadabilityPage() {
           {result.suggestions?.length > 0 && (
             <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6">
               <div className="flex items-center gap-2 mb-4">
-                <Lightbulb size={18} style={{ color: '#7C3AED' }} />
-                <span className="text-sm font-bold text-[#7C3AED]">Improvement Suggestions</span>
+                <Lightbulb size={18} style={{ color: '#FF6B35' }} />
+                <span className="text-sm font-bold text-[#FF6B35]">Improvement Suggestions</span>
               </div>
               <ul className="space-y-3">
                 {result.suggestions.map((s, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-[#999] leading-relaxed">
                     <span
                       className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: '#F59E0B' }}
+                      style={{ backgroundColor: '#FFD4C2' }}
                     />
                     {s}
                   </li>

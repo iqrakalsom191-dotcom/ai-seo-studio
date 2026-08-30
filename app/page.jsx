@@ -44,8 +44,8 @@ function LinkedinIcon(props) {
 
 const COLORS = {
   bg: '#09090B',
-  primary: '#7C3AED',
-  accent: '#F59E0B',
+  primary: '#FF6B35',
+  accent: '#FFD4C2',
   text: '#FAFAFA',
   muted: '#999999',
 }
@@ -208,7 +208,7 @@ export default function Home() {
             </Link>
             <Link
               href="/signup"
-              className="text-sm font-semibold px-4 py-2 rounded-lg hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
+              className="text-sm font-semibold px-4 py-2 rounded-lg hover:-translate-y-0.5 hover:bg-orange-500 transition-all duration-200"
               style={{ background: COLORS.primary, color: COLORS.text }}
             >
               Start Free
@@ -248,7 +248,7 @@ export default function Home() {
                 <Link
                   href="/signup"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-sm font-semibold px-4 py-2.5 rounded-lg text-center hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
+                  className="text-sm font-semibold px-4 py-2.5 rounded-lg text-center hover:-translate-y-0.5 hover:bg-orange-500 transition-all duration-200"
                   style={{ background: COLORS.primary, color: COLORS.text }}
                 >
                   Start Free
@@ -263,7 +263,7 @@ export default function Home() {
       <section className="max-w-6xl w-full mx-auto px-6 pt-40 pb-20 text-center">
         <div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-8"
-          style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: COLORS.primary }}
+          style={{ background: 'rgba(255, 107, 53,0.1)', border: '1px solid rgba(255, 107, 53,0.3)', color: COLORS.primary }}
         >
           <Sparkles size={14} />
           Powered by Groq AI
@@ -282,7 +282,7 @@ export default function Home() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold hover:-translate-y-1 hover:bg-purple-600 transition-all duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg text-sm font-semibold hover:-translate-y-1 hover:bg-orange-500 transition-all duration-200"
             style={{ background: COLORS.primary, color: COLORS.text }}
           >
             Start for free
@@ -325,12 +325,12 @@ export default function Home() {
               <div
                 key={f.title}
                 onClick={() => setShowFeatureModal(true)}
-                className="p-6 rounded-xl border hover:-translate-y-2 hover:border-purple-600 transition-all duration-200 cursor-pointer"
+                className="p-6 rounded-xl border hover:-translate-y-2 hover:border-orange-500 transition-all duration-200 cursor-pointer"
                 style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.08)' }}
               >
                 <div
                   className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
-                  style={{ background: 'rgba(124,58,237,0.1)' }}
+                  style={{ background: 'rgba(255, 107, 53,0.1)' }}
                 >
                   <Icon size={20} color={COLORS.primary} />
                 </div>
@@ -391,11 +391,11 @@ export default function Home() {
 
           <div
             className="p-8 rounded-xl border relative"
-            style={{ background: 'rgba(124,58,237,0.05)', borderColor: 'rgba(124,58,237,0.3)' }}
+            style={{ background: 'rgba(255, 107, 53,0.05)', borderColor: 'rgba(255, 107, 53,0.3)' }}
           >
             <span
               className="absolute top-4 right-4 text-xs font-semibold px-2.5 py-1 rounded-full"
-              style={{ background: 'rgba(245,158,11,0.15)', color: COLORS.accent }}
+              style={{ background: 'rgba(255, 212, 194, 0.15)', color: COLORS.accent }}
             >
               Coming soon
             </span>
@@ -424,7 +424,7 @@ export default function Home() {
           {REVIEWS.map((r) => (
             <div
               key={r.name}
-              className="p-6 rounded-xl border hover:-translate-y-1 hover:border-purple-600 transition-all duration-200"
+              className="p-6 rounded-xl border hover:-translate-y-1 hover:border-orange-500 transition-all duration-200"
               style={{ background: '#111', borderColor: '#1f1f1f' }}
             >
               <div className="flex items-center gap-1 mb-4">
@@ -443,7 +443,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 py-24 border border-purple-900" style={{ background: '#13102a' }}>
+      <section className="px-6 py-24 border border-orange-950" style={{ background: '#1a1a1a' }}>
         <div className="max-w-6xl w-full mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4" style={{ color: COLORS.text }}>
             Ready to start ranking?

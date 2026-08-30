@@ -71,7 +71,7 @@ export default function MetaPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Tag style={{ color: '#7C3AED' }} size={28} />
+        <Tag style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold text-white">Meta Tag Generator</h1>
       </div>
       <p className="text-[#999] mb-8">Generate SEO-optimized title and meta description for any page.</p>
@@ -86,7 +86,7 @@ export default function MetaPage() {
             placeholder="e.g. Best WordPress SEO Plugins"
             className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
             style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           />
         </div>
@@ -100,7 +100,7 @@ export default function MetaPage() {
             placeholder="e.g. WordPress SEO plugins"
             className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
             style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           />
         </div>
@@ -111,7 +111,7 @@ export default function MetaPage() {
           onClick={generate}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Generating...' : '✦ Generate Meta Tags'}
         </button>
@@ -127,7 +127,7 @@ export default function MetaPage() {
               </span>
             </div>
             <p className="text-white text-sm mb-3">{result.title}</p>
-            <button onClick={() => copy(result.title)} className="flex items-center gap-2 text-xs text-[#7C3AED] hover:opacity-80">
+            <button onClick={() => copy(result.title)} className="flex items-center gap-2 text-xs text-[#FF6B35] hover:opacity-80">
               <Copy size={14} /> Copy Title
             </button>
           </div>
@@ -140,7 +140,7 @@ export default function MetaPage() {
               </span>
             </div>
             <p className="text-white text-sm mb-3">{result.description}</p>
-            <button onClick={() => copy(result.description)} className="flex items-center gap-2 text-xs text-[#7C3AED] hover:opacity-80">
+            <button onClick={() => copy(result.description)} className="flex items-center gap-2 text-xs text-[#FF6B35] hover:opacity-80">
               <Copy size={14} /> Copy Description
             </button>
           </div>
@@ -156,7 +156,7 @@ export default function MetaPage() {
             onClick={saveToLibrary}
             disabled={saving || saved}
             className="w-full py-3 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50"
-            style={{ backgroundColor: '#7C3AED' }}
+            style={{ backgroundColor: '#FF6B35' }}
           >
             <Save size={16} />
             {saving ? 'Saving...' : saved ? 'Saved to Library ✓' : 'Save to Library'}

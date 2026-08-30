@@ -73,7 +73,7 @@ export default function WordCountPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <FileText style={{ color: '#7C3AED' }} size={28} />
+        <FileText style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>Word Count & SEO</h1>
       </div>
       <p className="text-[#999] mb-8">Analyze your content's stats and get AI-powered SEO recommendations.</p>
@@ -87,7 +87,7 @@ export default function WordCountPage() {
             placeholder="Paste your content here..."
             rows={10}
             className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 resize-none"
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
@@ -99,7 +99,7 @@ export default function WordCountPage() {
             onChange={(e) => setKeyword(e.target.value)}
             placeholder="e.g. content marketing"
             className="w-full border border-[#1f1f1f] bg-[#1a1a1a] text-white rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2"
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
@@ -108,7 +108,7 @@ export default function WordCountPage() {
           onClick={analyze}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Analyzing...' : '✦ Analyze'}
         </button>
@@ -117,7 +117,7 @@ export default function WordCountPage() {
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-6">
         {cards.map(({ label, value, icon: Icon }) => (
           <div key={label} className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-4 flex flex-col items-center text-center gap-2">
-            <Icon style={{ color: '#F59E0B' }} size={20} />
+            <Icon style={{ color: '#FFD4C2' }} size={20} />
             <div className="text-lg font-bold" style={{ color: '#FAFAFA' }}>{value}</div>
             <div className="text-xs text-[#999]">{label}</div>
           </div>
@@ -126,7 +126,7 @@ export default function WordCountPage() {
 
       {recommendations && (
         <div className="mt-6 bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-6">
-          <h2 className="font-bold text-[#7C3AED] mb-4 uppercase tracking-wide text-sm">AI Recommendations</h2>
+          <h2 className="font-bold text-[#FF6B35] mb-4 uppercase tracking-wide text-sm">AI Recommendations</h2>
           <ul className="space-y-3">
             {recommendations
               .split('\n')
@@ -136,7 +136,7 @@ export default function WordCountPage() {
                 <li key={i} className="flex items-start gap-3 text-sm text-[#ccc] leading-relaxed">
                   <span
                     className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                    style={{ backgroundColor: '#F59E0B' }}
+                    style={{ backgroundColor: '#FFD4C2' }}
                   />
                   {line}
                 </li>

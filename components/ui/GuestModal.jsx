@@ -25,9 +25,9 @@ export default function GuestModal({ open, onClose }) {
 
         <div
           className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full"
-          style={{ backgroundColor: "rgba(108,71,255,0.12)" }}
+          style={{ backgroundColor: "rgba(255, 107, 53,0.12)" }}
         >
-          <Lock size={26} color="#6C47FF" />
+          <Lock size={26} color="#FF6B35" />
         </div>
 
         <h2 className="text-xl font-bold text-zinc-900 dark:text-white">
@@ -42,8 +42,8 @@ export default function GuestModal({ open, onClose }) {
           href="/signup"
           className="mt-6 block w-full rounded-lg py-3 text-sm font-semibold text-white transition-opacity hover:opacity-90"
           style={{
-            backgroundColor: "#6C47FF",
-            boxShadow: "0 4px 15px rgba(108,71,255,0.3)",
+            backgroundColor: "#FF6B35",
+            boxShadow: "0 4px 15px rgba(255, 107, 53,0.3)",
           }}
         >
           Sign Up Free

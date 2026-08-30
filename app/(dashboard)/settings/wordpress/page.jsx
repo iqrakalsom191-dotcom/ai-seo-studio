@@ -113,7 +113,7 @@ export default function WordPressSettingsPage() {
   return (
     <div className="max-w-2xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Globe size={28} style={{ color: '#7C3AED' }} />
+        <Globe size={28} style={{ color: '#FF6B35' }} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>WordPress Connection</h1>
       </div>
       <p className="text-[#999] mb-8">Connect your WordPress site to publish content directly from AI SEO Studio.</p>
@@ -134,7 +134,7 @@ export default function WordPressSettingsPage() {
             onChange={(e) => setSiteUrl(e.target.value)}
             placeholder="https://yoursite.com"
             disabled={loading}
-            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] disabled:opacity-50"
+            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] disabled:opacity-50"
           />
         </div>
 
@@ -146,7 +146,7 @@ export default function WordPressSettingsPage() {
             onChange={(e) => setUsername(e.target.value)}
             placeholder="e.g. admin"
             disabled={loading}
-            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] disabled:opacity-50"
+            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] disabled:opacity-50"
           />
         </div>
 
@@ -158,7 +158,7 @@ export default function WordPressSettingsPage() {
             onChange={(e) => setAppPassword(e.target.value)}
             placeholder="xxxx xxxx xxxx xxxx xxxx xxxx"
             disabled={loading}
-            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#7C3AED] disabled:opacity-50"
+            className="w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] disabled:opacity-50"
           />
           <p className="text-xs text-[#999] mt-1">
             Generate one from your WordPress admin under Users → Profile → Application Passwords.
@@ -178,7 +178,7 @@ export default function WordPressSettingsPage() {
             onClick={save}
             disabled={saving || loading}
             className="flex-1 flex items-center justify-center gap-2 text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-            style={{ backgroundColor: '#7C3AED' }}
+            style={{ backgroundColor: '#FF6B35' }}
           >
             <Save size={16} />
             {saving ? 'Saving...' : 'Save'}

@@ -12,16 +12,16 @@ const COLORS = {
   bg: '#09090B',
   card: '#111',
   border: '#1f1f1f',
-  primary: '#7C3AED',
-  accent: '#F59E0B',
+  primary: '#FF6B35',
+  accent: '#FFD4C2',
   text: '#FAFAFA',
   muted: '#999999',
 }
 
 const typeBadge = {
-  blog:    { label: 'Blog',    bg: 'rgba(124,58,237,0.15)', color: '#a78bfa' },
-  meta:    { label: 'Meta',    bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
-  keyword: { label: 'Keyword', bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
+  blog:    { label: 'Blog',    bg: 'rgba(255, 107, 53,0.15)', color: '#a78bfa' },
+  meta:    { label: 'Meta',    bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
+  keyword: { label: 'Keyword', bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
 }
 
 const SEO_TIPS = [
@@ -71,15 +71,15 @@ function MarkdownPreview({ content }) {
       {lines.map((line, idx) => {
         switch (line.type) {
           case 'h3':
-            return <h3 key={idx} style={{ color: '#7C3AED', fontSize: '18px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h3>
+            return <h3 key={idx} style={{ color: '#FF6B35', fontSize: '18px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h3>
           case 'h2':
-            return <h2 key={idx} style={{ color: '#7C3AED', fontSize: '22px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h2>
+            return <h2 key={idx} style={{ color: '#FF6B35', fontSize: '22px', fontWeight: 700, margin: '16px 0 8px' }}>{line.text}</h2>
           case 'bold':
             return <p key={idx} style={{ color: '#FAFAFA', fontWeight: 700, margin: '4px 0' }}>{line.text}</p>
           case 'bullet':
             return (
               <div key={idx} style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', margin: '4px 0', color: '#999999', lineHeight: 1.7 }}>
-                <span style={{ color: '#F59E0B', marginTop: '2px' }}>●</span>
+                <span style={{ color: '#FFD4C2', marginTop: '2px' }}>●</span>
                 <span>{line.text}</span>
               </div>
             )
@@ -195,13 +195,13 @@ export default function DashboardPage() {
     <div className="p-6 md:p-8" style={{ background: COLORS.bg, minHeight: '100vh' }}>
     <div className="max-w-7xl w-full">
       <style>{`
-        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,0.15) !important; }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(255, 107, 53,0.15) !important; }
         .stat-card { transition: all 0.2s ease; }
         .action-card:hover { transform: translateY(-4px); }
         .action-card { transition: all 0.2s ease; }
-        .tool-card:hover { transform: translateY(-2px); border-color: #7C3AED !important; box-shadow: 0 8px 20px rgba(124,58,237,0.15) !important; }
+        .tool-card:hover { transform: translateY(-2px); border-color: #FF6B35 !important; box-shadow: 0 8px 20px rgba(255, 107, 53,0.15) !important; }
         .tool-card { transition: all 0.2s ease; }
-        .activity-row:hover { background: rgba(124,58,237,0.08) !important; cursor: pointer; }
+        .activity-row:hover { background: rgba(255, 107, 53,0.08) !important; cursor: pointer; }
         .activity-row:hover .activity-arrow { opacity: 1 !important; transform: translateX(2px); }
         .activity-row { transition: background 0.15s ease; }
         .activity-arrow { transition: all 0.15s ease; }
@@ -243,7 +243,7 @@ export default function DashboardPage() {
 
       {/* Guest Mode Banner */}
       {user?.is_anonymous && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', background: '#13102a', border: '1px solid #6b21a8', borderRadius: '14px', padding: '16px 24px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap', background: '#1a1a1a', border: '1px solid #6b21a8', borderRadius: '14px', padding: '16px 24px', marginBottom: '24px' }}>
           <p style={{ fontSize: '14px', fontWeight: '600', color: COLORS.text, margin: 0 }}>
             You are using Guest Mode — your data won't be saved. Sign up free to save your work!
           </p>
@@ -318,7 +318,7 @@ export default function DashboardPage() {
         </div>
         <div className="w-full bg-[#1f1f1f] rounded-full h-2 mt-3">
           <div
-            className="bg-[#7C3AED] h-2 rounded-full transition-all"
+            className="bg-[#FF6B35] h-2 rounded-full transition-all"
             style={{ width: `${Math.min((todayCount / 50) * 100, 100)}%`, background: usageWarning ? COLORS.accent : COLORS.primary }}
           />
         </div>
@@ -353,9 +353,9 @@ export default function DashboardPage() {
         <h2 className="text-lg font-semibold text-white mb-4">Tools</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6" style={{ gap: '14px' }}>
           {tools.map(({ label, icon: Icon, href }) => (
-            <Link key={href} href={href} className="tool-card hover:bg-[#1a0a3e] min-h-[100px] flex flex-col items-center justify-center gap-2"
+            <Link key={href} href={href} className="tool-card hover:bg-[#1a1a1a] min-h-[100px] flex flex-col items-center justify-center gap-2"
               style={{ textDecoration: 'none', background: COLORS.card, borderRadius: '14px', padding: '18px 12px', border: `1px solid ${COLORS.border}`, textAlign: 'center' }}>
-              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#1a0a3e', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: '38px', height: '38px', borderRadius: '10px', background: '#1a1a1a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Icon size={18} style={{ color: COLORS.primary }} />
               </div>
               <span style={{ fontSize: '12px', fontWeight: '600', color: COLORS.text }}>{label}</span>
@@ -400,7 +400,7 @@ export default function DashboardPage() {
               ? <p style={{ fontSize: '13px', color: COLORS.muted, textAlign: 'center', padding: '24px 0' }}>No keywords saved yet</p>
               : <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {topKeywords.map((item) => (
-                    <span key={item.id} style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', background: 'rgba(245,158,11,0.12)', color: COLORS.accent, border: '1px solid rgba(245,158,11,0.25)' }}>
+                    <span key={item.id} style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', background: 'rgba(255, 212, 194, 0.12)', color: COLORS.accent, border: '1px solid rgba(255, 212, 194, 0.25)' }}>
                       {item.keyword || item.title}
                     </span>
                   ))}
@@ -414,7 +414,7 @@ export default function DashboardPage() {
           <div style={{ background: COLORS.card, borderRadius: '16px', border: `1px solid ${COLORS.border}`, overflow: 'hidden' }}>
             {recent.length === 0 ? (
               <div style={{ padding: '48px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(124,58,237,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(255, 107, 53,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                   <Clock size={24} style={{ color: COLORS.primary }} />
                 </div>
                 <div style={{ fontSize: '15px', fontWeight: '600', color: COLORS.text, marginBottom: '6px' }}>No activity yet</div>
@@ -444,8 +444,8 @@ export default function DashboardPage() {
       </div>
 
       {/* SEO Tip */}
-      <div className="border-l-4 border-amber-500" style={{ background: '#13102a', borderTop: `1px solid ${COLORS.border}`, borderRight: `1px solid ${COLORS.border}`, borderBottom: `1px solid ${COLORS.border}`, borderRadius: '16px', padding: '24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <div className="border-l-4 border-amber-500" style={{ background: '#1a1a1a', borderTop: `1px solid ${COLORS.border}`, borderRight: `1px solid ${COLORS.border}`, borderBottom: `1px solid ${COLORS.border}`, borderRadius: '16px', padding: '24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+        <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(255, 212, 194, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Lightbulb size={18} style={{ color: COLORS.accent }} />
         </div>
         <div>

@@ -138,17 +138,17 @@ export default function DashboardLayout({ children }) {
     <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        .nav-link:hover { background: rgba(124,58,237,0.15) !important; color: #fff !important; }
-        .nav-link:hover svg { color: #7C3AED !important; }
+        .nav-link:hover { background: rgba(255, 107, 53,0.15) !important; color: #fff !important; }
+        .nav-link:hover svg { color: #FF6B35 !important; }
         .logout-btn:hover { background: rgba(255,255,255,0.07) !important; color: #fff !important; }
         .nav-link { transition: all 150ms ease !important; }
         .logout-btn { transition: all 0.18s ease !important; }
-        .nav-group-toggle:hover { background: rgba(124,58,237,0.15) !important; color: #fff !important; }
+        .nav-group-toggle:hover { background: rgba(255, 107, 53,0.15) !important; color: #fff !important; }
         .nav-group-toggle { transition: all 150ms ease !important; }
         .nav-group-chevron { transition: transform 0.25s ease !important; }
         .nav-group-body { transition: grid-template-rows 0.25s ease !important; display: grid; overflow: hidden; }
         .nav-group-body[data-open="false"] { height: 0; overflow: hidden; visibility: hidden; }
-        .flyout-link:hover { background: rgba(124,58,237,0.2) !important; color: #fff !important; }
+        .flyout-link:hover { background: rgba(255, 107, 53,0.2) !important; color: #fff !important; }
         .flyout-link { transition: all 150ms ease !important; }
       `}</style>
 
@@ -165,12 +165,12 @@ export default function DashboardLayout({ children }) {
           <Menu size={22} />
         </button>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <BrainCircuit size={20} color="#7C3AED" />
+          <BrainCircuit size={20} color="#FF6B35" />
           <span style={{ fontSize: '14px', fontWeight: '800', color: '#fff' }}>AI SEO Studio</span>
         </div>
         <div style={{
           width: '30px', height: '30px', borderRadius: '50%', flexShrink: 0,
-          background: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: '#FF6B35', display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: '12px', fontWeight: '700', color: '#fff'
         }}>
           {(user?.user_metadata?.full_name || user?.email || 'U')[0].toUpperCase()}
@@ -197,7 +197,7 @@ export default function DashboardLayout({ children }) {
         {/* Logo */}
         <div className="hidden md:block" style={{ padding: '28px 20px 24px', borderBottom: '1px solid #1f1f1f' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <BrainCircuit size={26} color="#7C3AED" />
+            <BrainCircuit size={26} color="#FF6B35" />
             <span style={{
               fontSize: '16px', fontWeight: '800', letterSpacing: '-0.4px', color: '#fff'
             }}>AI SEO Studio</span>
@@ -207,7 +207,7 @@ export default function DashboardLayout({ children }) {
         {/* Mobile Sidebar Header */}
         <div className="md:hidden flex items-center justify-between" style={{ padding: '16px 20px', borderBottom: '1px solid #1f1f1f' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <BrainCircuit size={22} color="#7C3AED" />
+            <BrainCircuit size={22} color="#FF6B35" />
             <span style={{ fontSize: '15px', fontWeight: '800', color: '#fff' }}>AI SEO Studio</span>
           </div>
           <button
@@ -241,9 +241,9 @@ export default function DashboardLayout({ children }) {
                   }}
                   style={{
                     width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                    background: hasActiveChild ? 'rgba(124,58,237,0.12)' : 'transparent',
+                    background: hasActiveChild ? 'rgba(255, 107, 53,0.12)' : 'transparent',
                     border: 'none', cursor: 'pointer',
-                    borderLeft: hasActiveChild ? '3px solid #7C3AED' : '3px solid transparent',
+                    borderLeft: hasActiveChild ? '3px solid #FF6B35' : '3px solid transparent',
                     fontSize: '14px', fontWeight: '600', letterSpacing: '0.08em',
                     textTransform: 'uppercase', color: '#999999',
                     padding: '8px 14px', borderRadius: '8px',
@@ -296,11 +296,11 @@ export default function DashboardLayout({ children }) {
                             padding: '8px 10px', borderRadius: '8px', textDecoration: 'none',
                             fontSize: '13px', fontWeight: isActive ? '600' : '500',
                             width: '100%',
-                            background: isActive ? '#7C3AED' : 'transparent',
+                            background: isActive ? '#FF6B35' : 'transparent',
                             color: isActive ? '#fff' : '#999999',
                           }}
                         >
-                          <Icon size={15} strokeWidth={isActive ? 2.5 : 1.8} style={{ color: isActive ? '#fff' : '#7C3AED', flexShrink: 0 }} />
+                          <Icon size={15} strokeWidth={isActive ? 2.5 : 1.8} style={{ color: isActive ? '#fff' : '#FF6B35', flexShrink: 0 }} />
                           {label}
                         </Link>
                       )
@@ -327,7 +327,7 @@ export default function DashboardLayout({ children }) {
                             padding: '10px 14px', borderRadius: '10px', textDecoration: 'none',
                             fontSize: '14px', fontWeight: isActive ? '600' : '500',
                             position: 'relative', overflow: 'hidden',
-                            background: isActive ? '#7C3AED' : 'transparent',
+                            background: isActive ? '#FF6B35' : 'transparent',
                             color: isActive ? '#fff' : '#999999',
                             border: '1px solid transparent',
                           }}
@@ -335,7 +335,7 @@ export default function DashboardLayout({ children }) {
                           <Icon
                             size={17}
                             strokeWidth={isActive ? 2.5 : 1.8}
-                            style={{ color: isActive ? '#fff' : '#7C3AED', flexShrink: 0 }}
+                            style={{ color: isActive ? '#fff' : '#FF6B35', flexShrink: 0 }}
                           />
                           {label}
                           {isActive && (
@@ -364,7 +364,7 @@ export default function DashboardLayout({ children }) {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{
                 width: '32px', height: '32px', borderRadius: '50%', flexShrink: 0,
-                background: '#7C3AED',
+                background: '#FF6B35',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: '13px', fontWeight: '700', color: '#fff'
               }}>

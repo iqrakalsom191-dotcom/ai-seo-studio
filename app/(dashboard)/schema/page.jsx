@@ -14,9 +14,9 @@ function highlightJson(json) {
   return escaped.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(\.\d+)?([eE][+-]?\d+)?)/g,
     (match) => {
-      let color = '#F59E0B' // number
+      let color = '#FFD4C2' // number
       if (/^"/.test(match)) {
-        color = /:$/.test(match) ? '#7C3AED' : '#E3A008' // key vs string
+        color = /:$/.test(match) ? '#FF6B35' : '#E3A008' // key vs string
       } else if (/true|false/.test(match)) {
         color = '#FF6B6B'
       } else if (/null/.test(match)) {
@@ -93,7 +93,7 @@ export default function SchemaPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Braces style={{ color: '#7C3AED' }} size={28} />
+        <Braces style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold text-white">Schema Markup</h1>
       </div>
       <p className="text-[#999] mb-8">Generate valid JSON-LD schema markup for your content.</p>
@@ -106,7 +106,7 @@ export default function SchemaPage() {
             onChange={(e) => setType(e.target.value)}
             className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white"
             style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           >
             {SCHEMA_TYPES.map((t) => (
@@ -126,7 +126,7 @@ export default function SchemaPage() {
                 placeholder="e.g. The Ultimate Guide to SEO"
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -139,7 +139,7 @@ export default function SchemaPage() {
                 placeholder="Short summary of the article"
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -152,7 +152,7 @@ export default function SchemaPage() {
                 placeholder="e.g. Jane Doe"
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -164,7 +164,7 @@ export default function SchemaPage() {
                 onChange={(e) => updateField('date', e.target.value)}
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -181,7 +181,7 @@ export default function SchemaPage() {
               rows={8}
               className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none resize-none text-white placeholder-gray-600"
               style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-              onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+              onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
               onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
             />
           </div>
@@ -198,7 +198,7 @@ export default function SchemaPage() {
                 placeholder="e.g. Wireless Noise-Cancelling Headphones"
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -211,7 +211,7 @@ export default function SchemaPage() {
                 placeholder="e.g. 199.99"
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -224,7 +224,7 @@ export default function SchemaPage() {
                 placeholder="Short product description"
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -237,7 +237,7 @@ export default function SchemaPage() {
                 placeholder="e.g. Acme"
                 className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none text-white placeholder-gray-600"
                 style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-                onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+                onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
                 onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
               />
             </div>
@@ -250,7 +250,7 @@ export default function SchemaPage() {
           onClick={generate}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Generating...' : '✦ Generate Schema'}
         </button>
@@ -263,7 +263,7 @@ export default function SchemaPage() {
             <button
               onClick={copy}
               className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition"
-              style={{ borderColor: '#1f1f1f', color: copied ? '#F59E0B' : '#7C3AED' }}
+              style={{ borderColor: '#1f1f1f', color: copied ? '#FFD4C2' : '#FF6B35' }}
             >
               {copied ? <Check size={14} /> : <Copy size={14} />}
               {copied ? 'Copied!' : 'Copy'}

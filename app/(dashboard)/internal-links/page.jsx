@@ -43,7 +43,7 @@ export default function InternalLinksPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Link2 style={{ color: '#7C3AED' }} size={28} />
+        <Link2 style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>Internal Links</h1>
       </div>
       <p className="text-[#999] mb-8">Find the most relevant internal links for your content, with suggested anchor text.</p>
@@ -57,7 +57,7 @@ export default function InternalLinksPage() {
             placeholder="Paste your main content here..."
             rows={8}
             className="w-full border bg-[#1a1a1a] text-white placeholder-gray-600 border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 resize-none"
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
@@ -69,7 +69,7 @@ export default function InternalLinksPage() {
             placeholder={'https://example.com/blog/seo-basics\nhttps://example.com/blog/keyword-research\nhttps://example.com/services/content-writing'}
             rows={6}
             className="w-full border bg-[#1a1a1a] text-white placeholder-gray-600 border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 resize-none"
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '')}
           />
         </div>
@@ -78,7 +78,7 @@ export default function InternalLinksPage() {
           onClick={suggest}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Analyzing...' : '✦ Suggest Internal Links'}
         </button>
@@ -88,13 +88,13 @@ export default function InternalLinksPage() {
         <div className="mt-6 space-y-3">
           {suggestions.map((s, i) => (
             <div key={i} className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-5">
-              <div className="flex items-center gap-2 text-sm font-semibold break-all" style={{ color: '#7C3AED' }}>
+              <div className="flex items-center gap-2 text-sm font-semibold break-all" style={{ color: '#FF6B35' }}>
                 <Link2 size={14} className="flex-shrink-0" />
                 {s.url}
               </div>
               <div className="flex items-center gap-2 mt-3 text-sm text-[#999]">
-                <ArrowRight size={14} style={{ color: '#F59E0B' }} className="flex-shrink-0" />
-                <span className="font-bold text-[#7C3AED]">Anchor text:</span> "{s.anchor}"
+                <ArrowRight size={14} style={{ color: '#FFD4C2' }} className="flex-shrink-0" />
+                <span className="font-bold text-[#FF6B35]">Anchor text:</span> "{s.anchor}"
               </div>
               <p className="mt-2 text-sm text-[#999]">{s.reason}</p>
             </div>

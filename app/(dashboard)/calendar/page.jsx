@@ -5,9 +5,9 @@ import toast from 'react-hot-toast'
 import { CalendarDays, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
 
 const TYPE_COLORS = {
-  blog: { bg: 'rgba(124,58,237,0.15)', color: '#a78bfa' },
-  meta: { bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
-  social: { bg: 'rgba(245,158,11,0.15)', color: '#F59E0B' },
+  blog: { bg: 'rgba(255, 107, 53,0.15)', color: '#a78bfa' },
+  meta: { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
+  social: { bg: 'rgba(255, 212, 194, 0.15)', color: '#FFD4C2' },
 }
 
 const MONTH_NAMES = [
@@ -131,7 +131,7 @@ export default function CalendarPage() {
   return (
     <div className="max-w-6xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <CalendarDays style={{ color: '#7C3AED' }} size={28} />
+        <CalendarDays style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>Content Calendar</h1>
       </div>
       <p className="text-[#999] mb-6">Plan and track your content across blog, meta, and social.</p>
@@ -142,7 +142,7 @@ export default function CalendarPage() {
             onClick={prevMonth}
             className="p-2 rounded-lg border border-[#1f1f1f] hover:bg-[#1a1a1a] transition"
           >
-            <ChevronLeft size={18} style={{ color: '#7C3AED' }} />
+            <ChevronLeft size={18} style={{ color: '#FF6B35' }} />
           </button>
           <span className="text-lg font-semibold text-white w-40 text-center">
             {MONTH_NAMES[month]} {year}
@@ -151,14 +151,14 @@ export default function CalendarPage() {
             onClick={nextMonth}
             className="p-2 rounded-lg border border-[#1f1f1f] hover:bg-[#1a1a1a] transition"
           >
-            <ChevronRight size={18} style={{ color: '#7C3AED' }} />
+            <ChevronRight size={18} style={{ color: '#FF6B35' }} />
           </button>
         </div>
 
         <button
           onClick={() => setShowForm((s) => !s)}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-white text-sm font-semibold hover:opacity-90 transition"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           <Plus size={16} />
           Add Content Plan
@@ -224,7 +224,7 @@ export default function CalendarPage() {
             onClick={handleAdd}
             disabled={saving}
             className="w-full text-white font-semibold py-2.5 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-            style={{ backgroundColor: '#7C3AED' }}
+            style={{ backgroundColor: '#FF6B35' }}
           >
             {saving ? 'Saving...' : 'Save Content Plan'}
           </button>
@@ -245,13 +245,13 @@ export default function CalendarPage() {
             <div
               key={i}
               className="min-h-[110px] border-b border-r border-[#1f1f1f] p-2 align-top"
-              style={{ backgroundColor: d && isToday(d) ? 'rgba(124,58,237,0.08)' : '#111111' }}
+              style={{ backgroundColor: d && isToday(d) ? 'rgba(255, 107, 53,0.08)' : '#111111' }}
             >
               {d && (
                 <>
                   <div
                     className="text-xs font-semibold mb-1.5"
-                    style={{ color: isToday(d) ? '#7C3AED' : '#999999' }}
+                    style={{ color: isToday(d) ? '#FF6B35' : '#999999' }}
                   >
                     {d}
                   </div>

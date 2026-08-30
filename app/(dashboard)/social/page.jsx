@@ -61,7 +61,7 @@ export default function SocialPage() {
   return (
     <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Share2 style={{ color: '#7C3AED' }} size={28} />
+        <Share2 style={{ color: '#FF6B35' }} size={28} />
         <h1 className="text-2xl font-bold text-white">Social Captions</h1>
       </div>
       <p className="text-[#999] mb-8">Paste your blog content, pick platforms, and generate ready-to-post captions.</p>
@@ -76,7 +76,7 @@ export default function SocialPage() {
             rows={8}
             className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none resize-y text-white placeholder-gray-600"
             style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
-            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onFocus={(e) => (e.target.style.borderColor = '#FF6B35')}
             onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           />
         </div>
@@ -91,9 +91,9 @@ export default function SocialPage() {
                   key={label}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer text-sm font-medium transition"
                   style={{
-                    borderColor: isChecked ? '#7C3AED' : '#1f1f1f',
-                    backgroundColor: isChecked ? 'rgba(124, 58, 237, 0.15)' : '#111111',
-                    color: isChecked ? '#7C3AED' : '#999999',
+                    borderColor: isChecked ? '#FF6B35' : '#1f1f1f',
+                    backgroundColor: isChecked ? 'rgba(255, 107, 53, 0.15)' : '#111111',
+                    color: isChecked ? '#FF6B35' : '#999999',
                   }}
                 >
                   <input
@@ -116,7 +116,7 @@ export default function SocialPage() {
           onClick={generate}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#7C3AED' }}
+          style={{ backgroundColor: '#FF6B35' }}
         >
           {loading ? 'Generating...' : '✦ Generate Captions'}
         </button>
@@ -127,11 +127,11 @@ export default function SocialPage() {
           {results.map((r, i) => (
             <div key={i} className="rounded-2xl border p-6" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-semibold" style={{ color: '#F59E0B' }}>{r.platform}</span>
+                <span className="text-sm font-semibold" style={{ color: '#FFD4C2' }}>{r.platform}</span>
                 <button
                   onClick={() => copy(r.caption, r.platform)}
                   className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition"
-                  style={{ borderColor: '#1f1f1f', color: copiedPlatform === r.platform ? '#F59E0B' : '#7C3AED' }}
+                  style={{ borderColor: '#1f1f1f', color: copiedPlatform === r.platform ? '#FFD4C2' : '#FF6B35' }}
                 >
                   {copiedPlatform === r.platform ? <Check size={14} /> : <Copy size={14} />}
                   {copiedPlatform === r.platform ? 'Copied!' : 'Copy'}
