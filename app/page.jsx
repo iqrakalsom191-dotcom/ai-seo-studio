@@ -13,6 +13,10 @@ import {
   BarChart3,
   ShieldCheck,
   ArrowRight,
+  X,
+  Twitter,
+  Github,
+  Linkedin,
 } from 'lucide-react'
 
 const COLORS = {
@@ -84,6 +88,8 @@ const STATS = [
 export default function Home() {
   const router = useRouter()
   const [guestLoading, setGuestLoading] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [showFeatureModal, setShowFeatureModal] = useState(false)
 
   useEffect(() => {
     async function checkAuth() {
@@ -95,6 +101,14 @@ export default function Home() {
     }
     checkAuth()
   }, [router])
+
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 8)
+    }
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   async function handleGuestLogin() {
     setGuestLoading(true)
@@ -111,8 +125,8 @@ export default function Home() {
     <div style={{ background: COLORS.bg, color: COLORS.text, minHeight: '100vh' }} className="font-sans">
       {/* Navbar */}
       <header
-        className="sticky top-0 z-50 border-b backdrop-blur"
-        style={{ background: 'rgba(9,9,11,0.8)', borderColor: 'rgba(255,255,255,0.08)' }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-200 ${scrolled ? 'backdrop-blur border-b' : 'border-b border-transparent'}`}
+        style={{ background: scrolled ? 'rgba(9,9,11,0.9)' : 'transparent', borderColor: scrolled ? 'rgba(255,255,255,0.08)' : 'transparent' }}
       >
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
@@ -121,22 +135,22 @@ export default function Home() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-sm hover:text-white transition-colors" style={{ color: COLORS.muted }}>Features</a>
-            <a href="#how-it-works" className="text-sm hover:text-white transition-colors" style={{ color: COLORS.muted }}>How it works</a>
-            <a href="#pricing" className="text-sm hover:text-white transition-colors" style={{ color: COLORS.muted }}>Pricing</a>
+            <a href="#features" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Features</a>
+            <a href="#how-it-works" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>How it works</a>
+            <a href="#pricing" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Pricing</a>
           </nav>
 
           <div className="flex items-center gap-3">
             <Link
               href="/login"
-              className="text-sm font-medium px-4 py-2 rounded-lg hover:text-white transition-colors"
+              className="text-sm font-medium px-4 py-2 rounded-lg hover:text-white transition-colors duration-200"
               style={{ color: COLORS.muted }}
             >
               Sign In
             </Link>
             <Link
               href="/signup"
-              className="text-sm font-semibold px-4 py-2 rounded-lg transition-opacity hover:opacity-90"
+              className="text-sm font-semibold px-4 py-2 rounded-lg hover:-translate-y-0.5 transition-all duration-200"
               style={{ background: COLORS.primary, color: COLORS.text }}
             >
               Start Free
@@ -146,7 +160,7 @@ export default function Home() {
       </header>
 
       {/* Hero */}
-      <section className="max-w-5xl mx-auto px-6 pt-24 pb-20 text-center">
+      <section className="max-w-5xl mx-auto px-6 pt-40 pb-20 text-center">
         <div
           className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium mb-8"
           style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: COLORS.primary }}
@@ -210,7 +224,8 @@ export default function Home() {
             return (
               <div
                 key={f.title}
-                className="p-6 rounded-xl border transition-colors hover:border-white/20"
+                onClick={() => setShowFeatureModal(true)}
+                className="p-6 rounded-xl border hover:-translate-y-2 hover:border-purple-600 transition-all duration-200 cursor-pointer"
                 style={{ background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.08)' }}
               >
                 <div
@@ -267,7 +282,7 @@ export default function Home() {
             <div className="text-4xl font-extrabold mb-6">$0</div>
             <Link
               href="/signup"
-              className="block text-center px-4 py-2.5 rounded-lg text-sm font-semibold border transition-colors hover:bg-white/5"
+              className="block text-center px-4 py-2.5 rounded-lg text-sm font-semibold border hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200"
               style={{ borderColor: 'rgba(255,255,255,0.15)', color: COLORS.text }}
             >
               Start Free
@@ -289,7 +304,7 @@ export default function Home() {
             <div className="text-4xl font-extrabold mb-6">—</div>
             <button
               disabled
-              className="block w-full text-center px-4 py-2.5 rounded-lg text-sm font-semibold cursor-not-allowed"
+              className="block w-full text-center px-4 py-2.5 rounded-lg text-sm font-semibold cursor-not-allowed hover:-translate-y-0.5 transition-all duration-200"
               style={{ background: 'rgba(255,255,255,0.05)', color: COLORS.muted }}
             >
               Coming Soon
@@ -299,7 +314,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 py-24" style={{ background: 'linear-gradient(135deg, #2E1065 0%, #4C1D95 60%, #7C3AED 100%)' }}>
+      <section className="px-6 py-24 border border-purple-900" style={{ background: '#13102a' }}>
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4" style={{ color: COLORS.text }}>
             Ready to start ranking?
@@ -310,7 +325,7 @@ export default function Home() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               href="/signup"
-              className="px-6 py-3 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90"
+              className="px-6 py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 transition-all duration-200"
               style={{ background: COLORS.text, color: '#1A1A2E' }}
             >
               Start for free
@@ -318,7 +333,7 @@ export default function Home() {
             <button
               onClick={handleGuestLogin}
               disabled={guestLoading}
-              className="px-6 py-3 rounded-lg text-sm font-semibold border transition-colors hover:bg-white/10"
+              className="px-6 py-3 rounded-lg text-sm font-semibold border hover:-translate-y-0.5 transition-all duration-200"
               style={{ borderColor: 'rgba(255,255,255,0.4)', color: COLORS.text, cursor: guestLoading ? 'not-allowed' : 'pointer' }}
             >
               {guestLoading ? 'Signing in...' : 'Try as Guest'}
@@ -328,24 +343,131 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
-        <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <Link href="/" className="flex items-center gap-2">
-            <BrainCircuit size={18} color={COLORS.primary} />
-            <span className="font-semibold" style={{ color: COLORS.text }}>AI SEO Studio</span>
-          </Link>
+      <footer className="border-t border-white/5" style={{ background: COLORS.bg }}>
+        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-5 gap-10">
+          <div className="md:col-span-1">
+            <Link href="/" className="flex items-center gap-2 mb-3">
+              <BrainCircuit size={20} color={COLORS.primary} />
+              <span className="font-semibold" style={{ color: COLORS.text }}>AI SEO Studio</span>
+            </Link>
+            <p className="text-sm leading-relaxed" style={{ color: COLORS.muted }}>
+              SEO content that ranks — written by AI.
+            </p>
+          </div>
 
-          <p className="text-sm" style={{ color: COLORS.muted }}>
-            © {new Date().getFullYear()} AI SEO Studio. All rights reserved.
-          </p>
+          <div>
+            <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>Product</h4>
+            <ul className="space-y-3">
+              {['Features', 'Pricing', 'Blog', 'Changelog'].map((item) => (
+                <li key={item}>
+                  <a href="#" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>{item}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <div className="flex items-center gap-6">
-            <a href="#features" className="text-sm hover:text-white transition-colors" style={{ color: COLORS.muted }}>Features</a>
-            <a href="#pricing" className="text-sm hover:text-white transition-colors" style={{ color: COLORS.muted }}>Pricing</a>
-            <Link href="/login" className="text-sm hover:text-white transition-colors" style={{ color: COLORS.muted }}>Sign In</Link>
+          <div>
+            <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>Resources</h4>
+            <ul className="space-y-3">
+              {['Documentation', 'Guides', 'API'].map((item) => (
+                <li key={item}>
+                  <a href="#" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>{item}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>Company</h4>
+            <ul className="space-y-3">
+              {['About', 'Contact', 'Careers'].map((item) => (
+                <li key={item}>
+                  <a href="#" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>{item}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold mb-4" style={{ color: COLORS.text }}>Legal</h4>
+            <ul className="space-y-3">
+              {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
+                <li key={item}>
+                  <a href="#" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>{item}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div className="border-t border-white/5">
+          <div className="max-w-6xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-sm" style={{ color: COLORS.muted }}>
+              © 2026 AI SEO Studio. All rights reserved.
+            </p>
+            <div className="flex items-center gap-5">
+              <a href="#" aria-label="Twitter" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
+                <Twitter size={18} />
+              </a>
+              <a href="#" aria-label="GitHub" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
+                <Github size={18} />
+              </a>
+              <a href="#" aria-label="LinkedIn" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
+                <Linkedin size={18} />
+              </a>
+            </div>
           </div>
         </div>
       </footer>
+
+      {/* Feature Modal */}
+      {showFeatureModal && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-6"
+          style={{ background: 'rgba(0,0,0,0.7)' }}
+          onClick={() => setShowFeatureModal(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-xl border p-6 relative"
+            style={{ background: '#13131a', borderColor: 'rgba(255,255,255,0.1)' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowFeatureModal(false)}
+              className="absolute top-4 right-4 hover:text-white transition-colors duration-200"
+              style={{ color: COLORS.muted }}
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+
+            <h3 className="text-lg font-semibold mb-2" style={{ color: COLORS.text }}>
+              Sign up to use this tool
+            </h3>
+            <p className="text-sm mb-6" style={{ color: COLORS.muted }}>
+              Create a free account or try as a guest to start using this feature.
+            </p>
+
+            <div className="flex flex-col gap-3">
+              <Link
+                href="/signup"
+                className="text-center px-4 py-2.5 rounded-lg text-sm font-semibold hover:-translate-y-0.5 transition-all duration-200"
+                style={{ background: COLORS.primary, color: COLORS.text }}
+              >
+                Sign up free
+              </Link>
+              <button
+                onClick={handleGuestLogin}
+                disabled={guestLoading}
+                className="px-4 py-2.5 rounded-lg text-sm font-semibold border hover:bg-white/5 hover:-translate-y-0.5 transition-all duration-200"
+                style={{ borderColor: 'rgba(255,255,255,0.15)', color: COLORS.text, cursor: guestLoading ? 'not-allowed' : 'pointer' }}
+              >
+                {guestLoading ? 'Signing in...' : 'Try as Guest'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
