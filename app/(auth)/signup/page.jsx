@@ -3,6 +3,22 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
+import { BrainCircuit, CheckCircle2, Star } from 'lucide-react'
+
+const COLORS = {
+  bg: '#09090B',
+  primary: '#7C3AED',
+  accent: '#F59E0B',
+  text: '#FAFAFA',
+  muted: '#999999',
+}
+
+const BULLETS = [
+  'AI-powered blog generation in seconds',
+  'Smart keyword research & suggestions',
+  'One-click WordPress publishing',
+  'SEO meta tags, generated automatically',
+]
 
 export default function SignupPage() {
   const router = useRouter()
@@ -46,102 +62,117 @@ export default function SignupPage() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'Inter, sans-serif' }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-        @keyframes float1 { 0%,100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
-        @keyframes float2 { 0%,100% { transform: translateY(0px) scale(1); } 50% { transform: translateY(20px) scale(0.95); } }
-        @keyframes float3 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(20px,-20px) scale(1.08); } }
-        .blob1 { animation: float1 8s ease-in-out infinite; }
-        .blob2 { animation: float2 10s ease-in-out infinite; }
-        .blob3 { animation: float3 12s ease-in-out infinite; }
-        .input-field:focus { border-color: #6C47FF !important; box-shadow: 0 0 0 3px rgba(108,71,255,0.15) !important; }
-        .signup-btn:hover { background: #5535e0 !important; transform: translateY(-1px); box-shadow: 0 8px 25px rgba(108,71,255,0.4) !important; }
-        .signup-btn { transition: all 0.2s ease !important; }
-        .guest-btn:hover { background: rgba(108,71,255,0.06) !important; }
-        .guest-btn { transition: all 0.2s ease !important; }
-      `}</style>
-
+    <div style={{ background: COLORS.bg, color: COLORS.text, minHeight: '100vh' }} className="font-sans grid grid-cols-1 md:grid-cols-2">
       {/* Left — Branding */}
-      <div style={{ flex: 1, background: 'linear-gradient(135deg, #6C47FF 0%, #4a2dd4 40%, #00C6AE 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '64px 48px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+      <div className="hidden md:flex flex-col justify-center px-16 py-16">
+        <div className="max-w-md">
+          <Link href="/" className="flex items-center gap-2 mb-12">
+            <BrainCircuit size={22} color={COLORS.primary} />
+            <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
+          </Link>
 
-        <div className="blob1" style={{ position: 'absolute', top: '-80px', left: '-80px', width: '350px', height: '350px', borderRadius: '50%', background: 'rgba(255,255,255,0.07)', filter: 'blur(2px)' }} />
-        <div className="blob2" style={{ position: 'absolute', bottom: '-100px', right: '-60px', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(0,198,174,0.15)', filter: 'blur(4px)' }} />
-        <div className="blob3" style={{ position: 'absolute', top: '40%', right: '10%', width: '200px', height: '200px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
-
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '420px', width: '100%' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '48px' }}>
-            <div style={{ width: '44px', height: '44px', background: 'rgba(255,255,255,0.2)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '22px', backdropFilter: 'blur(10px)' }}>🔍</div>
-            <span style={{ fontSize: '20px', fontWeight: '700', letterSpacing: '-0.3px' }}>AI SEO Studio</span>
-          </div>
-
-          <h1 style={{ fontSize: '48px', fontWeight: '800', lineHeight: '1.1', marginBottom: '20px', letterSpacing: '-1px' }}>
-            Start ranking.<br />
-            <span style={{ color: '#a8f0e8' }}>Start today.</span>
+          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight tracking-tight mb-5">
+            Start ranking today
           </h1>
-          <p style={{ fontSize: '17px', opacity: 0.85, lineHeight: '1.6', marginBottom: '48px' }}>
-            Join thousands of SEO professionals using AI to create content that ranks — faster than ever.
+          <p className="text-base leading-relaxed mb-10" style={{ color: COLORS.muted }}>
+            Join SEO professionals and marketers using AI to write content that ranks — faster than ever.
           </p>
 
-          <div style={{ display: 'flex', gap: '24px', marginBottom: '48px' }}>
-            {[['10x', 'Faster Content'], ['500+', 'SEO Tools'], ['99%', 'Uptime']].map(([val, label]) => (
-              <div key={label} style={{ background: 'rgba(255,255,255,0.12)', borderRadius: '12px', padding: '16px 20px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255,255,255,0.2)' }}>
-                <div style={{ fontSize: '24px', fontWeight: '800' }}>{val}</div>
-                <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '2px' }}>{label}</div>
+          <div className="flex flex-col gap-4 mb-12">
+            {BULLETS.map((b) => (
+              <div key={b} className="flex items-center gap-3">
+                <CheckCircle2 size={18} color={COLORS.primary} className="shrink-0" />
+                <span className="text-sm" style={{ color: COLORS.text }}>{b}</span>
               </div>
             ))}
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {[['⚡', 'AI-powered blog generation in seconds'], ['🎯', 'Smart keyword analysis & suggestions'], ['🔒', 'Your data, fully secured']].map(([icon, text]) => (
-              <div key={text} style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', opacity: 0.9 }}>
-                <span style={{ fontSize: '18px' }}>{icon}</span>
-                {text}
-              </div>
-            ))}
+          <div className="p-6 rounded-xl border" style={{ background: '#111', borderColor: '#1f1f1f' }}>
+            <div className="flex items-center gap-1 mb-3">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={14} color={COLORS.accent} fill={COLORS.accent} />
+              ))}
+            </div>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: COLORS.text }}>
+              "AI SEO Studio cut my content research time in half. My clients are ranking on page one within weeks."
+            </p>
+            <div>
+              <div className="text-sm font-semibold" style={{ color: COLORS.text }}>Ayesha Siddiqui</div>
+              <div className="text-xs mt-0.5" style={{ color: COLORS.muted }}>SEO Freelancer, Karachi</div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Right — Form */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#F7F8FC', padding: '48px' }}>
-        <div style={{ width: '100%', maxWidth: '420px', background: '#fff', borderRadius: '20px', padding: '48px 40px', boxShadow: '0 20px 60px rgba(108,71,255,0.12), 0 4px 20px rgba(0,0,0,0.06)', border: '1px solid rgba(108,71,255,0.08)' }}>
+      <div className="flex flex-col justify-center items-center px-6 py-16">
+        <Link href="/" className="flex md:hidden items-center gap-2 mb-8">
+          <BrainCircuit size={20} color={COLORS.primary} />
+          <span className="font-bold text-lg" style={{ color: COLORS.text }}>AI SEO Studio</span>
+        </Link>
 
-          <div style={{ marginBottom: '32px' }}>
-            <h2 style={{ fontSize: '28px', fontWeight: '800', color: '#1A1A2E', marginBottom: '8px', letterSpacing: '-0.5px' }}>Create your account</h2>
-            <p style={{ color: '#4A4A6A', fontSize: '15px' }}>Get started for free</p>
+        <div className="w-full max-w-md rounded-2xl border p-8" style={{ background: '#111', borderColor: '#1f1f1f' }}>
+          <div className="mb-8">
+            <h2 className="text-2xl font-extrabold mb-1" style={{ color: COLORS.text }}>Create your account</h2>
+            <p className="text-sm" style={{ color: COLORS.muted }}>Get started for free</p>
           </div>
 
           {error && (
-            <div style={{ background: '#fff0f0', border: '1px solid #ffcccc', borderRadius: '10px', padding: '12px 16px', color: '#cc0000', marginBottom: '20px', fontSize: '14px' }}>
+            <div className="rounded-lg px-4 py-3 mb-5 text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#f87171' }}>
               {error}
             </div>
           )}
 
           {success && (
-            <div style={{ background: '#f0fff8', border: '1px solid #00C6AE', borderRadius: '10px', padding: '16px', color: '#007a6a', marginBottom: '20px', fontSize: '14px', textAlign: 'center' }}>
-              ✅ Account created! Please check your email to verify.
+            <div className="rounded-lg px-4 py-4 mb-5 text-sm text-center" style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: COLORS.text }}>
+              Account created! Please check your email to verify.
             </div>
           )}
 
           {!success && (
             <>
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#1A1A2E', marginBottom: '8px', letterSpacing: '0.2px' }}>Full Name</label>
-                <input className="input-field" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={{ width: '100%', padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #e8e8f0', fontSize: '15px', outline: 'none', boxSizing: 'border-box', background: '#fafafa', color: '#1A1A2E', transition: 'all 0.2s' }} />
+              <div className="mb-4">
+                <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Full Name</label>
+                <input
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder="Your name"
+                  className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:border-purple-600 transition-colors"
+                  style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: COLORS.text }}
+                />
               </div>
 
-              <div style={{ marginBottom: '16px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#1A1A2E', marginBottom: '8px', letterSpacing: '0.2px' }}>Email address</label>
-                <input className="input-field" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" style={{ width: '100%', padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #e8e8f0', fontSize: '15px', outline: 'none', boxSizing: 'border-box', background: '#fafafa', color: '#1A1A2E', transition: 'all 0.2s' }} />
+              <div className="mb-4">
+                <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Email address</label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="you@example.com"
+                  className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:border-purple-600 transition-colors"
+                  style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: COLORS.text }}
+                />
               </div>
 
-              <div style={{ marginBottom: '28px' }}>
-                <label style={{ display: 'block', fontSize: '13px', fontWeight: '600', color: '#1A1A2E', marginBottom: '8px', letterSpacing: '0.2px' }}>Password</label>
-                <input className="input-field" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" style={{ width: '100%', padding: '13px 16px', borderRadius: '10px', border: '1.5px solid #e8e8f0', fontSize: '15px', outline: 'none', boxSizing: 'border-box', background: '#fafafa', color: '#1A1A2E', transition: 'all 0.2s' }} />
+              <div className="mb-6">
+                <label className="block text-xs font-semibold mb-2" style={{ color: COLORS.text }}>Password</label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full px-4 py-3 rounded-lg text-sm outline-none focus:border-purple-600 transition-colors"
+                  style={{ background: '#1a1a1a', border: '1px solid #2a2a2a', color: COLORS.text }}
+                />
               </div>
 
-              <button className="signup-btn" onClick={handleSignup} disabled={loading} style={{ width: '100%', padding: '14px', background: loading ? '#a89be0' : '#6C47FF', color: '#fff', border: 'none', borderRadius: '10px', fontSize: '15px', fontWeight: '700', cursor: loading ? 'not-allowed' : 'pointer', boxShadow: '0 4px 15px rgba(108,71,255,0.3)', letterSpacing: '0.2px' }}>
+              <button
+                onClick={handleSignup}
+                disabled={loading}
+                className="w-full py-3 rounded-lg text-sm font-semibold hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
+                style={{ background: loading ? '#4c2f9e' : COLORS.primary, color: COLORS.text, cursor: loading ? 'not-allowed' : 'pointer' }}
+              >
                 {loading ? 'Creating account...' : 'Create Account'}
               </button>
             </>
@@ -149,18 +180,18 @@ export default function SignupPage() {
 
           <button
             type="button"
-            className="guest-btn"
             onClick={handleGuestLogin}
             disabled={guestLoading}
-            style={{ width: '100%', padding: '13px', background: 'transparent', color: '#6C47FF', border: '1.5px solid #6C47FF', borderRadius: '10px', fontSize: '14px', fontWeight: '600', cursor: guestLoading ? 'not-allowed' : 'pointer', marginTop: '16px' }}
+            className="w-full py-3 rounded-lg text-sm font-semibold border mt-4 hover:-translate-y-0.5 hover:border-white hover:text-white transition-all duration-200"
+            style={{ borderColor: 'rgba(255,255,255,0.15)', color: COLORS.text, cursor: guestLoading ? 'not-allowed' : 'pointer' }}
           >
-            {guestLoading ? 'Signing in...' : 'Try as Guest — No signup needed'}
+            {guestLoading ? 'Signing in...' : 'Try as Guest'}
           </button>
 
-          <div style={{ textAlign: 'center', marginTop: '24px', paddingTop: '24px', borderTop: '1px solid #f0f0f5' }}>
-            <p style={{ color: '#4A4A6A', fontSize: '14px' }}>
+          <div className="text-center mt-6 pt-6 border-t" style={{ borderColor: '#1f1f1f' }}>
+            <p className="text-sm" style={{ color: COLORS.muted }}>
               Already have an account?{' '}
-              <Link href="/login" style={{ color: '#6C47FF', fontWeight: '700', textDecoration: 'none' }}>Log in</Link>
+              <Link href="/login" className="font-semibold hover:text-white transition-colors duration-200" style={{ color: COLORS.primary }}>Log in</Link>
             </p>
           </div>
         </div>
