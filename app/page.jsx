@@ -15,6 +15,7 @@ import {
   ArrowRight,
   X,
   Star,
+  Menu,
 } from 'lucide-react'
 
 function TwitterIcon(props) {
@@ -145,6 +146,7 @@ export default function Home() {
   const [guestLoading, setGuestLoading] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [showFeatureModal, setShowFeatureModal] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     async function checkAuth() {
@@ -196,7 +198,7 @@ export default function Home() {
             <Link href="/blog" className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Blog</Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Link
               href="/login"
               className="text-sm font-medium px-4 py-2 rounded-lg hover:text-white transition-colors duration-200"
@@ -212,7 +214,49 @@ export default function Home() {
               Start Free
             </Link>
           </div>
+
+          <button
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            className="md:hidden p-2 -mr-2"
+            style={{ color: COLORS.text }}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
         </div>
+
+        {mobileMenuOpen && (
+          <div
+            className="md:hidden border-t"
+            style={{ background: 'rgba(9,9,11,0.98)', borderColor: 'rgba(255,255,255,0.08)' }}
+          >
+            <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col gap-4">
+              <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Features</a>
+              <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>How it works</a>
+              <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Pricing</a>
+              <Link href="/blog" onClick={() => setMobileMenuOpen(false)} className="text-sm hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>Blog</Link>
+
+              <div className="flex flex-col gap-3 pt-4 border-t" style={{ borderColor: 'rgba(255,255,255,0.08)' }}>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-medium px-4 py-2.5 rounded-lg text-center border hover:text-white transition-colors duration-200"
+                  style={{ color: COLORS.muted, borderColor: 'rgba(255,255,255,0.15)' }}
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-semibold px-4 py-2.5 rounded-lg text-center hover:-translate-y-0.5 hover:bg-purple-600 transition-all duration-200"
+                  style={{ background: COLORS.primary, color: COLORS.text }}
+                >
+                  Start Free
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero */}
@@ -225,12 +269,12 @@ export default function Home() {
           Powered by Groq AI
         </div>
 
-        <h1 className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6">
           SEO content that ranks —<br />
           <span style={{ color: COLORS.accent }}>written by AI</span>
         </h1>
 
-        <p className="text-lg max-w-2xl mx-auto mb-10" style={{ color: COLORS.muted }}>
+        <p className="text-base sm:text-lg max-w-2xl mx-auto mb-10" style={{ color: COLORS.muted }}>
           Generate SEO-optimized blog posts, meta tags, and keyword strategies in seconds.
           Skip the writer's block and start ranking today.
         </p>
@@ -274,7 +318,7 @@ export default function Home() {
           <p style={{ color: COLORS.muted }}>A complete SEO toolkit powered by AI</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {FEATURES.map((f) => {
             const Icon = f.icon
             return (
@@ -376,7 +420,7 @@ export default function Home() {
           <p style={{ color: COLORS.muted }}>See what freelancers and marketers are saying</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {REVIEWS.map((r) => (
             <div
               key={r.name}
