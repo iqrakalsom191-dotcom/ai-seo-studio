@@ -24,6 +24,8 @@ import {
   Gauge,
   ChevronDown,
   BrainCircuit,
+  Menu,
+  X,
 } from 'lucide-react'
 
 const navGroups = [
@@ -77,6 +79,7 @@ export default function DashboardLayout({ children }) {
   const router = useRouter()
   const pathname = usePathname()
   const [user, setUser] = useState(null)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [expanded, setExpanded] = useState(() =>
     Object.fromEntries(navGroups.map(({ label }) => [label, label === 'Overview']))
   )
@@ -149,22 +152,71 @@ export default function DashboardLayout({ children }) {
         .flyout-link { transition: all 150ms ease !important; }
       `}</style>
 
+      {/* Mobile Top Navbar */}
+      <div
+        className="md:hidden fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4"
+        style={{ height: '56px', background: '#0d0d0d', borderBottom: '1px solid #1f1f1f' }}
+      >
+        <button
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Open menu"
+          style={{ color: '#fff', background: 'transparent', border: 'none', padding: '4px', cursor: 'pointer' }}
+        >
+          <Menu size={22} />
+        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <BrainCircuit size={20} color="#7C3AED" />
+          <span style={{ fontSize: '14px', fontWeight: '800', color: '#fff' }}>AI SEO Studio</span>
+        </div>
+        <div style={{
+          width: '30px', height: '30px', borderRadius: '50%', flexShrink: 0,
+          background: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: '12px', fontWeight: '700', color: '#fff'
+        }}>
+          {(user?.user_metadata?.full_name || user?.email || 'U')[0].toUpperCase()}
+        </div>
+      </div>
+
+      {/* Mobile Overlay */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="md:hidden fixed inset-0 z-[90]"
+          style={{ background: 'rgba(0,0,0,0.6)' }}
+        />
+      )}
+
       {/* Sidebar */}
-      <div style={{
-        width: '260px', height: '100vh', background: '#0d0d0d',
-        display: 'flex', flexDirection: 'column', position: 'fixed',
-        top: 0, left: 0, zIndex: 100, overflowY: 'auto',
-        borderRight: '1px solid #1f1f1f',
-      }}>
+      <div
+        className={`fixed md:left-0 top-0 h-screen z-[100] flex flex-col overflow-y-auto transition-all duration-300 ${sidebarOpen ? 'left-0' : '-left-[260px]'}`}
+        style={{
+          width: '260px', background: '#0d0d0d',
+          borderRight: '1px solid #1f1f1f',
+        }}>
 
         {/* Logo */}
-        <div style={{ padding: '28px 20px 24px', borderBottom: '1px solid #1f1f1f' }}>
+        <div className="hidden md:block" style={{ padding: '28px 20px 24px', borderBottom: '1px solid #1f1f1f' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <BrainCircuit size={26} color="#7C3AED" />
             <span style={{
               fontSize: '16px', fontWeight: '800', letterSpacing: '-0.4px', color: '#fff'
             }}>AI SEO Studio</span>
           </div>
+        </div>
+
+        {/* Mobile Sidebar Header */}
+        <div className="md:hidden flex items-center justify-between" style={{ padding: '16px 20px', borderBottom: '1px solid #1f1f1f' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <BrainCircuit size={22} color="#7C3AED" />
+            <span style={{ fontSize: '15px', fontWeight: '800', color: '#fff' }}>AI SEO Studio</span>
+          </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close menu"
+            style={{ color: '#999999', background: 'transparent', border: 'none', padding: '4px', cursor: 'pointer' }}
+          >
+            <X size={20} />
+          </button>
         </div>
 
         {/* Nav Links */}
@@ -269,6 +321,7 @@ export default function DashboardLayout({ children }) {
                           href={href}
                           className="nav-link"
                           title={label}
+                          onClick={() => setSidebarOpen(false)}
                           style={{
                             display: 'flex', alignItems: 'center', gap: '12px',
                             padding: '10px 14px', borderRadius: '10px', textDecoration: 'none',
@@ -345,7 +398,7 @@ export default function DashboardLayout({ children }) {
       </div>
 
       {/* Main Content */}
-      <div style={{ marginLeft: '260px' }} className="flex-1 overflow-auto bg-[#09090B] min-h-screen">
+      <div className="flex-1 overflow-auto bg-[#09090B] min-h-screen ml-0 md:ml-[260px] pt-[56px] md:pt-0">
         {children}
       </div>
     </div>
