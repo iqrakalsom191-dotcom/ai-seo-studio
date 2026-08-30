@@ -69,7 +69,7 @@ export default function SignupPage() {
 
   return (
     <div style={{ background: COLORS.bg, color: COLORS.text }} className="font-sans min-h-screen flex items-center justify-center py-12">
-    <div className="max-w-5xl w-full mx-auto px-6 grid grid-cols-1 md:grid-cols-2">
+    <div className="max-w-6xl w-full mx-auto px-6 grid grid-cols-1 md:grid-cols-2">
       {/* Left — Branding */}
       <div className="flex flex-col justify-center px-8 sm:px-16 py-16">
         <div className="max-w-md mx-auto md:mx-0 w-full">
