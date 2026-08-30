@@ -59,29 +59,30 @@ export default function SocialPage() {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto p-6" style={{ background: '#09090B' }}>
       <div className="flex items-center gap-3 mb-2">
-        <Share2 style={{ color: '#6C47FF' }} size={28} />
-        <h1 className="text-2xl font-bold " style={{ color: 'var(--foreground)' }}>Social Captions</h1>
+        <Share2 style={{ color: '#7C3AED' }} size={28} />
+        <h1 className="text-2xl font-bold text-white">Social Captions</h1>
       </div>
-      <p className="text-gray-500 mb-8">Paste your blog content, pick platforms, and generate ready-to-post captions.</p>
+      <p className="text-[#999] mb-8">Paste your blog content, pick platforms, and generate ready-to-post captions.</p>
 
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 space-y-4">
+      <div className="rounded-2xl border p-6 space-y-4" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Blog Content</label>
+          <label className="block text-sm font-medium text-[#999] mb-1">Blog Content</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Paste your blog content here..."
             rows={8}
-            className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 resize-y"
-            onFocus={(e) => (e.target.style.borderColor = '#6C47FF')}
-            onBlur={(e) => (e.target.style.borderColor = '')}
+            className="w-full rounded-lg px-4 py-3 text-sm focus:outline-none resize-y text-white placeholder-gray-600"
+            style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+            onFocus={(e) => (e.target.style.borderColor = '#7C3AED')}
+            onBlur={(e) => (e.target.style.borderColor = '#1f1f1f')}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Platforms</label>
+          <label className="block text-sm font-medium text-[#999] mb-2">Platforms</label>
           <div className="flex flex-wrap gap-3">
             {PLATFORMS.map(({ label, icon: Icon }) => {
               const isChecked = selected.includes(label)
@@ -90,9 +91,9 @@ export default function SocialPage() {
                   key={label}
                   className="flex items-center gap-2 px-4 py-2.5 rounded-xl border cursor-pointer text-sm font-medium transition"
                   style={{
-                    borderColor: isChecked ? '#6C47FF' : 'var(--border-color)',
-                    backgroundColor: isChecked ? 'rgba(108,71,255,0.06)' : '#fff',
-                    color: isChecked ? '#6C47FF' : '#374151',
+                    borderColor: isChecked ? '#7C3AED' : '#1f1f1f',
+                    backgroundColor: isChecked ? 'rgba(124, 58, 237, 0.15)' : '#111111',
+                    color: isChecked ? '#7C3AED' : '#999999',
                   }}
                 >
                   <input
@@ -109,13 +110,13 @@ export default function SocialPage() {
           </div>
         </div>
 
-        {error && <div className="bg-red-50 text-red-600 text-sm px-4 py-3 rounded-lg">{error}</div>}
+        {error && <div className="text-sm px-4 py-3 rounded-lg" style={{ background: 'rgba(239,68,68,0.1)', color: '#f87171' }}>{error}</div>}
 
         <button
           onClick={generate}
           disabled={loading}
           className="w-full text-white font-semibold py-3 rounded-xl transition disabled:opacity-50 hover:opacity-90"
-          style={{ backgroundColor: '#6C47FF' }}
+          style={{ backgroundColor: '#7C3AED' }}
         >
           {loading ? 'Generating...' : '✦ Generate Captions'}
         </button>
@@ -124,19 +125,19 @@ export default function SocialPage() {
       {results.length > 0 && (
         <div className="mt-6 space-y-4">
           {results.map((r, i) => (
-            <div key={i} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+            <div key={i} className="rounded-2xl border p-6" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
               <div className="flex justify-between items-center mb-3">
-                <span className="text-sm font-semibold" style={{ color: '#00C6AE' }}>{r.platform}</span>
+                <span className="text-sm font-semibold" style={{ color: '#F59E0B' }}>{r.platform}</span>
                 <button
                   onClick={() => copy(r.caption, r.platform)}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-gray-200 hover:bg-gray-50 transition"
-                  style={{ color: copiedPlatform === r.platform ? '#00C6AE' : '#6C47FF' }}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition"
+                  style={{ borderColor: '#1f1f1f', color: copiedPlatform === r.platform ? '#F59E0B' : '#7C3AED' }}
                 >
                   {copiedPlatform === r.platform ? <Check size={14} /> : <Copy size={14} />}
                   {copiedPlatform === r.platform ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{r.caption}</p>
+              <p className="text-sm text-[#FAFAFA] leading-relaxed whitespace-pre-wrap">{r.caption}</p>
             </div>
           ))}
         </div>
