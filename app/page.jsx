@@ -14,10 +14,31 @@ import {
   ShieldCheck,
   ArrowRight,
   X,
-  Twitter,
-  Github,
-  Linkedin,
 } from 'lucide-react'
+
+function TwitterIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor" {...props}>
+      <path d="M18.9 2H22l-7.6 8.7L23.3 22h-7l-5.5-6.6L4.5 22H1.4l8.1-9.3L1 2h7.2l5 6.1L18.9 2zm-1.2 18h1.7L7.4 3.9H5.6l12.1 16.1z" />
+    </svg>
+  )
+}
+
+function GithubIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor" {...props}>
+      <path d="M12 .5a11.5 11.5 0 00-3.64 22.42c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 015.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.82 1.19 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.07.78 2.16v3.2c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z" />
+    </svg>
+  )
+}
+
+function LinkedinIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" width={18} height={18} fill="currentColor" {...props}>
+      <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.03-1.85-3.03-1.85 0-2.14 1.45-2.14 2.94v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 110-4.12 2.06 2.06 0 010 4.12zM7.12 20.45H3.56V9h3.56v11.45z" />
+    </svg>
+  )
+}
 
 const COLORS = {
   bg: '#09090B',
@@ -407,13 +428,13 @@ export default function Home() {
             </p>
             <div className="flex items-center gap-5">
               <a href="#" aria-label="Twitter" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
-                <Twitter size={18} />
+                <TwitterIcon />
               </a>
               <a href="#" aria-label="GitHub" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
-                <Github size={18} />
+                <GithubIcon />
               </a>
               <a href="#" aria-label="LinkedIn" className="hover:text-white transition-colors duration-200" style={{ color: COLORS.muted }}>
-                <Linkedin size={18} />
+                <LinkedinIcon />
               </a>
             </div>
           </div>
