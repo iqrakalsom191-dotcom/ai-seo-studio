@@ -193,7 +193,7 @@ export default function DashboardPage() {
 
   return (
     <div className="p-6 md:p-8" style={{ background: COLORS.bg, minHeight: '100vh' }}>
-    <div className="max-w-7xl mx-auto w-full">
+    <div className="max-w-7xl w-full">
       <style>{`
         .stat-card:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(124,58,237,0.15) !important; }
         .stat-card { transition: all 0.2s ease; }
