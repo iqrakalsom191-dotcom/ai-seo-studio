@@ -41,3 +41,59 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Global clickable affordance: pointer cursor + a subtle hover cue
+   on every interactive element, site-wide, so nothing feels dead. */
+a,
+button,
+select,
+summary,
+[role="button"],
+[role="link"],
+[role="tab"],
+[role="menuitem"],
+[onclick],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="checkbox"],
+input[type="radio"],
+label[for],
+.cursor-pointer {
+  cursor: pointer;
+}
+
+a:not(:disabled),
+button:not(:disabled),
+select:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+input[type="button"]:not(:disabled),
+input[type="submit"]:not(:disabled),
+input[type="reset"]:not(:disabled) {
+  transition: filter 0.15s ease, transform 0.1s ease, opacity 0.15s ease;
+}
+
+a:not(:disabled):hover,
+button:not(:disabled):hover,
+[role="button"]:not([aria-disabled="true"]):hover,
+input[type="button"]:not(:disabled):hover,
+input[type="submit"]:not(:disabled):hover,
+input[type="reset"]:not(:disabled):hover {
+  filter: brightness(1.1);
+}
+
+a:not(:disabled):active,
+button:not(:disabled):active,
+[role="button"]:not([aria-disabled="true"]):active,
+input[type="button"]:not(:disabled):active,
+input[type="submit"]:not(:disabled):active,
+input[type="reset"]:not(:disabled):active {
+  transform: scale(0.98);
+}
+
+button:disabled,
+a[aria-disabled="true"],
+[role="button"][aria-disabled="true"],
+input:disabled {
+  cursor: not-allowed;
+}
