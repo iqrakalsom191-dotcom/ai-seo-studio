@@ -49,7 +49,7 @@ export function renderMarkdown(text) {
 
     if (line.startsWith('# ')) {
       flushList()
-      nodes.push(<h1 key={i} style={{ color: '#fff', fontSize: '24px' }} className="font-bold mt-6 mb-3">{parseBold(line.slice(2), i)}</h1>)
+      nodes.push(<h1 key={i} style={{ color: '#FAFAFA', fontSize: '24px', fontWeight: '700', marginBottom: '12px' }} className="mt-6">{parseBold(line.slice(2), i)}</h1>)
     } else if (line.startsWith('## ')) {
       flushList()
       nodes.push(<h2 key={i} style={{ color: '#FF6B35', fontSize: '20px' }} className="font-bold mt-5 mb-2">{parseBold(line.slice(3), i)}</h2>)
@@ -114,12 +114,12 @@ export function OutputTopBar({ wordCount, contentType }) {
   return (
     <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
       {typeof wordCount === 'number' && (
-        <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ background: 'rgba(255,107,53,0.12)', color: '#FF6B35' }}>
+        <span style={{ background: '#FF6B35', color: '#fff', fontWeight: '600', padding: '3px 10px', borderRadius: '20px', fontSize: '12px' }}>
           {wordCount} words
         </span>
       )}
       {contentType && (
-        <span className="text-xs font-semibold px-3 py-1 rounded-full" style={{ background: 'rgba(255,212,194,0.12)', color: '#FFD4C2' }}>
+        <span style={{ background: 'rgba(255,212,194,0.15)', color: '#FFD4C2', border: '1px solid rgba(255,212,194,0.3)', padding: '3px 10px', borderRadius: '20px', fontSize: '12px' }}>
           {contentType}
         </span>
       )}
