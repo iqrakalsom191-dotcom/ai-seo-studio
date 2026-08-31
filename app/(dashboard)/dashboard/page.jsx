@@ -168,13 +168,13 @@ export default function DashboardPage() {
     { label: 'Total Content',  value: stats.total,            icon: FileText, trend: '+12%', href: '/library',              color: COLORS.primary },
     { label: 'Keywords Saved', value: stats.keywords,         icon: Key,      trend: '+8%',  href: '/library?type=keyword', color: COLORS.primary },
     { label: 'This Week',      value: stats.thisWeek,         icon: Calendar, trend: '+24%', href: '/library',              color: COLORS.accent },
-    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    trend: null,   href: null,                    color: '#10b981' },
+    { label: 'Streak',         value: stats.streak + ' days', icon: Flame,    trend: null,   href: null,                    color: '#FFD4C2' },
   ]
 
   const actions = [
     { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator', color: COLORS.primary },
     { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta',      color: COLORS.accent },
-    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords',  color: '#10b981' },
+    { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords',  color: '#FFD4C2' },
   ]
 
   const tools = [
@@ -205,7 +205,7 @@ export default function DashboardPage() {
         .activity-row:hover .activity-arrow { opacity: 1 !important; transform: translateX(2px); }
         .activity-row { transition: background 0.15s ease; }
         .activity-arrow { transition: all 0.15s ease; }
-        .cta-btn:hover { background: #6b2fe0 !important; transform: translateY(-1px); }
+        .cta-btn:hover { background: #E55A25 !important; transform: translateY(-1px); }
         .cta-btn { transition: all 0.2s ease; }
       `}</style>
 
@@ -371,7 +371,7 @@ export default function DashboardPage() {
           {[
             { label: 'Blog Posts', count: breakdown.blog,    color: COLORS.primary },
             { label: 'Meta Tags',  count: breakdown.meta,    color: COLORS.accent },
-            { label: 'Keywords',   count: breakdown.keyword, color: '#10b981' },
+            { label: 'Keywords',   count: breakdown.keyword, color: '#FFD4C2' },
           ].map(({ label, count, color }) => {
             const total = breakdown.blog + breakdown.meta + breakdown.keyword || 1
             const pct = Math.round((count / total) * 100)
@@ -444,7 +444,7 @@ export default function DashboardPage() {
       </div>
 
       {/* SEO Tip */}
-      <div className="border-l-4 border-amber-500" style={{ background: '#1a1a1a', borderTop: `1px solid ${COLORS.border}`, borderRight: `1px solid ${COLORS.border}`, borderBottom: `1px solid ${COLORS.border}`, borderRadius: '16px', padding: '24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+      <div className="border-l-4" style={{ borderLeftColor: '#FF6B35', background: '#1a1a1a', borderTop: `1px solid ${COLORS.border}`, borderRight: `1px solid ${COLORS.border}`, borderBottom: `1px solid ${COLORS.border}`, borderRadius: '16px', padding: '24px', display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
         <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(255, 212, 194, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
           <Lightbulb size={18} style={{ color: COLORS.accent }} />
         </div>
