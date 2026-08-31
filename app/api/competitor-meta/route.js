@@ -1,5 +1,6 @@
-import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { callAI } from '@/lib/ai-client'
 
 const BLOCKED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0', '::1']
 
@@ -14,6 +15,9 @@ function isPrivateHost(hostname) {
 
 export async function POST(request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
     const body = await request.json()
     const { url } = body
 
@@ -60,18 +64,12 @@ Meta Description: "${description || '(none found)'}"
 
 Return the suggestions as plain text using short bullet points (start each with "- "). Do not include markdown headings or code fences.`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 1000,
-    })
-
-    let analysis = completion.choices[0]?.message?.content?.trim() || ''
-    analysis = stripThinkAndMeta(analysis)
+    const analysis = await callAI(
+      [{ role: 'user', content: prompt }],
+      user?.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
 
     return NextResponse.json({ title, description, analysis })
 

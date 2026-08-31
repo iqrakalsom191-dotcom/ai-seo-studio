@@ -1,8 +1,12 @@
-import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { callAI } from '@/lib/ai-client'
 
 export async function POST(request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
     const body = await request.json()
     const { keyword } = body
 
@@ -12,18 +16,12 @@ export async function POST(request) {
 
     const prompt = `Generate 5 SEO-friendly URL slugs for the keyword "${keyword}". Each slug should be short, lowercase, use hyphens instead of spaces, contain no special characters, and be optimized for search engines. Return only the 5 slugs, one per line, with no numbering, bullets, quotes, or preamble.`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 300,
-    })
-
-    let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = stripThinkAndMeta(raw)
+    const raw = await callAI(
+      [{ role: 'user', content: prompt }],
+      user?.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
     const slugs = raw
       .split('\n')
       .map((line) =>

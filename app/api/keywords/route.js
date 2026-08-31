@@ -1,10 +1,7 @@
-import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { checkAndIncrementUsage } from '@/lib/usage'
-import { stripThinkAndMeta } from '@/lib/groq'
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+import { callAI } from '@/lib/ai-client'
 
 export async function POST(request) {
   try {
@@ -21,10 +18,8 @@ export async function POST(request) {
 
     const { keyword } = await request.json()
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+    const content = await callAI(
+      [
         {
           role: 'user',
           content: `Analyze this SEO keyword: "${keyword}"
@@ -37,12 +32,10 @@ LSI: lsi1, lsi2, lsi3, lsi4, lsi5
 TIPS: tip one here | tip two here | tip three here`
         },
       ],
-      reasoning_effort: 'none',
-      max_tokens: 500,
-    })
-
-    let content = completion.choices[0]?.message?.content || ''
-    content = stripThinkAndMeta(content)
+      user.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
     console.log('KEYWORD RESPONSE:', content)
 
     const intentMatch = content.match(/INTENT:\s*(.+)/i)

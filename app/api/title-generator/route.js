@@ -1,8 +1,12 @@
-import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { callAI } from '@/lib/ai-client'
 
 export async function POST(request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
     const body = await request.json()
     const { keyword } = body
 
@@ -16,18 +20,12 @@ Strict requirement: each title must be no more than 60 characters (including spa
 
 Return ONLY the 10 titles, one per line. Do not include numbering, bullets, quotes, explanations, reasoning, or any extra text — just the 10 titles and nothing else.`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 500,
-    })
-
-    let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = stripThinkAndMeta(raw)
+    const raw = await callAI(
+      [{ role: 'user', content: prompt }],
+      user?.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
 
     if (!raw) {
       return NextResponse.json({ error: 'Could not generate titles' }, { status: 500 })

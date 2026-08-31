@@ -1,8 +1,12 @@
-import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { callAI } from '@/lib/ai-client'
 
 export async function POST(request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
     const body = await request.json()
     const { type, fields } = body
 
@@ -27,18 +31,12 @@ ${details}
 
 Return ONLY the JSON-LD object, wrapped in a <script type="application/ld+json"> tag is NOT needed — return just the raw JSON object itself. Do not include markdown formatting, code fences, explanations, or any extra text — just the valid JSON.`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 1500,
-    })
-
-    let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = stripThinkAndMeta(raw)
+    const raw = await callAI(
+      [{ role: 'user', content: prompt }],
+      user?.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
     const jsonMatch = raw.match(/\{[\s\S]*\}/)
 
     if (!jsonMatch) {

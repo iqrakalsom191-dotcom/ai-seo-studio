@@ -1,5 +1,6 @@
-import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { callAI } from '@/lib/ai-client'
 
 function buildPrompt(content, type) {
   switch (type) {
@@ -20,6 +21,9 @@ function buildPrompt(content, type) {
 
 export async function POST(request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
     const body = await request.json()
     const { content, type } = body
 
@@ -29,18 +33,12 @@ export async function POST(request) {
 
     const prompt = `${buildPrompt(content, type)}\n\nReturn only the improved content, with no preamble or explanation.`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 2000,
-    })
-
-    let result = completion.choices[0]?.message?.content?.trim() || ''
-    result = stripThinkAndMeta(result)
+    const result = await callAI(
+      [{ role: 'user', content: prompt }],
+      user?.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
 
     if (!result) {
       return NextResponse.json({ error: 'Could not generate improved content' }, { status: 500 })

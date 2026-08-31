@@ -26,6 +26,7 @@ import {
   BrainCircuit,
   Menu,
   X,
+  Cpu,
 } from 'lucide-react'
 
 const navGroups = [
@@ -71,6 +72,7 @@ const navGroups = [
       { label: 'Usage', href: '/usage', icon: Gauge },
       { label: 'Settings', href: '/settings', icon: Settings },
       { label: 'WordPress', href: '/settings/wordpress', icon: Globe },
+      { label: 'AI Provider', href: '/settings/ai-provider', icon: Cpu },
     ],
   },
 ]

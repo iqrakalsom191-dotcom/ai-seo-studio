@@ -1,5 +1,6 @@
-import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { callAI } from '@/lib/ai-client'
 
 const PLATFORM_GUIDE = {
   Instagram: 'Write an engaging Instagram caption (with emojis, casual tone) followed by 8-12 relevant hashtags.',
@@ -39,6 +40,9 @@ function fallbackParseCaptions(raw, platforms) {
 
 export async function POST(request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
     const body = await request.json()
     const { content, platforms } = body
 
@@ -65,18 +69,12 @@ ${content}
 Return ONLY a JSON array, and nothing else. No preamble, no explanation, no markdown formatting, no code fences. The response must be valid JSON matching exactly this shape:
 [{"platform": "Instagram", "caption": "..."}, ...]`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely. Output ONLY valid JSON, no markdown, no code fences, no commentary.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 1500,
-    })
-
-    let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = stripThinkAndMeta(raw)
+    const raw = await callAI(
+      [{ role: 'user', content: prompt }],
+      user?.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely. Output ONLY valid JSON, no markdown, no code fences, no commentary.'
+    )
 
     let results = null
     const jsonMatch = raw.match(/\[[\s\S]*\]/)

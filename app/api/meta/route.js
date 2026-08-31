@@ -1,10 +1,7 @@
-import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { checkAndIncrementUsage } from '@/lib/usage'
-import { stripThinkAndMeta } from '@/lib/groq'
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+import { callAI } from '@/lib/ai-client'
 
 export async function POST(request) {
   try {
@@ -22,10 +19,8 @@ export async function POST(request) {
     const body = await request.json()
     const { topic, keyword } = body
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
+    const content = await callAI(
+      [
         {
           role: 'user',
           content: `Write an SEO title and meta description for topic: ${topic}, keyword: ${keyword}.
@@ -35,13 +30,10 @@ Strict requirements:
 Format: TITLE: ... DESCRIPTION: ...`
         },
       ],
-      reasoning_effort: 'none',
-      max_tokens: 1000,
-
-    })
-
-    let content = completion.choices[0]?.message?.content || ''
-    content = stripThinkAndMeta(content)
+      user.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
 
     const titleMatch = content.match(/TITLE:\s*(.+)/i)
     const descMatch = content.match(/DESCRIPTION:\s*(.+)/i)

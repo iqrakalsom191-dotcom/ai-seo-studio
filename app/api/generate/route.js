@@ -1,10 +1,7 @@
-import Groq from 'groq-sdk'
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase-server'
 import { checkAndIncrementUsage } from '@/lib/usage'
-import { stripThinkAndMeta } from '@/lib/groq'
-
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
+import { callAI } from '@/lib/ai-client'
 
 export async function POST(request) {
   try {
@@ -30,18 +27,12 @@ The blog post should be approximately ${wordCount} words.
 Include a compelling title, introduction, main body with subheadings, and a conclusion.
 Format it in plain text with clear sections.`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 2048,
-    })
-
-    let content = completion.choices[0]?.message?.content || ''
-    content = stripThinkAndMeta(content)
+    const content = await callAI(
+      [{ role: 'user', content: prompt }],
+      user.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
     return NextResponse.json({ content, success: true })
 
   } catch (error) {

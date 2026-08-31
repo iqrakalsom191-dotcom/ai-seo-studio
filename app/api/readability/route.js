@@ -1,5 +1,6 @@
-import { groq, stripThinkAndMeta } from '@/lib/groq'
 import { NextResponse } from 'next/server'
+import { createClient } from '@/lib/supabase-server'
+import { callAI } from '@/lib/ai-client'
 
 function countSyllables(word) {
   word = word.toLowerCase().replace(/[^a-z]/g, '')
@@ -38,6 +39,9 @@ function analyzeText(content) {
 
 export async function POST(request) {
   try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
     const body = await request.json()
     const { content } = body
 
@@ -49,18 +53,12 @@ export async function POST(request) {
 
     const prompt = `You are a readability expert. Given the following content and its Flesch Reading Ease score of ${score} (${readingLevel}), provide 3-5 concise, actionable suggestions to improve its readability. Return only a plain list of suggestions, one per line, with no numbering, bullets, or preamble.\n\nContent:\n${content}`
 
-    const completion = await groq.chat.completions.create({
-      model: 'qwen/qwen3.6-27b',
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.' },
-        { role: 'user', content: prompt },
-      ],
-      reasoning_effort: 'none',
-      max_tokens: 500,
-    })
-
-    let raw = completion.choices[0]?.message?.content?.trim() || ''
-    raw = stripThinkAndMeta(raw)
+    const raw = await callAI(
+      [{ role: 'user', content: prompt }],
+      user?.id,
+      supabase,
+      'You are a helpful assistant. Never use <think> tags or show reasoning. Respond directly and concisely.'
+    )
     const suggestions = raw
       .split('\n')
       .map((line) => line.replace(/^[-*•\d.)\s]+/, '').trim())
