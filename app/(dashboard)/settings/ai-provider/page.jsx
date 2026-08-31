@@ -57,6 +57,7 @@ export default function AIProviderSettingsPage() {
   const [testing, setTesting] = useState(false)
   const [settingActive, setSettingActive] = useState(null)
   const [removing, setRemoving] = useState(null)
+  const [updatingModel, setUpdatingModel] = useState(null)
   const { showModal, setShowModal, guardedAction } = useGuestGuard()
 
   const loadProviders = async () => {
@@ -187,6 +188,33 @@ export default function AIProviderSettingsPage() {
     }
   })
 
+  const updateProviderModel = guardedAction(async (providerId, newModel) => {
+    setUpdatingModel(providerId)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      const { error } = await supabase
+        .from('user_ai_settings')
+        .update({ model: newModel, updated_at: new Date().toISOString() })
+        .eq('user_id', user.id)
+        .eq('provider', providerId)
+
+      if (error) throw error
+
+      setConnectedProviders((prev) =>
+        prev.map((p) => (p.provider === providerId ? { ...p, model: newModel } : p))
+      )
+      toast.success('Model updated')
+    } catch (e) {
+      console.error(e)
+      toast.error(e.message || 'Failed to update model')
+    } finally {
+      setUpdatingModel(null)
+    }
+  })
+
   const removeProvider = guardedAction(async (providerId) => {
     setRemoving(providerId)
     try {
@@ -268,7 +296,20 @@ export default function AIProviderSettingsPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-xs text-[#999]">{cp.model}</p>
+                    <div className="relative inline-block">
+                      <select
+                        value={cp.model}
+                        onChange={(e) => updateProviderModel(cp.provider, e.target.value)}
+                        disabled={updatingModel === cp.provider}
+                        className="appearance-none text-xs text-white rounded-lg pl-2.5 pr-6 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#FF6B35] disabled:opacity-50 cursor-pointer"
+                        style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}
+                      >
+                        {(meta?.models || [cp.model]).map((m) => (
+                          <option key={m} value={m}>{m}</option>
+                        ))}
+                      </select>
+                      <span className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[#FF6B35] text-[10px]">▾</span>
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-2">
