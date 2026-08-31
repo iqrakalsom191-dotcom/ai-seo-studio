@@ -16,16 +16,28 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Daily generation limit reached. Try again tomorrow.' }, { status: 429 })
     }
 
-    const { keyword, tone, wordCount, language } = await request.json()
+    const { keyword, tone, wordCount, language, context } = await request.json()
 
     if (!keyword) {
       return NextResponse.json({ error: 'Keyword is required' }, { status: 400 })
     }
 
-    const prompt = `Write a ${tone} blog post about "${keyword}" in ${language}. 
+    let contextBlock = ''
+    if (context) {
+      const lines = []
+      if (context.title) lines.push(`- Use this as the article title (or close variation): "${context.title}"`)
+      if (context.metaDescription) lines.push(`- The article should align with this meta description: "${context.metaDescription}"`)
+      if (context.relatedKeywords?.length) lines.push(`- Naturally incorporate these related keywords where relevant: ${context.relatedKeywords.join(', ')}`)
+      if (context.faqs?.length) lines.push(`- Include an FAQ section near the end covering: ${context.faqs.map((f) => f.question).join(' | ')}`)
+      if (lines.length > 0) {
+        contextBlock = `\n\nAdditional requirements from prior research on this keyword:\n${lines.join('\n')}`
+      }
+    }
+
+    const prompt = `Write a ${tone} blog post about "${keyword}" in ${language}.
 The blog post should be approximately ${wordCount} words.
 Include a compelling title, introduction, main body with subheadings, and a conclusion.
-Format it in plain text with clear sections.`
+Format it in plain text with clear sections.${contextBlock}`
 
     const content = await callAI(
       [{ role: 'user', content: prompt }],

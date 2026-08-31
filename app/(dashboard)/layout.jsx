@@ -27,6 +27,7 @@ import {
   Menu,
   X,
   Cpu,
+  Rocket,
 } from 'lucide-react'
 import ReviewWidget from '@/components/ui/ReviewWidget'
 
@@ -35,6 +36,12 @@ const navGroups = [
     label: 'Overview',
     items: [
       { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    ],
+  },
+  {
+    label: 'SEO Workflow',
+    items: [
+      { label: 'Projects', href: '/projects', icon: Rocket },
     ],
   },
   {

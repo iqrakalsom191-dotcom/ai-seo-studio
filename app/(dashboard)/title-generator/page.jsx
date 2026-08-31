@@ -1,14 +1,41 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import toast from 'react-hot-toast'
-import { Type, Copy, Check } from 'lucide-react'
+import { Type, Copy, Check, BookmarkPlus } from 'lucide-react'
+import useProjectContext from '@/hooks/useProjectContext'
+import ProjectBanner from '@/components/ui/ProjectBanner'
 
 export default function TitleGeneratorPage() {
+  return (
+    <Suspense fallback={null}>
+      <TitleGeneratorInner />
+    </Suspense>
+  )
+}
+
+function TitleGeneratorInner() {
+  const { projectId, project, saveToProject } = useProjectContext()
   const [keyword, setKeyword] = useState('')
   const [titles, setTitles] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [copiedIndex, setCopiedIndex] = useState(null)
+  const [savedIndex, setSavedIndex] = useState(null)
+
+  useEffect(() => {
+    if (project?.keyword && !keyword) setKeyword(project.keyword)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project])
+
+  const saveTitle = async (title, index) => {
+    try {
+      await saveToProject({ selected_title: title })
+      setSavedIndex(index)
+      toast.success('Saved to project')
+    } catch (e) {
+      toast.error(e.message || 'Failed to save')
+    }
+  }
 
   const generate = async () => {
     if (!keyword.trim()) return setError('Please enter a keyword first')
@@ -57,6 +84,8 @@ export default function TitleGeneratorPage() {
       </div>
       <p className="text-[#999] mb-8">Enter a keyword and get 10 catchy, SEO-optimized blog title options.</p>
 
+      <ProjectBanner project={project} projectId={projectId} />
+
       <div className="rounded-2xl border p-6 space-y-4" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
         <div>
           <label className="block text-sm font-medium text-[#999] mb-1">Keyword</label>
@@ -98,14 +127,26 @@ export default function TitleGeneratorPage() {
                   {title.length}/60
                 </span>
               </div>
-              <button
-                onClick={() => copy(title, i)}
-                className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition"
-                style={{ borderColor: '#1f1f1f', color: copiedIndex === i ? '#FFD4C2' : '#FF6B35' }}
-              >
-                {copiedIndex === i ? <Check size={14} /> : <Copy size={14} />}
-                {copiedIndex === i ? 'Copied!' : 'Copy'}
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                {projectId && (
+                  <button
+                    onClick={() => saveTitle(title, i)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition"
+                    style={{ borderColor: '#1f1f1f', color: savedIndex === i ? '#FFD4C2' : '#FF6B35' }}
+                  >
+                    {savedIndex === i ? <Check size={14} /> : <BookmarkPlus size={14} />}
+                    {savedIndex === i ? 'Saved!' : 'Use This'}
+                  </button>
+                )}
+                <button
+                  onClick={() => copy(title, i)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border transition"
+                  style={{ borderColor: '#1f1f1f', color: copiedIndex === i ? '#FFD4C2' : '#FF6B35' }}
+                >
+                  {copiedIndex === i ? <Check size={14} /> : <Copy size={14} />}
+                  {copiedIndex === i ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
             </div>
           ))}
         </div>

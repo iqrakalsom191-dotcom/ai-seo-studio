@@ -1,10 +1,21 @@
 'use client'
-import { useState } from 'react'
-import { Tag, Copy, Save } from 'lucide-react'
+import { useEffect, useState, Suspense } from 'react'
+import { Tag, Copy, Save, BookmarkPlus, Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
+import useProjectContext from '@/hooks/useProjectContext'
+import ProjectBanner from '@/components/ui/ProjectBanner'
 
 export default function MetaPage() {
+  return (
+    <Suspense fallback={null}>
+      <MetaPageInner />
+    </Suspense>
+  )
+}
+
+function MetaPageInner() {
+  const { projectId, project, saveToProject } = useProjectContext()
   const [topic, setTopic] = useState('')
   const [keyword, setKeyword] = useState('')
   const [result, setResult] = useState(null)
@@ -12,6 +23,25 @@ export default function MetaPage() {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [savedToProject, setSavedToProject] = useState(false)
+
+  useEffect(() => {
+    if (project?.keyword && !topic && !keyword) {
+      setTopic(project.keyword)
+      setKeyword(project.keyword)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project])
+
+  const saveResultToProject = async () => {
+    try {
+      await saveToProject({ meta_title: result.title, meta_description: result.description })
+      setSavedToProject(true)
+      toast.success('Saved to project')
+    } catch (e) {
+      toast.error(e.message || 'Failed to save')
+    }
+  }
 
   const generate = async () => {
     if (!topic || !keyword) return setError('Please fill all fields')
@@ -75,6 +105,8 @@ export default function MetaPage() {
         <h1 className="text-2xl font-bold text-white">Meta Tag Generator</h1>
       </div>
       <p className="text-[#999] mb-8">Generate SEO-optimized title and meta description for any page.</p>
+
+      <ProjectBanner project={project} projectId={projectId} />
 
       <div className="rounded-2xl border p-6 space-y-4" style={{ background: '#111111', borderColor: '#1f1f1f' }}>
         <div>
@@ -152,15 +184,28 @@ export default function MetaPage() {
             <p className="text-[#999] text-xs mt-1">{result.description}</p>
           </div>
 
-          <button
-            onClick={saveToLibrary}
-            disabled={saving || saved}
-            className="w-full py-3 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50"
-            style={{ backgroundColor: '#FF6B35' }}
-          >
-            <Save size={16} />
-            {saving ? 'Saving...' : saved ? 'Saved to Library ✓' : 'Save to Library'}
-          </button>
+          <div className="flex gap-3">
+            {projectId && (
+              <button
+                onClick={saveResultToProject}
+                disabled={savedToProject}
+                className="flex-1 py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50 border-2"
+                style={{ borderColor: '#FFD4C2', color: '#FFD4C2' }}
+              >
+                {savedToProject ? <Check size={16} /> : <BookmarkPlus size={16} />}
+                {savedToProject ? 'Saved to Project' : 'Use in Project'}
+              </button>
+            )}
+            <button
+              onClick={saveToLibrary}
+              disabled={saving || saved}
+              className="flex-1 py-3 rounded-xl text-white text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50"
+              style={{ backgroundColor: '#FF6B35' }}
+            >
+              <Save size={16} />
+              {saving ? 'Saving...' : saved ? 'Saved to Library ✓' : 'Save to Library'}
+            </button>
+          </div>
         </div>
       )}
     </div>

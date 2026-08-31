@@ -1,15 +1,42 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import toast from 'react-hot-toast'
-import { HelpCircle, ChevronDown } from 'lucide-react'
+import { HelpCircle, ChevronDown, BookmarkPlus, Check } from 'lucide-react'
 import { renderMarkdown } from '@/components/ui/MarkdownOutput'
+import useProjectContext from '@/hooks/useProjectContext'
+import ProjectBanner from '@/components/ui/ProjectBanner'
 
 export default function FaqPage() {
+  return (
+    <Suspense fallback={null}>
+      <FaqPageInner />
+    </Suspense>
+  )
+}
+
+function FaqPageInner() {
+  const { projectId, project, saveToProject } = useProjectContext()
   const [topic, setTopic] = useState('')
   const [faqs, setFaqs] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [openIndex, setOpenIndex] = useState(null)
+  const [savedToProject, setSavedToProject] = useState(false)
+
+  useEffect(() => {
+    if (project?.keyword && !topic) setTopic(project.keyword)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project])
+
+  const saveAllToProject = async () => {
+    try {
+      await saveToProject({ faqs })
+      setSavedToProject(true)
+      toast.success('FAQs saved to project')
+    } catch (e) {
+      toast.error(e.message || 'Failed to save')
+    }
+  }
 
   const generate = async () => {
     if (!topic.trim()) return setError('Please enter a topic first')
@@ -46,6 +73,8 @@ export default function FaqPage() {
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>FAQ Generator</h1>
       </div>
       <p className="text-[#999] mb-8">Enter a topic and get 10 SEO-optimized FAQs.</p>
+
+      <ProjectBanner project={project} projectId={projectId} />
 
       <div className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-6 space-y-4">
         <div>
@@ -108,6 +137,17 @@ export default function FaqPage() {
               </div>
             )
           })}
+          {projectId && (
+            <button
+              onClick={saveAllToProject}
+              disabled={savedToProject}
+              className="w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition disabled:opacity-50 border-2"
+              style={{ borderColor: '#FFD4C2', color: '#FFD4C2' }}
+            >
+              {savedToProject ? <Check size={16} /> : <BookmarkPlus size={16} />}
+              {savedToProject ? 'Saved to Project' : `Use these ${faqs.length} FAQs in Project`}
+            </button>
+          )}
         </div>
       )}
     </div>

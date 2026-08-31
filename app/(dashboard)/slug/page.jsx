@@ -1,14 +1,41 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import toast from 'react-hot-toast'
-import { Link2, Copy, Check } from 'lucide-react'
+import { Link2, Copy, Check, BookmarkPlus } from 'lucide-react'
+import useProjectContext from '@/hooks/useProjectContext'
+import ProjectBanner from '@/components/ui/ProjectBanner'
 
 export default function SlugPage() {
+  return (
+    <Suspense fallback={null}>
+      <SlugPageInner />
+    </Suspense>
+  )
+}
+
+function SlugPageInner() {
+  const { projectId, project, saveToProject } = useProjectContext()
   const [keyword, setKeyword] = useState('')
   const [slugs, setSlugs] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [copiedIndex, setCopiedIndex] = useState(null)
+  const [savedIndex, setSavedIndex] = useState(null)
+
+  useEffect(() => {
+    if (project?.keyword && !keyword) setKeyword(project.keyword)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [project])
+
+  const saveSlug = async (slug, index) => {
+    try {
+      await saveToProject({ slug })
+      setSavedIndex(index)
+      toast.success('Saved to project')
+    } catch (e) {
+      toast.error(e.message || 'Failed to save')
+    }
+  }
 
   const generate = async () => {
     if (!keyword.trim()) return setError('Please enter a keyword first')
@@ -52,6 +79,8 @@ export default function SlugPage() {
       </div>
       <p className="text-[#999] mb-8">Enter a keyword and get 5 SEO-friendly URL slugs.</p>
 
+      <ProjectBanner project={project} projectId={projectId} />
+
       <div className="bg-[#111] rounded-2xl shadow-sm border border-[#1f1f1f] p-6 space-y-4">
         <div>
           <label className="block text-sm font-medium text-[#999] mb-1">Keyword</label>
@@ -86,14 +115,26 @@ export default function SlugPage() {
               className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-4 flex items-center justify-between gap-4 hover:shadow-md transition"
             >
               <code className="text-sm font-medium text-white break-all">/{slug}</code>
-              <button
-                onClick={() => copy(slug, i)}
-                className="flex-shrink-0 flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-[#1f1f1f] hover:bg-[#1a1a1a] transition"
-                style={{ color: copiedIndex === i ? '#FFD4C2' : '#FF6B35' }}
-              >
-                {copiedIndex === i ? <Check size={14} /> : <Copy size={14} />}
-                {copiedIndex === i ? 'Copied!' : 'Copy'}
-              </button>
+              <div className="flex items-center gap-2 shrink-0">
+                {projectId && (
+                  <button
+                    onClick={() => saveSlug(slug, i)}
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-[#1f1f1f] hover:bg-[#1a1a1a] transition"
+                    style={{ color: savedIndex === i ? '#FFD4C2' : '#FF6B35' }}
+                  >
+                    {savedIndex === i ? <Check size={14} /> : <BookmarkPlus size={14} />}
+                    {savedIndex === i ? 'Saved!' : 'Use This'}
+                  </button>
+                )}
+                <button
+                  onClick={() => copy(slug, i)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-semibold border border-[#1f1f1f] hover:bg-[#1a1a1a] transition"
+                  style={{ color: copiedIndex === i ? '#FFD4C2' : '#FF6B35' }}
+                >
+                  {copiedIndex === i ? <Check size={14} /> : <Copy size={14} />}
+                  {copiedIndex === i ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
             </div>
           ))}
         </div>
