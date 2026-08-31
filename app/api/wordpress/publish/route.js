@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
+import { markdownToHtml } from '@/lib/markdown-to-html'
 
 export async function POST(request) {
   try {
@@ -37,7 +38,7 @@ export async function POST(request) {
       },
       body: JSON.stringify({
         title,
-        content,
+        content: markdownToHtml(content),
         status,
       }),
     })
