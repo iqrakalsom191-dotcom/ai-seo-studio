@@ -110,16 +110,16 @@ export default function ProjectWorkspacePage() {
         <StepKeyword analyzing={analyzing} />
       )}
       {project.current_step === 2 && (
-        <StepResearch project={project} analyzing={analyzing} onContinue={() => goToStep(3)} />
+        <StepResearch project={project} analyzing={analyzing} onContinue={() => goToStep(3)} onBack={() => goToStep(1)} />
       )}
       {project.current_step === 3 && (
-        <StepContentPlan project={project} patch={patch} onContinue={() => goToStep(4)} />
+        <StepContentPlan project={project} patch={patch} onContinue={() => goToStep(4)} onBack={() => goToStep(2)} />
       )}
       {project.current_step === 4 && (
-        <StepWrite project={project} patch={patch} onContinue={() => goToStep(5)} />
+        <StepWrite project={project} patch={patch} onContinue={() => goToStep(5)} onBack={() => goToStep(3)} />
       )}
       {project.current_step === 5 && (
-        <StepPublish project={project} patch={patch} />
+        <StepPublish project={project} patch={patch} goToStep={goToStep} />
       )}
 
       <GuestModal open={showModal} onClose={() => setShowModal(false)} />
@@ -135,6 +135,28 @@ function Card({ children }) {
   )
 }
 
+function StepNav({ onBack, onContinue, continueLabel = 'Continue' }) {
+  return (
+    <div className="flex gap-3">
+      {onBack && (
+        <button
+          onClick={onBack}
+          className="px-5 py-3 rounded-xl text-sm font-semibold border border-[#1f1f1f] text-[#999] hover:text-white hover:bg-[#1a1a1a] transition"
+        >
+          ← Back
+        </button>
+      )}
+      <button
+        onClick={onContinue}
+        className="flex-1 text-white font-semibold py-3 rounded-xl transition hover:opacity-90"
+        style={{ backgroundColor: '#FF6B35' }}
+      >
+        {continueLabel}
+      </button>
+    </div>
+  )
+}
+
 function StepKeyword({ analyzing }) {
   return (
     <Card>
@@ -146,7 +168,7 @@ function StepKeyword({ analyzing }) {
   )
 }
 
-function StepResearch({ project, analyzing, onContinue }) {
+function StepResearch({ project, analyzing, onContinue, onBack }) {
   const a = project.keyword_analysis
   if (analyzing || !a) {
     return (
@@ -197,18 +219,20 @@ function StepResearch({ project, analyzing, onContinue }) {
         </Link>
       </Card>
 
-      <button
-        onClick={onContinue}
-        className="w-full text-white font-semibold py-3 rounded-xl transition hover:opacity-90"
-        style={{ backgroundColor: '#FF6B35' }}
-      >
-        Continue to Content Plan
-      </button>
+      <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Continue to Content Plan" />
     </div>
   )
 }
 
-function StepContentPlan({ project, patch, onContinue }) {
+function OptionalTag() {
+  return (
+    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide" style={{ background: 'rgba(153,153,153,0.15)', color: '#999' }}>
+      Optional
+    </span>
+  )
+}
+
+function StepContentPlan({ project, patch, onContinue, onBack }) {
   const [title, setTitle] = useState(project.selected_title || '')
   const [metaTitle, setMetaTitle] = useState(project.meta_title || '')
   const [metaDescription, setMetaDescription] = useState(project.meta_description || '')
@@ -217,6 +241,7 @@ function StepContentPlan({ project, patch, onContinue }) {
   const [newQ, setNewQ] = useState('')
   const [newA, setNewA] = useState('')
   const [saving, setSaving] = useState(null)
+  const [activeModal, setActiveModal] = useState(null)
 
   const saveField = async (key, value, label) => {
     setSaving(key)
@@ -255,12 +280,18 @@ function StepContentPlan({ project, patch, onContinue }) {
 
   return (
     <div className="space-y-5">
+      <p className="text-xs text-[#999]">
+        Everything below is optional — skip whatever you don't need and hit Continue whenever you're ready.
+      </p>
+
       <Card>
         <div className="flex items-center justify-between">
-          <label className="text-sm font-semibold" style={{ color: '#FAFAFA' }}>Title</label>
-          <Link href={`/title-generator?project=${project.id}`} target="_blank" className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
+          <label className="text-sm font-semibold flex items-center gap-2" style={{ color: '#FAFAFA' }}>
+            Title <OptionalTag />
+          </label>
+          <button onClick={() => setActiveModal('title')} className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
             Generate ideas →
-          </Link>
+          </button>
         </div>
         <div className="flex gap-2">
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Paste or write your chosen title" className={inputClass} />
@@ -273,11 +304,11 @@ function StepContentPlan({ project, patch, onContinue }) {
       <Card>
         <div className="flex items-center justify-between">
           <label className="text-sm font-semibold flex items-center gap-2" style={{ color: '#FAFAFA' }}>
-            <Tags size={14} style={{ color: '#FF6B35' }} /> Meta Title & Description
+            <Tags size={14} style={{ color: '#FF6B35' }} /> Meta Title & Description <OptionalTag />
           </label>
-          <Link href={`/meta?project=${project.id}`} target="_blank" className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
+          <button onClick={() => setActiveModal('meta')} className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
             Generate →
-          </Link>
+          </button>
         </div>
         <input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} placeholder="Meta title" className={inputClass} />
         <textarea value={metaDescription} onChange={(e) => setMetaDescription(e.target.value)} placeholder="Meta description" rows={2} className={`${inputClass} resize-none`} />
@@ -295,11 +326,11 @@ function StepContentPlan({ project, patch, onContinue }) {
       <Card>
         <div className="flex items-center justify-between">
           <label className="text-sm font-semibold flex items-center gap-2" style={{ color: '#FAFAFA' }}>
-            <Link2 size={14} style={{ color: '#FF6B35' }} /> Slug
+            <Link2 size={14} style={{ color: '#FF6B35' }} /> Slug <OptionalTag />
           </label>
-          <Link href={`/slug?project=${project.id}`} target="_blank" className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
+          <button onClick={() => setActiveModal('slug')} className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
             Generate →
-          </Link>
+          </button>
         </div>
         <div className="flex gap-2">
           <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="e.g. best-coffee-maker" className={inputClass} />
@@ -312,11 +343,11 @@ function StepContentPlan({ project, patch, onContinue }) {
       <Card>
         <div className="flex items-center justify-between">
           <label className="text-sm font-semibold flex items-center gap-2" style={{ color: '#FAFAFA' }}>
-            <HelpCircle size={14} style={{ color: '#FF6B35' }} /> FAQs ({faqs.length})
+            <HelpCircle size={14} style={{ color: '#FF6B35' }} /> FAQs ({faqs.length}) <OptionalTag />
           </label>
-          <Link href={`/faq?project=${project.id}`} target="_blank" className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
+          <button onClick={() => setActiveModal('faq')} className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
             Generate →
-          </Link>
+          </button>
         </div>
         {faqs.map((f, i) => (
           <div key={i} className="flex items-start justify-between gap-2 rounded-lg p-3" style={{ background: '#1a1a1a' }}>
@@ -336,18 +367,268 @@ function StepContentPlan({ project, patch, onContinue }) {
         </button>
       </Card>
 
-      <button
-        onClick={onContinue}
-        className="w-full text-white font-semibold py-3 rounded-xl transition hover:opacity-90"
-        style={{ backgroundColor: '#FF6B35' }}
-      >
-        Continue to Write
-      </button>
+      <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Continue to Write" />
+
+      {activeModal === 'title' && (
+        <TitleGenModal
+          keyword={project.keyword}
+          onClose={() => setActiveModal(null)}
+          onSelect={(value) => { setTitle(value); saveField('selected_title', value, 'Title'); setActiveModal(null) }}
+        />
+      )}
+      {activeModal === 'meta' && (
+        <MetaGenModal
+          keyword={project.keyword}
+          onClose={() => setActiveModal(null)}
+          onSelect={(t, d) => {
+            setMetaTitle(t); setMetaDescription(d)
+            saveField('meta_title', t, 'Meta title').then(() => saveField('meta_description', d, 'Meta description'))
+            setActiveModal(null)
+          }}
+        />
+      )}
+      {activeModal === 'slug' && (
+        <SlugGenModal
+          keyword={project.keyword}
+          onClose={() => setActiveModal(null)}
+          onSelect={(value) => { setSlug(value); saveField('slug', value, 'Slug'); setActiveModal(null) }}
+        />
+      )}
+      {activeModal === 'faq' && (
+        <FaqGenModal
+          keyword={project.keyword}
+          onClose={() => setActiveModal(null)}
+          onSelect={(newFaqs) => {
+            const merged = [...faqs, ...newFaqs]
+            setFaqs(merged)
+            patch({ faqs: merged }).then(() => toast.success('FAQs saved'))
+            setActiveModal(null)
+          }}
+        />
+      )}
     </div>
   )
 }
 
-function StepWrite({ project, patch, onContinue }) {
+function ModalShell({ title, onClose, children }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.6)' }} onClick={onClose}>
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl p-6"
+        style={{ background: '#111', border: '1px solid #1f1f1f' }}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold" style={{ color: '#FAFAFA' }}>{title}</h3>
+          <button onClick={onClose} className="text-[#999] hover:text-white">
+            <X size={18} />
+          </button>
+        </div>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+function GenerateButton({ onClick, loading, children }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={loading}
+      className="w-full flex items-center justify-center gap-2 text-white font-semibold py-2.5 rounded-xl transition disabled:opacity-50 hover:opacity-90"
+      style={{ backgroundColor: '#FF6B35' }}
+    >
+      {loading && <Loader2 size={15} className="animate-spin" />}
+      {children}
+    </button>
+  )
+}
+
+function TitleGenModal({ keyword, onClose, onSelect }) {
+  const [titles, setTitles] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const generate = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/title-generator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.titles) throw new Error(data.error || 'Failed to generate titles')
+      setTitles(data.titles.split('\n').map((t) => t.trim()).filter(Boolean))
+    } catch (e) {
+      toast.error(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { generate() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <ModalShell title="Generate Title" onClose={onClose}>
+      <div className="space-y-3">
+        {titles.map((t, i) => (
+          <button
+            key={i}
+            onClick={() => onSelect(t)}
+            className="w-full text-left rounded-lg p-3 text-sm transition hover:border-[#FF6B35]"
+            style={{ background: '#1a1a1a', border: '1px solid #1f1f1f', color: '#e5e5e5' }}
+          >
+            {t}
+          </button>
+        ))}
+        <GenerateButton onClick={generate} loading={loading}>
+          {loading ? 'Generating…' : titles.length ? 'Regenerate' : 'Generate Titles'}
+        </GenerateButton>
+      </div>
+    </ModalShell>
+  )
+}
+
+function MetaGenModal({ keyword, onClose, onSelect }) {
+  const [result, setResult] = useState(null)
+  const [loading, setLoading] = useState(false)
+
+  const generate = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/meta', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: keyword, keyword }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to generate meta tags')
+      setResult(data)
+    } catch (e) {
+      toast.error(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { generate() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <ModalShell title="Generate Meta Tags" onClose={onClose}>
+      <div className="space-y-3">
+        {result && (
+          <div className="rounded-lg p-3 space-y-2" style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}>
+            <p className="text-sm font-medium" style={{ color: '#FAFAFA' }}>{result.title}</p>
+            <p className="text-xs" style={{ color: '#999' }}>{result.description}</p>
+            <button
+              onClick={() => onSelect(result.title, result.description)}
+              className="text-xs font-semibold"
+              style={{ color: '#FF6B35' }}
+            >
+              Use This →
+            </button>
+          </div>
+        )}
+        <GenerateButton onClick={generate} loading={loading}>
+          {loading ? 'Generating…' : result ? 'Regenerate' : 'Generate Meta Tags'}
+        </GenerateButton>
+      </div>
+    </ModalShell>
+  )
+}
+
+function SlugGenModal({ keyword, onClose, onSelect }) {
+  const [slugs, setSlugs] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const generate = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/slug', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ keyword }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.slugs) throw new Error(data.error || 'Failed to generate slugs')
+      setSlugs(data.slugs)
+    } catch (e) {
+      toast.error(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { generate() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <ModalShell title="Generate Slug" onClose={onClose}>
+      <div className="space-y-3">
+        {slugs.map((s, i) => (
+          <button
+            key={i}
+            onClick={() => onSelect(s)}
+            className="w-full text-left rounded-lg p-3 text-sm font-mono transition hover:border-[#FF6B35]"
+            style={{ background: '#1a1a1a', border: '1px solid #1f1f1f', color: '#e5e5e5' }}
+          >
+            /{s}
+          </button>
+        ))}
+        <GenerateButton onClick={generate} loading={loading}>
+          {loading ? 'Generating…' : slugs.length ? 'Regenerate' : 'Generate Slugs'}
+        </GenerateButton>
+      </div>
+    </ModalShell>
+  )
+}
+
+function FaqGenModal({ keyword, onClose, onSelect }) {
+  const [faqs, setFaqs] = useState([])
+  const [loading, setLoading] = useState(false)
+
+  const generate = async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/faq', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ topic: keyword }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.faqs) throw new Error(data.error || 'Failed to generate FAQs')
+      setFaqs(data.faqs)
+    } catch (e) {
+      toast.error(e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => { generate() }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <ModalShell title="Generate FAQs" onClose={onClose}>
+      <div className="space-y-3">
+        {faqs.map((f, i) => (
+          <div key={i} className="rounded-lg p-3" style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}>
+            <p className="text-sm font-medium" style={{ color: '#FAFAFA' }}>{f.question}</p>
+            <p className="text-xs mt-1" style={{ color: '#999' }}>{f.answer}</p>
+          </div>
+        ))}
+        {faqs.length > 0 && (
+          <button onClick={() => onSelect(faqs)} className="w-full text-sm font-semibold py-2 rounded-lg border-2" style={{ borderColor: '#FFD4C2', color: '#FFD4C2' }}>
+            Use all {faqs.length} FAQs
+          </button>
+        )}
+        <GenerateButton onClick={generate} loading={loading}>
+          {loading ? 'Generating…' : faqs.length ? 'Regenerate' : 'Generate FAQs'}
+        </GenerateButton>
+      </div>
+    </ModalShell>
+  )
+}
+
+function StepWrite({ project, patch, onContinue, onBack }) {
   const [tone, setTone] = useState('professional')
   const [wordCount, setWordCount] = useState('1000')
   const [language, setLanguage] = useState('english')
@@ -442,32 +723,27 @@ function StepWrite({ project, patch, onContinue }) {
         <Card>
           <OutputTopBar wordCount={project.generated_content.split(/\s+/).length} contentType="Blog Post" />
           <MarkdownContent text={project.generated_content} />
-          <div className="flex gap-3">
-            <button
-              onClick={saveToLibrary}
-              disabled={saving}
-              className="flex-1 flex items-center justify-center gap-2 rounded-xl border-2 py-2.5 text-sm font-semibold"
-              style={{ borderColor: '#FFD4C2', color: '#FFD4C2' }}
-            >
-              {savedOk ? <CheckCheck size={15} /> : <BookmarkPlus size={15} />}
-              {saving ? 'Saving…' : savedOk ? 'Saved!' : 'Save to Library'}
-            </button>
-            <button
-              onClick={onContinue}
-              className="flex-1 text-white font-semibold py-2.5 rounded-xl text-sm"
-              style={{ backgroundColor: '#FF6B35' }}
-            >
-              Continue to Publish
-            </button>
-          </div>
+          <button
+            onClick={saveToLibrary}
+            disabled={saving}
+            className="w-full flex items-center justify-center gap-2 rounded-xl border-2 py-2.5 text-sm font-semibold"
+            style={{ borderColor: '#FFD4C2', color: '#FFD4C2' }}
+          >
+            {savedOk ? <CheckCheck size={15} /> : <BookmarkPlus size={15} />}
+            {saving ? 'Saving…' : savedOk ? 'Saved!' : 'Save to Library'}
+          </button>
+          <StepNav onBack={onBack} onContinue={onContinue} continueLabel="Continue to Publish" />
         </Card>
       )}
     </div>
   )
 }
 
-function StepPublish({ project, patch }) {
+function StepPublish({ project, patch, goToStep }) {
   const [publishing, setPublishing] = useState(false)
+  const [editing, setEditing] = useState(false)
+  const [draft, setDraft] = useState(project.generated_content || '')
+  const [savingEdit, setSavingEdit] = useState(false)
 
   const publish = async (status) => {
     if (!project.generated_content) {
@@ -503,6 +779,19 @@ function StepPublish({ project, patch }) {
     }
   }
 
+  const saveEdit = async () => {
+    setSavingEdit(true)
+    try {
+      await patch({ generated_content: draft })
+      setEditing(false)
+      toast.success('Article updated — republish to push these changes live')
+    } catch (e) {
+      toast.error(e.message || 'Failed to save changes')
+    } finally {
+      setSavingEdit(false)
+    }
+  }
+
   return (
     <div className="space-y-5">
       {project.wordpress_status !== 'none' && (
@@ -516,6 +805,57 @@ function StepPublish({ project, patch }) {
         </Card>
       )}
 
+      {project.generated_content && (
+        <Card>
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-semibold" style={{ color: '#FAFAFA' }}>Article Content</span>
+            <div className="flex items-center gap-3">
+              {!editing && (
+                <button onClick={() => { setDraft(project.generated_content); setEditing(true) }} className="text-xs font-semibold flex items-center gap-1" style={{ color: '#FF6B35' }}>
+                  <FileEdit size={13} /> Edit
+                </button>
+              )}
+              <button onClick={() => goToStep(4)} className="text-xs font-semibold" style={{ color: '#FFD4C2' }}>
+                Regenerate in Write step →
+              </button>
+            </div>
+          </div>
+
+          {editing ? (
+            <div className="space-y-3">
+              <textarea
+                value={draft}
+                onChange={(e) => setDraft(e.target.value)}
+                rows={16}
+                className="w-full bg-[#1a1a1a] text-white border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35] resize-y font-mono"
+              />
+              <div className="flex gap-3">
+                <button onClick={() => setEditing(false)} className="flex-1 py-2.5 rounded-lg text-sm font-semibold border border-[#1f1f1f] text-[#999]">
+                  Cancel
+                </button>
+                <button
+                  onClick={saveEdit}
+                  disabled={savingEdit}
+                  className="flex-1 py-2.5 rounded-lg text-sm font-semibold text-white disabled:opacity-50"
+                  style={{ background: '#FF6B35' }}
+                >
+                  {savingEdit ? 'Saving…' : 'Save Changes'}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <MarkdownContent text={project.generated_content} />
+          )}
+        </Card>
+      )}
+
+      <button
+        onClick={() => goToStep(4)}
+        className="px-5 py-3 rounded-xl text-sm font-semibold border border-[#1f1f1f] text-[#999] hover:text-white hover:bg-[#1a1a1a] transition"
+      >
+        ← Back to Write
+      </button>
+
       <Card>
         <div className="flex flex-col sm:flex-row gap-3">
           <button
@@ -525,7 +865,7 @@ function StepPublish({ project, patch }) {
             style={{ borderColor: '#FF6B35', color: '#FF6B35' }}
           >
             {publishing ? <Loader2 size={15} className="animate-spin" /> : <FileEdit size={15} />}
-            Save as Draft
+            {project.wordpress_status === 'none' ? 'Save as Draft' : 'Update Draft'}
           </button>
           <button
             onClick={() => publish('publish')}
@@ -534,7 +874,7 @@ function StepPublish({ project, patch }) {
             style={{ backgroundColor: '#FF6B35' }}
           >
             {publishing ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
-            Publish Live
+            {project.wordpress_status === 'published' ? 'Republish' : 'Publish Live'}
           </button>
         </div>
       </Card>
