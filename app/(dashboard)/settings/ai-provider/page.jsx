@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Cpu, Save, Plug, Eye, EyeOff, CheckCircle2, ExternalLink } from 'lucide-react'
+import { Cpu, Save, Plug, Eye, EyeOff, CheckCircle2, ExternalLink, Trash2, Zap } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import useGuestGuard from '@/hooks/useGuestGuard'
@@ -42,7 +42,12 @@ const PROVIDERS = [
   },
 ]
 
+function providerMeta(id) {
+  return PROVIDERS.find((p) => p.id === id)
+}
+
 export default function AIProviderSettingsPage() {
+  const [connectedProviders, setConnectedProviders] = useState([])
   const [provider, setProvider] = useState('groq')
   const [apiKey, setApiKey] = useState('')
   const [model, setModel] = useState(PROVIDERS[0].models[0])
@@ -50,40 +55,39 @@ export default function AIProviderSettingsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [testing, setTesting] = useState(false)
-  const [connected, setConnected] = useState(false)
+  const [settingActive, setSettingActive] = useState(null)
+  const [removing, setRemoving] = useState(null)
   const { showModal, setShowModal, guardedAction } = useGuestGuard()
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+  const loadProviders = async () => {
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
 
-        const { data, error } = await supabase
-          .from('user_ai_settings')
-          .select('provider, api_key, model')
-          .eq('user_id', user.id)
-          .single()
+      const { data, error } = await supabase
+        .from('user_ai_settings')
+        .select('provider, api_key, model, is_active')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: true })
 
-        if (!error && data) {
-          setProvider(data.provider || 'groq')
-          setApiKey(data.api_key || '')
-          setModel(data.model || PROVIDERS.find(p => p.id === data.provider)?.models[0] || '')
-          setConnected(true)
-        }
-      } catch (e) {
-        console.error(e)
-      } finally {
-        setLoading(false)
+      if (!error && data) {
+        setConnectedProviders(data)
       }
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
     }
-    load()
+  }
+
+  useEffect(() => {
+    loadProviders()
   }, [])
 
   const selectProvider = (id) => {
     setProvider(id)
-    const p = PROVIDERS.find(p => p.id === id)
+    const p = providerMeta(id)
     setModel(p.models[0])
   }
 
@@ -123,6 +127,8 @@ export default function AIProviderSettingsPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
+      const isFirstProvider = connectedProviders.length === 0
+
       const { error } = await supabase
         .from('user_ai_settings')
         .upsert(
@@ -131,23 +137,95 @@ export default function AIProviderSettingsPage() {
             provider,
             api_key: apiKey.trim(),
             model,
+            is_active: isFirstProvider,
             updated_at: new Date().toISOString(),
           },
-          { onConflict: 'user_id' }
+          { onConflict: 'user_id,provider' }
         )
 
       if (error) throw error
-      setConnected(true)
-      toast.success('AI provider settings saved')
+      setApiKey('')
+      await loadProviders()
+      toast.success('AI provider saved')
     } catch (e) {
       console.error(e)
-      toast.error(e.message || 'Failed to save settings')
+      toast.error(e.message || 'Failed to save provider')
     } finally {
       setSaving(false)
     }
   })
 
-  const activeProvider = PROVIDERS.find(p => p.id === provider)
+  const setAsActive = guardedAction(async (providerId) => {
+    setSettingActive(providerId)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      const { error: deactivateError } = await supabase
+        .from('user_ai_settings')
+        .update({ is_active: false })
+        .eq('user_id', user.id)
+
+      if (deactivateError) throw deactivateError
+
+      const { error: activateError } = await supabase
+        .from('user_ai_settings')
+        .update({ is_active: true })
+        .eq('user_id', user.id)
+        .eq('provider', providerId)
+
+      if (activateError) throw activateError
+
+      await loadProviders()
+      toast.success(`${providerMeta(providerId)?.name} is now active`)
+    } catch (e) {
+      console.error(e)
+      toast.error(e.message || 'Failed to set active provider')
+    } finally {
+      setSettingActive(null)
+    }
+  })
+
+  const removeProvider = guardedAction(async (providerId) => {
+    setRemoving(providerId)
+    try {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error('Not authenticated')
+
+      const removedWasActive = connectedProviders.find((p) => p.provider === providerId)?.is_active
+
+      const { error } = await supabase
+        .from('user_ai_settings')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('provider', providerId)
+
+      if (error) throw error
+
+      if (removedWasActive) {
+        const remaining = connectedProviders.filter((p) => p.provider !== providerId)
+        if (remaining.length > 0) {
+          await supabase
+            .from('user_ai_settings')
+            .update({ is_active: true })
+            .eq('user_id', user.id)
+            .eq('provider', remaining[0].provider)
+        }
+      }
+
+      await loadProviders()
+      toast.success('Provider removed')
+    } catch (e) {
+      console.error(e)
+      toast.error(e.message || 'Failed to remove provider')
+    } finally {
+      setRemoving(null)
+    }
+  })
+
+  const activeProvider = providerMeta(provider)
 
   return (
     <div className="max-w-2xl mx-auto p-6" style={{ background: '#09090B' }}>
@@ -155,16 +233,74 @@ export default function AIProviderSettingsPage() {
         <Cpu size={28} style={{ color: '#FF6B35' }} />
         <h1 className="text-2xl font-bold" style={{ color: '#FAFAFA' }}>AI Provider</h1>
       </div>
-      <p className="text-[#999] mb-8">Connect your own AI provider API key to power content generation.</p>
+      <p className="text-[#999] mb-8">Connect your own AI provider API keys to power content generation.</p>
 
-      <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6 space-y-6">
-        {connected && (
-          <div className="flex items-center gap-2 text-sm px-4 py-3 rounded-lg" style={{ background: 'rgba(255,107,53,0.12)', color: '#FF6B35' }}>
-            <CheckCircle2 size={16} />
-            Provider connected
+      {connectedProviders.length > 0 && (
+        <div className="mb-8">
+          <h2 className="text-sm font-semibold text-[#999] mb-3 uppercase tracking-wide">Connected Providers</h2>
+          <div className="space-y-3">
+            {connectedProviders.map((cp) => {
+              const meta = providerMeta(cp.provider)
+              return (
+                <div
+                  key={cp.provider}
+                  className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-4 flex items-center justify-between gap-4 flex-wrap"
+                >
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="font-semibold text-sm" style={{ color: '#FAFAFA' }}>
+                        {meta?.name || cp.provider}
+                      </span>
+                      <span
+                        className="flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full"
+                        style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}
+                      >
+                        <CheckCircle2 size={11} />
+                        Connected
+                      </span>
+                      {cp.is_active && (
+                        <span
+                          className="flex items-center gap-1 text-xs font-semibold px-2.5 py-0.5 rounded-full"
+                          style={{ background: 'rgba(255,107,53,0.15)', color: '#FF6B35' }}
+                        >
+                          <Zap size={11} />
+                          Active
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-[#999]">{cp.model}</p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setAsActive(cp.provider)}
+                      disabled={cp.is_active || settingActive === cp.provider}
+                      className="text-xs font-semibold px-3 py-2 rounded-lg transition disabled:cursor-default"
+                      style={
+                        cp.is_active
+                          ? { background: '#1a1a1a', color: '#666', border: '1px solid #1f1f1f' }
+                          : { background: '#FF6B35', color: '#fff' }
+                      }
+                    >
+                      {cp.is_active ? 'Active' : settingActive === cp.provider ? 'Setting…' : 'Set Active'}
+                    </button>
+                    <button
+                      onClick={() => removeProvider(cp.provider)}
+                      disabled={removing === cp.provider}
+                      className="p-2 rounded-lg border border-[#1f1f1f] text-[#999] hover:text-[#f87171] hover:border-[#f87171]/40 transition disabled:opacity-50"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
           </div>
-        )}
+        </div>
+      )}
 
+      <h2 className="text-sm font-semibold text-[#999] mb-3 uppercase tracking-wide">Add Provider</h2>
+      <div className="bg-[#111] rounded-2xl border border-[#1f1f1f] shadow-sm p-6 space-y-6">
         <div>
           <label className="block text-sm font-medium text-[#999] mb-3">Provider</label>
           <div className="grid grid-cols-2 gap-3">
@@ -286,7 +422,7 @@ export default function AIProviderSettingsPage() {
             style={{ backgroundColor: '#FF6B35' }}
           >
             <Save size={16} />
-            {saving ? 'Saving...' : 'Save'}
+            {saving ? 'Saving...' : 'Save Provider'}
           </button>
         </div>
       </div>
