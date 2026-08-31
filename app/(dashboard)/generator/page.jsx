@@ -6,37 +6,7 @@ import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import useGuestGuard from '@/hooks/useGuestGuard'
 import GuestModal from '@/components/ui/GuestModal'
-
-function parseBold(line) {
-  const parts = line.split(/\*\*/)
-  return parts.map((part, i) =>
-    i % 2 === 1
-      ? <strong key={i} className="font-semibold text-white">{part}</strong>
-      : part
-  )
-}
-
-function renderMarkdown(text) {
-  return text.split('\n').map((line, i) => {
-    if (line.startsWith('# '))
-      return <h1 key={i} className="text-2xl font-bold text-white mt-6 mb-3">{parseBold(line.slice(2))}</h1>
-    if (line.startsWith('## '))
-      return <h2 key={i} className="text-xl font-bold text-white mt-5 mb-2">{parseBold(line.slice(3))}</h2>
-    if (line.startsWith('### '))
-      return <h3 key={i} className="text-lg font-semibold text-[#FF6B35] mt-4 mb-2">{parseBold(line.slice(4))}</h3>
-    if (line.startsWith('#### '))
-      return <h4 key={i} className="text-base font-semibold text-[#999] mt-3 mb-1">{parseBold(line.slice(5))}</h4>
-    if (line.startsWith('- ') || line.startsWith('* '))
-      return <li key={i} className="ml-4 text-[#ccc] leading-relaxed list-disc my-0.5">{parseBold(line.slice(2))}</li>
-    if (line.match(/^\d+\. /))
-      return <li key={i} className="ml-4 text-[#ccc] leading-relaxed list-decimal my-0.5">{parseBold(line.replace(/^\d+\. /, ''))}</li>
-    if (line.startsWith('---') || line.startsWith('***'))
-      return <hr key={i} className="border-[#1f1f1f] my-4" />
-    if (line.trim() === '')
-      return <div key={i} className="h-2" />
-    return <p key={i} className="text-[#ccc] leading-relaxed my-1">{parseBold(line)}</p>
-  })
-}
+import { MarkdownContent, OutputTopBar } from '@/components/ui/MarkdownOutput'
 
 export default function GeneratorPage() {
   const [keyword, setKeyword]     = useState('')
@@ -245,14 +215,10 @@ export default function GeneratorPage() {
 
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-white">Generated Content</h2>
-            <span className="bg-[#FFD4C2]/10 text-[#FFD4C2] text-xs font-semibold px-3 py-1 rounded-full">
-              {output.split(/\s+/).length} words
-            </span>
           </div>
 
-          <div className="overflow-y-auto max-h-[500px] rounded-xl border border-[#1f1f1f] bg-[#1a1a1a] px-5 py-4 text-sm">
-            {renderMarkdown(output)}
-          </div>
+          <OutputTopBar wordCount={output.split(/\s+/).length} contentType="Blog Post" />
+          <MarkdownContent text={output} />
 
           <div className="flex flex-col sm:flex-row gap-3">
             <button

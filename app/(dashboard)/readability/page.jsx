@@ -115,10 +115,10 @@ export default function ReadabilityPage() {
               </div>
               <ul className="space-y-3">
                 {result.suggestions.map((s, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-[#999] leading-relaxed">
+                  <li key={i} className="flex items-start gap-3 text-sm" style={{ color: '#e5e5e5', lineHeight: 1.8 }}>
                     <span
-                      className="mt-1 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: '#FFD4C2' }}
+                      className="mt-2.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
+                      style={{ backgroundColor: '#FF6B35' }}
                     />
                     {s}
                   </li>

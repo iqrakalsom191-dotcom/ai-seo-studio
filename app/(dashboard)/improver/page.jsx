@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Wand2, Copy, Save, Check } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
+import { MarkdownContent, OutputTopBar } from '@/components/ui/MarkdownOutput'
 
 const IMPROVEMENT_TYPES = ['Improve Writing', 'SEO Optimize', 'Rewrite', 'Make Shorter', 'Make Longer']
 
@@ -127,12 +128,8 @@ export default function ImproverPage() {
               <span className="text-sm font-semibold" style={{ color: '#FFD4C2' }}>Improved Content</span>
               <span className="text-xs font-medium text-[#999]">{result.length} chars</span>
             </div>
-            <textarea
-              readOnly
-              value={result}
-              rows={8}
-              className="w-full border border-[#1f1f1f] rounded-lg px-4 py-3 text-sm text-white leading-relaxed resize-y focus:outline-none bg-[#1a1a1a]"
-            />
+            <OutputTopBar wordCount={result.split(/\s+/).length} contentType={type} />
+            <MarkdownContent text={result} />
           </div>
 
           <div className="flex gap-3">

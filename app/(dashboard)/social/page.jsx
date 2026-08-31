@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { Share2, Copy, Check, Camera, AtSign, Briefcase } from 'lucide-react'
+import { renderMarkdown } from '@/components/ui/MarkdownOutput'
 
 const PLATFORMS = [
   { label: 'Instagram', icon: Camera },
@@ -137,7 +138,7 @@ export default function SocialPage() {
                   {copiedPlatform === r.platform ? 'Copied!' : 'Copy'}
                 </button>
               </div>
-              <p className="text-sm text-[#FAFAFA] leading-relaxed whitespace-pre-wrap">{r.caption}</p>
+              <div className="text-sm whitespace-pre-wrap">{renderMarkdown(r.caption)}</div>
             </div>
           ))}
         </div>

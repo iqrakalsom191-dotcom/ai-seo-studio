@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import { HelpCircle, ChevronDown } from 'lucide-react'
+import { renderMarkdown } from '@/components/ui/MarkdownOutput'
 
 export default function FaqPage() {
   const [topic, setTopic] = useState('')
@@ -98,10 +99,10 @@ export default function FaqPage() {
                 </button>
                 {isOpen && (
                   <div
-                    className="px-5 pb-4 text-sm text-[#999] leading-relaxed"
+                    className="px-5 pb-4 text-sm"
                     style={{ borderTop: `1px solid rgba(255, 212, 194, 0.2)`, paddingTop: '12px' }}
                   >
-                    {faq.answer}
+                    {renderMarkdown(faq.answer)}
                   </div>
                 )}
               </div>
