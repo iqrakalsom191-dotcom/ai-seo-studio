@@ -12,7 +12,7 @@ const PROVIDERS = [
     id: 'groq',
     name: 'Groq',
     description: 'Ultra-fast inference with open-weight models',
-    models: ['qwen-qwen3-27b', 'llama-3.3-70b-versatile', 'mixtral-8x7b-32768'],
+    models: ['qwen/qwen3-27b', 'llama-3.3-70b-versatile', 'mixtral-8x7b-32768'],
     keyUrl: 'https://console.groq.com',
     keySteps: ['Get free API key at console.groq.com', 'Login', 'API Keys', 'Create New Key'],
   },
