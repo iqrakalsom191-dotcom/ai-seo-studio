@@ -16,6 +16,15 @@ import GuestModal from '@/components/ui/GuestModal'
 
 const inputClass = 'w-full bg-[#1a1a1a] text-white placeholder-gray-600 border border-[#1f1f1f] rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[#FF6B35]'
 
+function slugify(text) {
+  return (text || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+}
+
 export default function ProjectWorkspacePage() {
   const { id } = useParams()
   const router = useRouter()
@@ -234,7 +243,6 @@ function OptionalTag() {
 
 function StepContentPlan({ project, patch, onContinue, onBack }) {
   const [title, setTitle] = useState(project.selected_title || '')
-  const [metaTitle, setMetaTitle] = useState(project.meta_title || '')
   const [metaDescription, setMetaDescription] = useState(project.meta_description || '')
   const [slug, setSlug] = useState(project.slug || '')
   const [faqs, setFaqs] = useState(project.faqs || [])
@@ -243,11 +251,52 @@ function StepContentPlan({ project, patch, onContinue, onBack }) {
   const [saving, setSaving] = useState(null)
   const [activeModal, setActiveModal] = useState(null)
 
-  const saveField = async (key, value, label) => {
-    setSaving(key)
+  // Title is the single source of truth — saving it also syncs the meta title,
+  // and auto-fills the slug if one hasn't been set yet.
+  const saveTitle = async (value) => {
+    if (project.selected_title && project.selected_title !== value) {
+      if (!window.confirm('Replace your saved title? This will also update your meta title.')) return
+    }
+    setSaving('selected_title')
     try {
-      await patch({ [key]: value })
-      toast.success(`${label} saved`)
+      const updates = { selected_title: value, meta_title: value }
+      if (!slug) updates.slug = slugify(value)
+      const updated = await patch(updates)
+      setTitle(value)
+      if (updated.slug) setSlug(updated.slug)
+      toast.success('Title saved')
+    } catch (e) {
+      toast.error(e.message)
+    } finally {
+      setSaving(null)
+    }
+  }
+
+  const saveDescription = async (value) => {
+    if (project.meta_description && project.meta_description !== value) {
+      if (!window.confirm('Replace your saved meta description?')) return
+    }
+    setSaving('meta_description')
+    try {
+      await patch({ meta_description: value, meta_title: title })
+      setMetaDescription(value)
+      toast.success('Meta description saved')
+    } catch (e) {
+      toast.error(e.message)
+    } finally {
+      setSaving(null)
+    }
+  }
+
+  const saveSlug = async (value) => {
+    if (project.slug && project.slug !== value) {
+      if (!window.confirm('Replace your saved slug?')) return
+    }
+    setSaving('slug')
+    try {
+      await patch({ slug: value })
+      setSlug(value)
+      toast.success('Slug saved')
     } catch (e) {
       toast.error(e.message)
     } finally {
@@ -295,7 +344,7 @@ function StepContentPlan({ project, patch, onContinue, onBack }) {
         </div>
         <div className="flex gap-2">
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Paste or write your chosen title" className={inputClass} />
-          <button onClick={() => saveField('selected_title', title, 'Title')} disabled={saving === 'selected_title'} className="px-4 rounded-lg text-sm font-semibold text-white shrink-0" style={{ background: '#FF6B35' }}>
+          <button onClick={() => saveTitle(title)} disabled={saving === 'selected_title'} className="px-4 rounded-lg text-sm font-semibold text-white shrink-0" style={{ background: '#FF6B35' }}>
             {saving === 'selected_title' ? '…' : 'Save'}
           </button>
         </div>
@@ -304,22 +353,23 @@ function StepContentPlan({ project, patch, onContinue, onBack }) {
       <Card>
         <div className="flex items-center justify-between">
           <label className="text-sm font-semibold flex items-center gap-2" style={{ color: '#FAFAFA' }}>
-            <Tags size={14} style={{ color: '#FF6B35' }} /> Meta Title & Description <OptionalTag />
+            <Tags size={14} style={{ color: '#FF6B35' }} /> Meta Description <OptionalTag />
           </label>
           <button onClick={() => setActiveModal('meta')} className="text-xs font-semibold" style={{ color: '#FF6B35' }}>
             Generate →
           </button>
         </div>
-        <input value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} placeholder="Meta title" className={inputClass} />
+        <p className="text-xs" style={{ color: '#999' }}>
+          Meta title: <span style={{ color: title ? '#FAFAFA' : '#666' }}>{title || 'Set a title above first — it doubles as your meta title'}</span>
+        </p>
         <textarea value={metaDescription} onChange={(e) => setMetaDescription(e.target.value)} placeholder="Meta description" rows={2} className={`${inputClass} resize-none`} />
         <button
-          onClick={() => saveField('meta_title', metaTitle, 'Meta title')
-            .then(() => saveField('meta_description', metaDescription, 'Meta description'))}
-          disabled={saving}
+          onClick={() => saveDescription(metaDescription)}
+          disabled={saving === 'meta_description'}
           className="px-4 py-2 rounded-lg text-sm font-semibold text-white"
           style={{ background: '#FF6B35' }}
         >
-          {saving ? '…' : 'Save Meta'}
+          {saving === 'meta_description' ? '…' : 'Save Description'}
         </button>
       </Card>
 
@@ -334,7 +384,7 @@ function StepContentPlan({ project, patch, onContinue, onBack }) {
         </div>
         <div className="flex gap-2">
           <input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="e.g. best-coffee-maker" className={inputClass} />
-          <button onClick={() => saveField('slug', slug, 'Slug')} disabled={saving === 'slug'} className="px-4 rounded-lg text-sm font-semibold text-white shrink-0" style={{ background: '#FF6B35' }}>
+          <button onClick={() => saveSlug(slug)} disabled={saving === 'slug'} className="px-4 rounded-lg text-sm font-semibold text-white shrink-0" style={{ background: '#FF6B35' }}>
             {saving === 'slug' ? '…' : 'Save'}
           </button>
         </div>
@@ -373,25 +423,22 @@ function StepContentPlan({ project, patch, onContinue, onBack }) {
         <TitleGenModal
           keyword={project.keyword}
           onClose={() => setActiveModal(null)}
-          onSelect={(value) => { setTitle(value); saveField('selected_title', value, 'Title'); setActiveModal(null) }}
+          onSelect={(value) => { saveTitle(value); setActiveModal(null) }}
         />
       )}
       {activeModal === 'meta' && (
         <MetaGenModal
-          keyword={project.keyword}
+          keyword={title || project.keyword}
+          hasTitle={!!title}
           onClose={() => setActiveModal(null)}
-          onSelect={(t, d) => {
-            setMetaTitle(t); setMetaDescription(d)
-            saveField('meta_title', t, 'Meta title').then(() => saveField('meta_description', d, 'Meta description'))
-            setActiveModal(null)
-          }}
+          onSelect={(description) => { saveDescription(description); setActiveModal(null) }}
         />
       )}
       {activeModal === 'slug' && (
         <SlugGenModal
-          keyword={project.keyword}
+          keyword={title || project.keyword}
           onClose={() => setActiveModal(null)}
-          onSelect={(value) => { setSlug(value); saveField('slug', value, 'Slug'); setActiveModal(null) }}
+          onSelect={(value) => { saveSlug(value); setActiveModal(null) }}
         />
       )}
       {activeModal === 'faq' && (
@@ -489,7 +536,7 @@ function TitleGenModal({ keyword, onClose, onSelect }) {
   )
 }
 
-function MetaGenModal({ keyword, onClose, onSelect }) {
+function MetaGenModal({ keyword, hasTitle, onClose, onSelect }) {
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -514,14 +561,18 @@ function MetaGenModal({ keyword, onClose, onSelect }) {
   useEffect(() => { generate() }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <ModalShell title="Generate Meta Tags" onClose={onClose}>
+    <ModalShell title="Generate Meta Description" onClose={onClose}>
       <div className="space-y-3">
+        {hasTitle && (
+          <p className="text-xs" style={{ color: '#999' }}>
+            Your saved title will be used as the meta title — only the description is generated here.
+          </p>
+        )}
         {result && (
           <div className="rounded-lg p-3 space-y-2" style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}>
-            <p className="text-sm font-medium" style={{ color: '#FAFAFA' }}>{result.title}</p>
-            <p className="text-xs" style={{ color: '#999' }}>{result.description}</p>
+            <p className="text-xs" style={{ color: '#e5e5e5' }}>{result.description}</p>
             <button
-              onClick={() => onSelect(result.title, result.description)}
+              onClick={() => onSelect(result.description)}
               className="text-xs font-semibold"
               style={{ color: '#FF6B35' }}
             >
@@ -530,7 +581,7 @@ function MetaGenModal({ keyword, onClose, onSelect }) {
           </div>
         )}
         <GenerateButton onClick={generate} loading={loading}>
-          {loading ? 'Generating…' : result ? 'Regenerate' : 'Generate Meta Tags'}
+          {loading ? 'Generating…' : result ? 'Regenerate' : 'Generate Description'}
         </GenerateButton>
       </div>
     </ModalShell>
