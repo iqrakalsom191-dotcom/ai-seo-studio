@@ -147,6 +147,22 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false)
   const [showFeatureModal, setShowFeatureModal] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [liveReviews, setLiveReviews] = useState([])
+
+  useEffect(() => {
+    async function loadReviews() {
+      try {
+        const res = await fetch('/api/reviews')
+        const data = await res.json()
+        if (res.ok && Array.isArray(data.reviews)) {
+          setLiveReviews(data.reviews)
+        }
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    loadReviews()
+  }, [])
 
   useEffect(() => {
     async function checkAuth() {
@@ -421,24 +437,40 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {REVIEWS.map((r) => (
-            <div
-              key={r.name}
-              className="p-6 rounded-xl border hover:-translate-y-1 hover:border-orange-500 transition-all duration-200"
-              style={{ background: '#111', borderColor: '#1f1f1f' }}
-            >
-              <div className="flex items-center gap-1 mb-4">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} size={16} color={COLORS.accent} fill={COLORS.accent} />
-                ))}
-              </div>
-              <p className="text-sm leading-relaxed mb-6" style={{ color: COLORS.text }}>"{r.text}"</p>
-              <div>
-                <div className="text-sm font-semibold" style={{ color: COLORS.text }}>{r.name}</div>
-                <div className="text-xs mt-0.5" style={{ color: COLORS.muted }}>{r.role}</div>
-              </div>
-            </div>
-          ))}
+          {liveReviews.length > 0
+            ? liveReviews.slice(0, 6).map((r, i) => (
+                <div
+                  key={i}
+                  className="p-6 rounded-xl border hover:-translate-y-1 hover:border-orange-500 transition-all duration-200"
+                  style={{ background: '#111', borderColor: '#1f1f1f' }}
+                >
+                  <div className="flex items-center gap-1 mb-4">
+                    {Array.from({ length: 5 }).map((_, j) => (
+                      <Star key={j} size={16} color={COLORS.accent} fill={j < r.rating ? COLORS.accent : 'transparent'} />
+                    ))}
+                  </div>
+                  <p className="text-sm leading-relaxed mb-6" style={{ color: COLORS.text }}>"{r.comment}"</p>
+                  <div className="text-xs" style={{ color: COLORS.muted }}>AI SEO Studio user</div>
+                </div>
+              ))
+            : REVIEWS.map((r) => (
+                <div
+                  key={r.name}
+                  className="p-6 rounded-xl border hover:-translate-y-1 hover:border-orange-500 transition-all duration-200"
+                  style={{ background: '#111', borderColor: '#1f1f1f' }}
+                >
+                  <div className="flex items-center gap-1 mb-4">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} size={16} color={COLORS.accent} fill={COLORS.accent} />
+                    ))}
+                  </div>
+                  <p className="text-sm leading-relaxed mb-6" style={{ color: COLORS.text }}>"{r.text}"</p>
+                  <div>
+                    <div className="text-sm font-semibold" style={{ color: COLORS.text }}>{r.name}</div>
+                    <div className="text-xs mt-0.5" style={{ color: COLORS.muted }}>{r.role}</div>
+                  </div>
+                </div>
+              ))}
         </div>
       </section>
 

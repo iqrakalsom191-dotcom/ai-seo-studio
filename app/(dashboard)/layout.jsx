@@ -28,6 +28,7 @@ import {
   X,
   Cpu,
 } from 'lucide-react'
+import ReviewWidget from '@/components/ui/ReviewWidget'
 
 const navGroups = [
   {
@@ -403,6 +404,8 @@ export default function DashboardLayout({ children }) {
       <div className="flex-1 overflow-auto bg-[#09090B] min-h-screen ml-0 md:ml-[260px] pt-[56px] md:pt-0">
         {children}
       </div>
+
+      <ReviewWidget />
     </div>
   )
 }
