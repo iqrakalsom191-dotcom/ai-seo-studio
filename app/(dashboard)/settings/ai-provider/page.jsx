@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Cpu, Save, Plug, Eye, EyeOff, CheckCircle2 } from 'lucide-react'
+import { Cpu, Save, Plug, Eye, EyeOff, CheckCircle2, ExternalLink } from 'lucide-react'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
 import useGuestGuard from '@/hooks/useGuestGuard'
@@ -13,24 +13,32 @@ const PROVIDERS = [
     name: 'Groq',
     description: 'Ultra-fast inference with open-weight models',
     models: ['qwen/qwen3-27b', 'llama-3.3-70b-versatile', 'mixtral-8x7b-32768'],
+    keyUrl: 'https://console.groq.com',
+    keySteps: ['Get free API key at console.groq.com', 'Login', 'API Keys', 'Create New Key'],
   },
   {
     id: 'openai',
     name: 'OpenAI',
     description: 'GPT-4o and GPT-3.5 family models',
     models: ['gpt-4o', 'gpt-4o-mini', 'gpt-3.5-turbo'],
+    keyUrl: 'https://platform.openai.com',
+    keySteps: ['Get API key at platform.openai.com', 'Login', 'API Keys', 'Create New Secret Key'],
   },
   {
     id: 'gemini',
     name: 'Gemini',
     description: "Google's multimodal Gemini models",
     models: ['gemini-2.0-flash', 'gemini-1.5-pro', 'gemini-1.5-flash'],
+    keyUrl: 'https://aistudio.google.com',
+    keySteps: ['Get free API key at aistudio.google.com', 'Login', 'Get API Key', 'Create API Key'],
   },
   {
     id: 'claude',
     name: 'Claude',
     description: "Anthropic's Claude model family",
     models: ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+    keyUrl: 'https://console.anthropic.com',
+    keySteps: ['Get API key at console.anthropic.com', 'Login', 'API Keys', 'Create Key'],
   },
 ]
 
@@ -191,6 +199,37 @@ export default function AIProviderSettingsPage() {
               )
             })}
           </div>
+        </div>
+
+        <div className="rounded-xl p-4" style={{ background: '#1a1a1a', border: '1px solid #1f1f1f' }}>
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-sm font-semibold" style={{ color: '#FAFAFA' }}>
+              How to get your {activeProvider.name} API key
+            </span>
+            <a
+              href={activeProvider.keyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 text-xs font-semibold"
+              style={{ color: '#FF6B35' }}
+            >
+              <ExternalLink size={13} />
+              Open {activeProvider.name}
+            </a>
+          </div>
+          <ol className="space-y-2">
+            {activeProvider.keySteps.map((step, i) => (
+              <li key={i} className="flex items-start gap-2.5 text-sm" style={{ color: '#e5e5e5' }}>
+                <span
+                  className="flex-shrink-0 w-5 h-5 rounded-full text-[11px] font-bold flex items-center justify-center mt-0.5"
+                  style={{ background: 'rgba(255,107,53,0.15)', color: '#FF6B35' }}
+                >
+                  {i + 1}
+                </span>
+                {step}
+              </li>
+            ))}
+          </ol>
         </div>
 
         <div>
