@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import toast from 'react-hot-toast'
-import { FileText, Key, Calendar, Flame, Sparkles, Tags, Search, ArrowRight, ArrowUpRight, Clock, Lightbulb, X, Link2, HelpCircle, Braces, ChevronRight } from 'lucide-react'
+import { FileText, Key, Calendar, Flame, Sparkles, Tags, Search, ArrowRight, ArrowUpRight, Clock, Lightbulb, X, Link2, HelpCircle, Braces, ChevronRight, Rocket } from 'lucide-react'
 
 const DAILY_LIMIT = 50
 
@@ -172,6 +172,7 @@ export default function DashboardPage() {
   ]
 
   const actions = [
+    { label: 'Start SEO Project', desc: 'Keyword to published post, guided',   icon: Rocket,   href: '/projects',  color: COLORS.primary },
     { label: 'Generate Blog',    desc: 'AI-powered blog post from a keyword', icon: Sparkles, href: '/generator', color: COLORS.primary },
     { label: 'Create Meta Tags', desc: 'SEO title & description generator',   icon: Tags,     href: '/meta',      color: COLORS.accent },
     { label: 'Analyze Keyword',  desc: 'Intent, difficulty & suggestions',    icon: Search,   href: '/keywords',  color: '#FFD4C2' },
@@ -263,10 +264,10 @@ export default function DashboardPage() {
           </h1>
           <p style={{ fontSize: '16px', color: COLORS.muted }}>Here's what's happening with your SEO content today.</p>
         </div>
-        <Link href="/generator" className="cta-btn"
+        <Link href="/projects" className="cta-btn"
           style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '14px 24px', borderRadius: '12px', background: COLORS.primary, color: '#fff', fontSize: '15px', fontWeight: '700', textDecoration: 'none', flexShrink: 0 }}>
-          <Sparkles size={18} />
-          Generate Content
+          <Rocket size={18} />
+          Start SEO Project
         </Link>
       </div>
 
